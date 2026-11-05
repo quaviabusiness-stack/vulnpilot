@@ -2,5 +2,6 @@ node_modules/
 dist/
 coverage/
 .tools/
+GitHub CLI/
 pnpm-lock.yaml
 *.tgz

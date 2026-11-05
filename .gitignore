@@ -3,6 +3,7 @@ dist/
 coverage/
 *.tgz
 .tools/
+GitHub CLI/
 .env
 .env.*
 !.env.example
