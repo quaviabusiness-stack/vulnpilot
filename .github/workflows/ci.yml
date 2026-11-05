@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - name: Smoke-test JSON and the packed CLI
+        env:
+          OSV_MOCK: '1'
+          VULNPILOT_TELEMETRY: '0'
+        run: |
+          node dist/cli.js --path test/fixtures --json > /tmp/vulnpilot-report.json
+          node --input-type=module -e "import fs from 'node:fs'; const r = JSON.parse(fs.readFileSync('/tmp/vulnpilot-report.json', 'utf8')); if (r.dependencyCount !== 2 || r.vulnerabilityCount !== 1) throw new Error('Unexpected report');"
+          pnpm pack
+          npm exec --yes --package="./vulnpilot-$(node -p "require('./package.json').version").tgz" -- vulnpilot --path test/fixtures --json

@@ -1,0 +1,50 @@
+{
+  "name": "vulnpilot",
+  "version": "0.1.0",
+  "description": "Dependency vulnerability checks and a preliminary CRA applicability prompt.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quaviabusiness-stack/vulnpilot.git"
+  },
+  "type": "module",
+  "bin": {
+    "vulnpilot": "dist/cli.js"
+  },
+  "files": [
+    "dist/cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=26"
+  },
+  "packageManager": "pnpm@12.16.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "lint": "eslint . && prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "tsup": "^9.0.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0"
+  }
+}
