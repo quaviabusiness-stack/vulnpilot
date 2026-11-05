@@ -1,0 +1,151 @@
+{
+  "GHSA-mock-lod1-0001": {
+    "id": "GHSA-mock-lod1-0001",
+    "summary": "MOCK: Command injection in template()",
+    "details": "Synthetic advisory used by tests and VULNPILOT_MOCK=1.",
+    "aliases": ["CVE-2099-1001"],
+    "severity": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+      }
+    ],
+    "database_specific": { "severity": "HIGH" },
+    "affected": [
+      {
+        "package": {
+          "ecosystem": "npm",
+          "name": "lodash",
+          "purl": "pkg:npm/lodash"
+        },
+        "ranges": [
+          {
+            "type": "SEMVER",
+            "events": [{ "introduced": "0" }, { "fixed": "4.17.21" }]
+          }
+        ]
+      }
+    ],
+    "references": [
+      { "type": "WEB", "url": "https://example.invalid/mock-0001" }
+    ]
+  },
+  "GHSA-mock-lod2-0002": {
+    "id": "GHSA-mock-lod2-0002",
+    "summary": "MOCK: Regular expression denial of service in toNumber()",
+    "aliases": ["CVE-2099-1002"],
+    "severity": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      }
+    ],
+    "affected": [
+      {
+        "package": { "ecosystem": "npm", "name": "lodash" },
+        "ranges": [
+          {
+            "type": "SEMVER",
+            "events": [{ "introduced": "4.0.0" }, { "fixed": "4.17.21" }]
+          }
+        ]
+      }
+    ],
+    "references": []
+  },
+  "GHSA-mock-min1-0003": {
+    "id": "GHSA-mock-min1-0003",
+    "summary": "MOCK: Prototype pollution in minimist",
+    "aliases": ["CVE-2099-1003"],
+    "severity": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:H"
+      }
+    ],
+    "affected": [
+      {
+        "package": { "ecosystem": "npm", "name": "minimist" },
+        "ranges": [
+          {
+            "type": "SEMVER",
+            "events": [
+              { "introduced": "0" },
+              { "fixed": "0.2.4" },
+              { "introduced": "1.0.0" },
+              { "fixed": "1.2.6" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "GHSA-mock-log1-0004": {
+    "id": "GHSA-mock-log1-0004",
+    "summary": "MOCK: Remote code execution via JNDI lookup",
+    "aliases": ["CVE-2099-1004"],
+    "severity": [
+      {
+        "type": "CVSS_V3",
+        "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+      }
+    ],
+    "affected": [
+      {
+        "package": {
+          "ecosystem": "Maven",
+          "name": "org.apache.logging.log4j:log4j-core"
+        },
+        "ranges": [
+          {
+            "type": "ECOSYSTEM",
+            "events": [{ "introduced": "2.13.0" }, { "fixed": "2.15.0" }]
+          },
+          {
+            "type": "ECOSYSTEM",
+            "events": [{ "introduced": "2.4" }, { "fixed": "2.12.2" }]
+          }
+        ]
+      }
+    ]
+  },
+  "PYSEC-mock-0005": {
+    "id": "PYSEC-mock-0005",
+    "details": "MOCK: Cookie header leak on cross-origin redirect (PyPA record without summary).",
+    "aliases": ["CVE-2099-1005", "GHSA-mock-url1-0005"],
+    "affected": [
+      {
+        "package": { "ecosystem": "PyPI", "name": "urllib3" },
+        "ranges": [
+          {
+            "type": "ECOSYSTEM",
+            "events": [{ "introduced": "2.0.0" }, { "fixed": "2.0.7" }]
+          }
+        ]
+      }
+    ]
+  },
+  "GHSA-mock-url1-0005": {
+    "id": "GHSA-mock-url1-0005",
+    "summary": "MOCK: Cookie header leak on cross-origin redirect",
+    "aliases": ["CVE-2099-1005", "PYSEC-mock-0005"],
+    "severity": [
+      {
+        "type": "CVSS_V4",
+        "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N"
+      }
+    ],
+    "database_specific": { "severity": "MODERATE" },
+    "affected": [
+      {
+        "package": { "ecosystem": "PyPI", "name": "urllib3" },
+        "ranges": [
+          {
+            "type": "ECOSYSTEM",
+            "events": [{ "introduced": "2.0.0" }, { "fixed": "2.0.8" }]
+          }
+        ]
+      }
+    ]
+  }
+}

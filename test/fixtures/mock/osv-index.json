@@ -1,0 +1,6 @@
+{
+  "npm|lodash|4.17.20": ["GHSA-mock-lod1-0001", "GHSA-mock-lod2-0002"],
+  "npm|minimist|1.2.5": ["GHSA-mock-min1-0003"],
+  "Maven|org.apache.logging.log4j:log4j-core|2.14.1": ["GHSA-mock-log1-0004"],
+  "PyPI|urllib3|2.0.7": ["PYSEC-mock-0005", "GHSA-mock-url1-0005"]
+}
