@@ -14,6 +14,14 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    env:
+      # Repository variables (not secrets): the Supabase anon key is public by
+      # design and protected by the insert-only RLS policy in supabase/telemetry.sql.
+      # Leave them unset to publish a build with telemetry and the CTA disabled.
+      # Set at job level because `npm publish` rebuilds via prepack/prepublishOnly.
+      VULNPILOT_SUPABASE_URL: ${{ vars.VULNPILOT_SUPABASE_URL }}
+      VULNPILOT_SUPABASE_ANON_KEY: ${{ vars.VULNPILOT_SUPABASE_ANON_KEY }}
+      VULNPILOT_WAITLIST_URL: ${{ vars.VULNPILOT_WAITLIST_URL }}
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v6
@@ -40,13 +48,9 @@ jobs:
       - run: pnpm test
       - name: Build with telemetry and waitlist settings
         run: pnpm build
-        env:
-          # Repository variables (not secrets): the Supabase anon key is public by
-          # design and protected by the insert-only RLS policy in supabase/telemetry.sql.
-          # Leave them unset to publish a build with telemetry and the CTA disabled.
-          VULNPILOT_SUPABASE_URL: ${{ vars.VULNPILOT_SUPABASE_URL }}
-          VULNPILOT_SUPABASE_ANON_KEY: ${{ vars.VULNPILOT_SUPABASE_ANON_KEY }}
-          VULNPILOT_WAITLIST_URL: ${{ vars.VULNPILOT_WAITLIST_URL }}
+      - name: Check the bundle embeds the telemetry settings
+        if: ${{ vars.VULNPILOT_SUPABASE_URL != '' }}
+        run: grep -qF "$VULNPILOT_SUPABASE_URL" dist/cli.js
       - name: Publish with npm provenance
         run: npm publish --provenance --access public
         env:
