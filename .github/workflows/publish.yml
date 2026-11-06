@@ -38,7 +38,15 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm build
+      - name: Build with telemetry and waitlist settings
+        run: pnpm build
+        env:
+          # Repository variables (not secrets): the Supabase anon key is public by
+          # design and protected by the insert-only RLS policy in supabase/telemetry.sql.
+          # Leave them unset to publish a build with telemetry and the CTA disabled.
+          VULNPILOT_SUPABASE_URL: ${{ vars.VULNPILOT_SUPABASE_URL }}
+          VULNPILOT_SUPABASE_ANON_KEY: ${{ vars.VULNPILOT_SUPABASE_ANON_KEY }}
+          VULNPILOT_WAITLIST_URL: ${{ vars.VULNPILOT_WAITLIST_URL }}
       - name: Publish with npm provenance
         run: npm publish --provenance --access public
         env:

@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json",
+  "title": "Vulnpilot report v1",
+  "description": "Output of `vulnpilot --json`. Minor/patch schema versions only add optional fields; a breaking change bumps the major version.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "tool",
+    "generatedAt",
+    "durationMs",
+    "mock",
+    "input",
+    "cra",
+    "summary",
+    "sources",
+    "issues"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string", "pattern": "^1\\.\\d+\\.\\d+$" },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "vulnpilot" },
+        "version": { "type": "string" }
+      }
+    },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "mock": { "type": "boolean" },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "file", "dependencies", "skipped"],
+      "properties": {
+        "format": {
+          "enum": [
+            "package-lock",
+            "pnpm-lock",
+            "yarn-v1",
+            "yarn-berry",
+            "cyclonedx"
+          ]
+        },
+        "file": { "type": "string" },
+        "dependencies": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cra": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verdict",
+        "rule",
+        "reason",
+        "answers",
+        "keyDates",
+        "disclaimer"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": ["likely_applies", "likely_out_of_scope", "unclear"]
+        },
+        "rule": { "type": "string" },
+        "reason": { "type": "string" },
+        "answers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "question", "answer"],
+            "properties": {
+              "id": { "enum": ["euDistribution", "commercial", "productType"] },
+              "question": { "type": "string" },
+              "answer": {
+                "enum": [
+                  "yes",
+                  "no",
+                  "unknown",
+                  "app",
+                  "library",
+                  "firmware",
+                  "saas",
+                  "saas-with-client"
+                ]
+              }
+            }
+          }
+        },
+        "keyDates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["date", "obligation", "inForce"],
+            "properties": {
+              "date": { "type": "string", "format": "date" },
+              "obligation": { "type": "string" },
+              "inForce": { "type": "boolean" }
+            }
+          }
+        },
+        "disclaimer": { "type": "string", "pattern": "[Nn]ot legal advice" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependencies",
+        "vulnerablePackages",
+        "issues",
+        "criticalOrHigh",
+        "activelyExploited",
+        "uncheckedDependencies"
+      ],
+      "properties": {
+        "dependencies": { "type": "integer", "minimum": 0 },
+        "vulnerablePackages": { "type": "integer", "minimum": 0 },
+        "issues": { "type": "integer", "minimum": 0 },
+        "criticalOrHigh": { "type": "integer", "minimum": 0 },
+        "activelyExploited": { "type": "integer", "minimum": 0 },
+        "uncheckedDependencies": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "enum": ["osv", "cisa-kev", "first-epss"] },
+          "status": { "enum": ["ok", "partial", "unavailable"] },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "issues": {
+      "description": "Sorted: actively exploited (KEV) first, then EPSS, then CVSS.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/issue" }
+    }
+  },
+  "definitions": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package",
+        "id",
+        "aliases",
+        "cves",
+        "summary",
+        "severity",
+        "fixedVersions",
+        "recommendedFix",
+        "kev",
+        "epss",
+        "references",
+        "detailsAvailable"
+      ],
+      "properties": {
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ecosystem", "name", "version"],
+          "properties": {
+            "ecosystem": { "type": "string" },
+            "name": { "type": "string" },
+            "version": { "type": "string" },
+            "purl": { "type": "string" }
+          }
+        },
+        "id": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "cves": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^CVE-\\d{4}-\\d{4,}$" }
+        },
+        "summary": { "type": "string" },
+        "severity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["level", "score", "vector"],
+          "properties": {
+            "level": {
+              "enum": ["critical", "high", "medium", "low", "unknown"]
+            },
+            "score": {
+              "type": ["number", "null"],
+              "minimum": 0,
+              "maximum": 10
+            },
+            "vector": { "type": ["string", "null"] }
+          }
+        },
+        "fixedVersions": { "type": "array", "items": { "type": "string" } },
+        "recommendedFix": { "type": ["string", "null"] },
+        "kev": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "cve",
+                "dateAdded",
+                "dueDate",
+                "knownRansomwareCampaignUse",
+                "name"
+              ],
+              "properties": {
+                "cve": { "type": "string" },
+                "dateAdded": { "type": "string" },
+                "dueDate": { "type": "string" },
+                "knownRansomwareCampaignUse": { "type": "boolean" },
+                "name": { "type": "string" }
+              }
+            }
+          ]
+        },
+        "epss": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["cve", "score", "percentile", "date"],
+              "properties": {
+                "cve": { "type": "string" },
+                "score": { "type": "number", "minimum": 0, "maximum": 1 },
+                "percentile": { "type": "number", "minimum": 0, "maximum": 1 },
+                "date": { "type": "string" }
+              }
+            }
+          ]
+        },
+        "references": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "detailsAvailable": { "type": "boolean" }
+      }
+    }
+  }
+}

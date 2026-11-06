@@ -13,8 +13,10 @@ export default defineConfig({
   noExternal: ['commander', '@clack/prompts'],
   define: {
     __CLI_VERSION__: JSON.stringify(packageJson.version),
-    __TELEMETRY_ENDPOINT__: JSON.stringify(
-      process.env.VULNPILOT_TELEMETRY_ENDPOINT ?? '',
+    __SUPABASE_URL__: JSON.stringify(process.env.VULNPILOT_SUPABASE_URL ?? ''),
+    __SUPABASE_ANON_KEY__: JSON.stringify(
+      process.env.VULNPILOT_SUPABASE_ANON_KEY ?? '',
     ),
+    __WAITLIST_URL__: JSON.stringify(process.env.VULNPILOT_WAITLIST_URL ?? ''),
   },
 });

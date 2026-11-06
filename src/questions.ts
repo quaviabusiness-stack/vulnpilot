@@ -1,11 +1,18 @@
-import { confirm, isCancel, select } from '@clack/prompts';
-import type { Answers } from './types.js';
+import { isCancel, select } from '@clack/prompts';
+import { PRODUCT_TYPES, QUESTIONS } from './cra.js';
+import type { Answer, Answers, ProductType } from './types.js';
 
 export class CancelledError extends Error {
   constructor() {
     super('Questionnaire cancelled.');
   }
 }
+
+const YES_NO = [
+  { value: 'yes' as const, label: 'Yes' },
+  { value: 'no' as const, label: 'No' },
+  { value: 'unknown' as const, label: 'Not sure' },
+];
 
 export async function askQuestions(
   supplied: Partial<Answers>,
@@ -18,26 +25,26 @@ export async function askQuestions(
   };
   if (!interactive) return answers;
 
-  for (const [key, message] of [
-    ['euDistribution', 'Do you sell or distribute this product in the EU?'],
-    ['commercial', 'Is this product part of a commercial activity?'],
-  ] as const) {
-    if (supplied[key] !== undefined) continue;
-    const answer = await confirm({ message });
-    if (isCancel(answer)) throw new CancelledError();
-    answers[key] = answer ? 'yes' : 'no';
-  }
-  if (supplied.productType === undefined) {
-    const answer = await select({
-      message: 'What kind of product is it?',
-      options: [
-        { value: 'app' as const, label: 'App' },
-        { value: 'library' as const, label: 'Library' },
-        { value: 'firmware' as const, label: 'Firmware' },
-      ],
-    });
-    if (isCancel(answer)) throw new CancelledError();
-    answers.productType = answer;
+  for (const { id, question } of QUESTIONS) {
+    if (supplied[id] !== undefined) continue;
+    if (id === 'productType') {
+      const answer = await select<ProductType>({
+        message: question,
+        options: (Object.keys(PRODUCT_TYPES) as ProductType[]).map((value) => ({
+          value,
+          label: PRODUCT_TYPES[value],
+        })),
+      });
+      if (isCancel(answer)) throw new CancelledError();
+      answers.productType = answer;
+    } else {
+      const answer = await select<Answer>({
+        message: question,
+        options: YES_NO,
+      });
+      if (isCancel(answer)) throw new CancelledError();
+      answers[id] = answer;
+    }
   }
   return answers;
 }

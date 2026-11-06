@@ -1,12 +1,7 @@
-import type { Dependency } from '../types.js';
+import { isRecord } from '../types.js';
+import { DependencySet, type ParseResult } from './common.js';
 
-export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-const exactVersion = /^\d+\.\d+\.\d+(?:-[\da-zA-Z.-]+)?(?:\+[\da-zA-Z.-]+)?$/;
-
-export function parsePackageLock(content: string): Dependency[] {
+export function parsePackageLock(content: string): ParseResult {
   const lock: unknown = JSON.parse(content);
   if (!isRecord(lock) || ![1, 2, 3].includes(Number(lock.lockfileVersion))) {
     throw new Error(
@@ -14,7 +9,7 @@ export function parsePackageLock(content: string): Dependency[] {
     );
   }
 
-  const dependencies = new Map<string, Dependency>();
+  const set = new DependencySet();
   function add(name: string, entry: Record<string, unknown>): void {
     const rawVersion = entry.version;
     if (entry.link === true || typeof rawVersion !== 'string') return;
@@ -22,16 +17,17 @@ export function parsePackageLock(content: string): Dependency[] {
     // Local, workspace, URL and git dependencies have no exact npm version.
     if (
       typeof entry.resolved === 'string' &&
-      entry.resolved.startsWith('file:')
-    )
+      /^(?:file:|link:|git\+|git:|github:)/.test(entry.resolved)
+    ) {
+      set.skip();
       return;
+    }
     if (version.startsWith('npm:')) {
       const separator = version.lastIndexOf('@');
       name = version.slice(4, separator);
       version = version.slice(separator + 1);
     }
-    if (!name || !exactVersion.test(version)) return;
-    dependencies.set(`${name}@${version}`, { name, version, ecosystem: 'npm' });
+    set.addNpm(name, version);
   }
 
   if (Number(lock.lockfileVersion) >= 2) {
@@ -55,5 +51,5 @@ export function parsePackageLock(content: string): Dependency[] {
     }
     visit(lock.dependencies);
   }
-  return [...dependencies.values()];
+  return set.result();
 }
