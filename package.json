@@ -1,6 +1,6 @@
 {
   "name": "vulnpilot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Find known and actively exploited (CISA KEV) vulnerabilities in your dependencies and screen EU Cyber Resilience Act applicability. Not legal advice.",
   "license": "MIT",
   "repository": {
