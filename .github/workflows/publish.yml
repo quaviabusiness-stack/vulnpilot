@@ -51,7 +51,7 @@ jobs:
       - name: Check the bundle embeds the telemetry settings
         if: ${{ vars.VULNPILOT_SUPABASE_URL != '' }}
         run: grep -qF "$VULNPILOT_SUPABASE_URL" dist/cli.js
+      # Authenticates with npm trusted publishing (GitHub OIDC via
+      # `id-token: write`); no npm token is stored in the repository.
       - name: Publish with npm provenance
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
