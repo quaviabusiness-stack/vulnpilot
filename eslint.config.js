@@ -16,4 +16,21 @@ export default tseslint.config(
       globals: { process: 'readonly', console: 'readonly', URL: 'readonly' },
     },
   },
+  {
+    // Static landing page (served by Vercel, not part of the npm package).
+    files: ['site/**/*.js'],
+    languageOptions: {
+      sourceType: 'script',
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        fetch: 'readonly',
+        AbortController: 'readonly',
+        URLSearchParams: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+      },
+    },
+  },
 );

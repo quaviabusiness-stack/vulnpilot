@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Vulnpilot: know your CRA exposure and actively exploited dependencies
+    </title>
+    <meta
+      name="description"
+      content="Free, open-source CLI that flags actively exploited (CISA KEV) vulnerabilities in your dependencies, ranks them with EPSS and CVSS, and screens EU Cyber Resilience Act applicability. Join the waitlist for continuous monitoring and 24-hour report drafts."
+    />
+    <link rel="canonical" href="https://vulnpilot.vercel.app/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta
+      name="theme-color"
+      content="#fafaf9"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0c0e12"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vulnpilot" />
+    <meta property="og:url" content="https://vulnpilot.vercel.app/" />
+    <meta
+      property="og:title"
+      content="Vulnpilot: know your CRA exposure and actively exploited dependencies"
+    />
+    <meta
+      property="og:description"
+      content="One command flags actively exploited vulnerabilities in your dependencies and screens EU Cyber Resilience Act applicability. Free and open source."
+    />
+    <meta property="og:image" content="https://vulnpilot.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Vulnpilot: know your CRA exposure and which dependencies are actively exploited. npx vulnpilot"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Vulnpilot home">
+          <svg
+            class="brand-mark"
+            viewBox="0 0 32 32"
+            width="24"
+            height="24"
+            aria-hidden="true"
+          >
+            <path
+              d="M16 2.5 4.5 7v8.2c0 7 4.9 12.4 11.5 14.3 6.6-1.9 11.5-7.3 11.5-14.3V7L16 2.5Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+            />
+            <path
+              d="m10.5 15.5 4 4 7-8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Vulnpilot</span>
+        </a>
+        <nav aria-label="Main">
+          <ul class="nav-list">
+            <li><a href="#cli">CLI</a></li>
+            <li><a href="#cra">CRA dates</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+            <li><a class="nav-cta" href="#waitlist">Join the waitlist</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container">
+          <p class="eyebrow">Free, open-source CLI · MIT licensed</p>
+          <h1 id="hero-title">
+            Know your CRA exposure and which dependencies are actively
+            exploited.
+          </h1>
+          <p class="lede">
+            Vulnpilot scans your lockfile or SBOM, flags vulnerabilities listed
+            in CISA's Known Exploited Vulnerabilities catalog, ranks the rest by
+            EPSS and CVSS, and runs a short EU Cyber Resilience Act
+            applicability screen. One command, no account.
+          </p>
+
+          <div class="command" role="group" aria-label="Install command">
+            <code
+              ><span class="prompt" aria-hidden="true">$</span> npx
+              vulnpilot</code
+            >
+            <button
+              class="copy-btn"
+              type="button"
+              data-copy="npx vulnpilot"
+              aria-label="Copy command: npx vulnpilot"
+            >
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+          <p class="hint">
+            Requires Node.js 26 or later. Run it in a project directory.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#waitlist">Join the waitlist</a>
+            <a
+              class="btn btn-secondary"
+              href="https://github.com/quaviabusiness-stack/vulnpilot"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+                />
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="cli" class="section" aria-labelledby="cli-title">
+        <div class="container">
+          <p class="section-kicker">Available today</p>
+          <h2 id="cli-title">What the free CLI does</h2>
+          <p class="section-lede">
+            Everything below ships in the current
+            <a href="https://www.npmjs.com/package/vulnpilot">npm package</a>.
+            It reads only your lockfile or SBOM; no source code leaves your
+            machine.
+          </p>
+
+          <div class="cli-layout">
+            <ul class="feature-list">
+              <li class="feature">
+                <h3>Inputs</h3>
+                <p>
+                  <code>package-lock.json</code> (npm),
+                  <code>pnpm-lock.yaml</code>, <code>yarn.lock</code> (Classic
+                  and Berry), and CycloneDX JSON SBOMs via
+                  <code>--sbom</code> for firmware and non-npm projects.
+                </p>
+              </li>
+              <li class="feature">
+                <h3>Data sources</h3>
+                <p>
+                  Known vulnerabilities from
+                  <a href="https://osv.dev">OSV.dev</a>, the "actively
+                  exploited" flag from
+                  <a
+                    href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+                    >CISA KEV</a
+                  >, and exploit likelihood from
+                  <a href="https://www.first.org/epss/">FIRST EPSS</a>. Issues
+                  are ranked KEV first, then EPSS, then CVSS.
+                </p>
+              </li>
+              <li class="feature">
+                <h3>CRA screen</h3>
+                <p>
+                  Three questions (EU market, commercial activity, product type)
+                  give a rule-based first pass: likely applies, likely out of
+                  scope, or unclear, with the reason and the key dates.
+                </p>
+              </li>
+              <li class="feature">
+                <h3>JSON output and CI exit codes</h3>
+                <p>
+                  <code>--json</code> prints a versioned, schema-validated
+                  report. Exit codes <code>0</code>/<code>1</code>/<code
+                    >2</code
+                  >
+                  and <code>--fail-on critical|high|kev</code> let you gate a
+                  pipeline.
+                </p>
+              </li>
+              <li class="feature">
+                <h3>Offline cache</h3>
+                <p>
+                  Responses are cached for 24 hours.
+                  <code>--offline</code> scans from the cache only and reports
+                  anything that is missing.
+                </p>
+              </li>
+            </ul>
+
+            <figure class="terminal">
+              <div class="terminal-bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <pre
+                class="terminal-body"
+                tabindex="0"
+                aria-label="Example terminal output"
+              ><code><span class="t-dim">$</span> npx vulnpilot
+
+EU Cyber Resilience Act: <span class="t-warn">LIKELY APPLIES</span>
+  Answers: EU market: yes · commercial: yes · product: app
+  Not legal advice.
+
+Dependencies            4
+Vulnerable packages     2
+Critical/high issues    2
+Actively exploited      <span class="t-bad">1 (CISA KEV)</span>
+
+Top 3 of 3 issue(s) (KEV first, then EPSS, then CVSS)
+ 1. minimist@1.2.5  CVE-2099-1003  CRITICAL 9.8
+    EPSS 5.0% · <span class="t-bad">KNOWN EXPLOITED</span>
+    Fix: upgrade to 1.2.6
+ 2. lodash@4.17.20  CVE-2099-1001  HIGH 7.2
+    EPSS 21.3%
+    Fix: upgrade to 4.17.21</code></pre>
+              <figcaption>
+                Shortened example from the CLI's built-in mock mode. The
+                <code>CVE-2099-*</code> IDs are synthetic, not real advisories.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="cra" class="section section-alt" aria-labelledby="cra-title">
+        <div class="container">
+          <p class="section-kicker">Why now</p>
+          <h2 id="cra-title">The Cyber Resilience Act has dates</h2>
+          <p class="section-lede">
+            The EU Cyber Resilience Act (Regulation (EU) 2024/2847) covers
+            products with digital elements made available on the EU market,
+            including software. Two dates matter most.
+          </p>
+
+          <ol class="timeline">
+            <li class="timeline-item is-current">
+              <p class="timeline-date">
+                <time datetime="2026-09-11">11 September 2026</time>
+                <span class="badge badge-live">In force</span>
+              </p>
+              <h3>Reporting obligations apply</h3>
+              <p>
+                Manufacturers must report actively exploited vulnerabilities and
+                severe incidents: an early warning within 24 hours of becoming
+                aware, a notification within 72 hours, and a final report once a
+                fix or mitigation is available. This also covers products
+                already on the market.
+              </p>
+            </li>
+            <li class="timeline-item">
+              <p class="timeline-date">
+                <time datetime="2027-12-11">11 December 2027</time>
+              </p>
+              <h3>Full obligations and CE marking</h3>
+              <p>
+                Essential cybersecurity requirements, vulnerability handling,
+                conformity assessment and CE marking apply to products placed on
+                the EU market.
+              </p>
+            </li>
+          </ol>
+
+          <p class="note">
+            <strong>Not legal advice.</strong> Vulnerability data and the CRA
+            screen are an automated first pass. Whether and how the CRA applies
+            to you depends on details a short questionnaire cannot capture;
+            check with a qualified adviser.
+          </p>
+        </div>
+      </section>
+
+      <section id="coming" class="section" aria-labelledby="coming-title">
+        <div class="container">
+          <p class="section-kicker">Planned</p>
+          <h2 id="coming-title">What's coming</h2>
+          <p class="section-lede">
+            We are planning a paid product on top of the CLI. It is not
+            available yet, and its scope may change based on what we hear from
+            the waitlist. The CLI stays free and open source.
+          </p>
+
+          <div class="plan-grid">
+            <article class="plan-card">
+              <span class="badge">Planned</span>
+              <h3>Continuous monitoring</h3>
+              <p>
+                Your dependencies re-checked automatically when new advisories
+                or CISA KEV entries are published, with an alert when something
+                affects you, instead of waiting for the next manual scan.
+              </p>
+            </article>
+            <article class="plan-card">
+              <span class="badge">Planned</span>
+              <h3>Ready-to-send 24-hour report drafts</h3>
+              <p>
+                When an actively exploited vulnerability affects your product, a
+                pre-filled draft of the CRA early warning with the facts already
+                gathered, for you to review, complete and send.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="waitlist"
+        class="section section-alt"
+        aria-labelledby="waitlist-title"
+      >
+        <div class="container waitlist-layout">
+          <div>
+            <p class="section-kicker">Waitlist</p>
+            <h2 id="waitlist-title">Get early access</h2>
+            <p class="section-lede">
+              Join the waitlist and we'll email you when monitoring and report
+              drafts are ready to try. No spam, and you can unsubscribe anytime.
+            </p>
+          </div>
+
+          <div class="form-card">
+            <form id="waitlist-form" novalidate>
+              <div class="field">
+                <label for="email">Work email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  inputmode="email"
+                  autocomplete="email"
+                  maxlength="254"
+                  required
+                  aria-describedby="email-error"
+                />
+                <p class="field-error" id="email-error" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="company-size"
+                  >Company size <span class="optional">(optional)</span></label
+                >
+                <select id="company-size" name="company_size">
+                  <option value="">Prefer not to say</option>
+                  <option value="1">Just me</option>
+                  <option value="2-10">2–10 people</option>
+                  <option value="11-50">11–50 people</option>
+                  <option value="51-250">51–250 people</option>
+                  <option value="250+">More than 250 people</option>
+                </select>
+              </div>
+
+              <div class="hp" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
+
+              <div class="field field-check">
+                <input
+                  id="consent"
+                  name="consent"
+                  type="checkbox"
+                  required
+                  aria-describedby="consent-error"
+                />
+                <label for="consent"
+                  >I agree to receive emails about Vulnpilot. Unsubscribe
+                  anytime. See the <a href="/privacy">privacy notice</a>.</label
+                >
+              </div>
+              <p class="field-error" id="consent-error" hidden></p>
+
+              <button class="btn btn-primary btn-block" type="submit">
+                <span class="btn-label">Join the waitlist</span>
+              </button>
+
+              <p
+                class="form-status"
+                id="form-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </form>
+
+            <div class="form-success" id="form-success" tabindex="-1" hidden>
+              <svg
+                viewBox="0 0 24 24"
+                width="28"
+                height="28"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="m7.5 12.5 3 3 6-7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <h3>You're on the list</h3>
+              <p>
+                Thanks. We'll email you when there is something to try. Until
+                then, <code>npx vulnpilot</code> works today.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>
+          Vulnpilot is open source under the
+          <a
+            href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+            >MIT license</a
+          >.
+        </p>
+        <ul class="footer-links">
+          <li>
+            <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              >GitHub</a
+            >
+          </li>
+          <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li>
+            <a href="mailto:quavia.business@gmail.com"
+              >quavia.business@gmail.com</a
+            >
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
