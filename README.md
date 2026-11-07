@@ -14,7 +14,7 @@ The CRA screen is a transparent, rule-based first pass. It is **not legal advice
 
 ## Status and requirements
 
-Node.js 26 LTS (26.13.0 pinned for development) and pnpm 12.16.1. The package is named `vulnpilot`: on November 5, 2026, `npm view cra-check` returned the existing version `0.2.0`, while `npm view vulnpilot` returned E404. Availability is not a reservation; recheck before publishing. If both unscoped names become unavailable, use `@vulnpilot/cli` after obtaining the npm scope. No version has been published yet.
+Node.js 26 LTS (26.13.0 pinned for development) and pnpm 12.16.1. Published on npm as [`vulnpilot`](https://www.npmjs.com/package/vulnpilot).
 
 ## Usage
 
@@ -146,6 +146,10 @@ Opt out with `--no-telemetry`, `VULNPILOT_TELEMETRY=0`, or by setting `CI` (any 
 ## Waitlist link
 
 If `VULNPILOT_WAITLIST_URL` is set at build time (repository variable of the same name), the text output ends with one line: "Get continuous monitoring and ready-to-send 24h report drafts: `<url>?utm_source=cli`". It never appears in `--json` output or in builds without the variable.
+
+Published builds link to the waitlist at [getvulnpilot.vercel.app](https://getvulnpilot.vercel.app) for a planned paid add-on (continuous monitoring and ready-to-send 24-hour CRA report drafts); the CLI itself stays free and MIT-licensed. Joining is optional and needs an email address and explicit consent; see the [privacy notice](https://getvulnpilot.vercel.app/privacy).
+
+The page is plain static files in [`site/`](site/) (no build step, cookies, trackers or third-party scripts), deployed by Vercel from `main` with `site` as the project root. It is not part of the npm package. The form posts directly to the Supabase REST API (`POST {SUPABASE_URL}/rest/v1/vulnpilot_waitlist`, `Prefer: return=minimal`) with the anon key. [`supabase/waitlist.sql`](supabase/waitlist.sql) creates the table with the same model as telemetry: RLS on, column-level `INSERT` (`email`, `consent`, `source`, `company_size`) for `anon` only, and no select/update/delete policies. A unique index on `lower(email)` returns HTTP 409 for duplicates, which the page shows as success so it never reveals whether an address is registered.
 
 ## Local development
 
