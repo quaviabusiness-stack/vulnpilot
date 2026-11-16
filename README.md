@@ -142,6 +142,7 @@ Opt out with `--no-telemetry`, `VULNPILOT_TELEMETRY=0`, or by setting `CI` (any 
 
 1. Run [`supabase/telemetry.sql`](supabase/telemetry.sql) in the project's SQL editor. It creates `cli_runs(id, created_at, cli_version, os, dep_count, result_bucket, kev_count_bucket)` with check constraints, enables RLS, grants the `anon` role column-level `INSERT` only, and adds an insert-only policy. There are no select/update/delete policies, so the anon key cannot read or change rows; query them with the service role or the dashboard.
 2. Set the GitHub repository **variables** `VULNPILOT_SUPABASE_URL` (e.g. `https://xyz.supabase.co`) and `VULNPILOT_SUPABASE_ANON_KEY`. The anon key is public by design; the RLS policy is what protects the table. These are embedded at build time only; runtime environment variables cannot enable telemetry in a published build.
+3. On the Supabase free plan, also run [`supabase/keepalive.sql`](supabase/keepalive.sql). Free projects pause after about a week without activity, which silently stops telemetry and the waitlist form; [`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml) calls the harmless `vulnpilot_keepalive()` function every two days with the anon key and fails if the project is unreachable.
 
 ## Waitlist link
 

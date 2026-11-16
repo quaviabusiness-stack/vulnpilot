@@ -1,0 +1,41 @@
+name: Supabase keepalive
+
+# The Supabase free plan pauses a project after about a week without
+# activity, which silently breaks the waitlist form and CLI telemetry.
+# This pings a harmless function (supabase/keepalive.sql) every two days.
+# A failed run means the project is paused or unreachable: restore it in the
+# Supabase dashboard.
+
+on:
+  schedule:
+    - cron: '17 6 */2 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SUPABASE_URL: ${{ vars.VULNPILOT_SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ vars.VULNPILOT_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Call vulnpilot_keepalive
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Set the VULNPILOT_SUPABASE_URL and VULNPILOT_SUPABASE_ANON_KEY repository variables."
+            exit 1
+          fi
+          status=$(curl --silent --show-error --output response.txt --write-out '%{http_code}' \
+            --retry 3 --retry-delay 20 --retry-all-errors --max-time 30 \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/vulnpilot_keepalive" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H 'Content-Type: application/json' \
+            -d '{}') || status=000
+          echo "HTTP $status: $(head -c 200 response.txt 2>/dev/null)"
+          if [ "$status" != 200 ]; then
+            echo "::error::Supabase did not answer (HTTP $status). The project may be paused; restore it in the Supabase dashboard."
+            exit 1
+          fi
