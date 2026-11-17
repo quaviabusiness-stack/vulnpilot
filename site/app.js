@@ -1,4 +1,4 @@
-// Vulnpilot landing page: copy button and waitlist form.
+// Vulnpilot landing page: copy buttons and waitlist form.
 // The form posts straight to the Supabase REST API with the public anon key.
 // That key can only INSERT the four columns below (see supabase/waitlist.sql);
 // it cannot read, list, change or delete signups.
@@ -19,21 +19,34 @@ function signupSource() {
   return SOURCE_PATTERN.test(source) ? source : 'other';
 }
 
+// A button copies either its data-copy text or the text of the element
+// named in data-copy-from. The result is announced through #copy-status.
 function setupCopyButtons() {
-  for (const button of document.querySelectorAll('[data-copy]')) {
+  const status = document.getElementById('copy-status');
+  for (const button of document.querySelectorAll(
+    '[data-copy], [data-copy-from]',
+  )) {
     const label = button.querySelector('.copy-label');
     let timer;
     button.addEventListener('click', async () => {
+      const source = button.dataset.copyFrom
+        ? document.getElementById(button.dataset.copyFrom)
+        : null;
+      const value = source ? source.textContent : button.dataset.copy;
       let text = 'Copied';
+      let announcement = 'Copied to the clipboard.';
       try {
-        await navigator.clipboard.writeText(button.dataset.copy);
+        await navigator.clipboard.writeText(value);
       } catch {
         text = 'Select';
+        announcement = 'Copying failed. Select the text and copy it.';
       }
       label.textContent = text;
+      if (status) status.textContent = announcement;
       clearTimeout(timer);
       timer = setTimeout(() => {
         label.textContent = 'Copy';
+        if (status) status.textContent = '';
       }, 1800);
     });
   }
