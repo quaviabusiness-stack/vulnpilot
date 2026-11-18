@@ -75,6 +75,11 @@ test('parsed and consent: what was found and what will be sent; nothing leaves y
   await scan(page);
   const sent = network.requests.find((request) => request.url === OSV_BATCH);
   expect(sent?.body).toBe(shown);
+  // Nothing identifying goes with them: no cookie, no referrer.
+  for (const request of network.external()) {
+    expect(request.headers['cookie']).toBeUndefined();
+    expect(request.headers['referer']).toBeUndefined();
+  }
   const hosts = new Set(
     network.external().map((request) => new URL(request.url).host),
   );

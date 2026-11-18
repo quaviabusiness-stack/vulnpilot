@@ -442,7 +442,7 @@ async function readSample(): Promise<void> {
   ui.inputStatus.textContent = 'Loading the sample SBOM…';
   let text: string;
   try {
-    const response = await fetch(SAMPLE_URL, { credentials: 'omit' });
+    const response = await fetch(SAMPLE_URL);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     text = await response.text();
   } catch {

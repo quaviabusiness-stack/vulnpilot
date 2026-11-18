@@ -38,8 +38,10 @@ export interface ScanRun {
 }
 
 /**
- * Runs the CLI's scan from the browser. Every request omits credentials and
- * the referrer and bypasses the HTTP cache, so nothing about the scan is kept.
+ * Runs the CLI's scan from the browser. Requests send no referrer and bypass
+ * the HTTP cache, so nothing about the scan is kept, and no credentials go to
+ * another origin: OSV.dev and FIRST get none. (The site sets no cookies; only
+ * a protected preview deployment has an access cookie, for /api/kev.)
  */
 export async function runScan(
   dependencies: Dependency[],
@@ -54,7 +56,7 @@ export async function runScan(
     fetch: (input, init) =>
       globalThis.fetch(input, {
         ...init,
-        credentials: 'omit',
+        credentials: 'same-origin',
         referrerPolicy: 'no-referrer',
         cache: 'no-store',
         signal: init?.signal ? AbortSignal.any([init.signal, signal]) : signal,
