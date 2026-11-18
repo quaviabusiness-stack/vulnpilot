@@ -1,1 +1,5 @@
 * text=auto eol=lf
+site/assets/** linguist-generated=true
+site/api/kev.mjs linguist-generated=true
+site/samples/** linguist-generated=true
+site-tools/proof/** linguist-generated=true

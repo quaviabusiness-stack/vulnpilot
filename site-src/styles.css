@@ -5,7 +5,7 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: optional;
-  src: url('/fonts/inter-latin-wght.woff2') format('woff2');
+  src: url('/assets/fonts/inter-latin-wght.woff2') format('woff2');
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-style: normal;
   font-weight: 100 800;
   font-display: optional;
-  src: url('/fonts/jetbrains-mono-latin-wght.woff2') format('woff2');
+  src: url('/assets/fonts/jetbrains-mono-latin-wght.woff2') format('woff2');
 }
 
 /* Tokens. Light is the default; dark is designed separately below. */
@@ -29,6 +29,10 @@
   --signal: #c8350f;
   --signal-hover: #a82b0b;
   --on-signal: #ffffff;
+  /* Incomplete data. Contrast: 5.52 on --bg, 5.93 on --surface, 5.18 on
+     --warn-bg; --text on --warn-bg 16.24. */
+  --warn: #8a5a00;
+  --warn-bg: #f6efe1;
 
   /* The terminal is always dark: it is an object on the page, not a theme. */
   --term-bg: #111113;
@@ -38,6 +42,9 @@
   --term-dim: #8e8e8a;
   --term-bold: #fafaf8;
   --term-red: #ff5b37;
+  /* ANSI 33 and 32, used only inside the terminal: 10.99 and 9.87 on --term-bg. */
+  --term-yellow: #e2c27a;
+  --term-green: #8fca8b;
 
   --sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial,
@@ -66,6 +73,9 @@
     --signal: #ff5b37;
     --signal-hover: #ff7a5c;
     --on-signal: #0b0b0c;
+    /* 9.25 on --bg, 8.72 on --surface, 8.16 on --warn-bg; --text on --warn-bg 14.79. */
+    --warn: #e0a84a;
+    --warn-bg: #1d1a14;
     --term-edge: #242427;
   }
 }
@@ -182,6 +192,11 @@ strong {
   border-radius: 2px;
 }
 
+/* Components set display; hidden must still hide them. */
+[hidden] {
+  display: none !important;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;
@@ -289,7 +304,8 @@ strong {
   text-decoration: none;
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a[aria-current='page'] {
   color: var(--text);
 }
 
@@ -594,6 +610,14 @@ strong {
 .t-r {
   color: var(--term-red);
   font-weight: 650;
+}
+
+.t-y {
+  color: var(--term-yellow);
+}
+
+.t-g {
+  color: var(--term-green);
 }
 
 .term-gap {
@@ -1251,6 +1275,18 @@ strong {
   color: var(--text);
 }
 
+.legal-note-link {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 1024px) {
+  .legal-note-link {
+    grid-column: 4 / span 7;
+  }
+}
+
 @media (min-width: 768px) {
   .milestones {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1678,6 +1714,13 @@ strong {
 
 .prose li::marker {
   color: var(--muted);
+}
+
+.prose h3 {
+  margin-top: 28px;
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 .notfound p {

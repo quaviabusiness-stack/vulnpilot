@@ -1,0 +1,5 @@
+# RFC 9116. Add the Contact line (the address shown in the site footer) before
+# this is deployed; CI fails until it is present and 30 days before Expires.
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://getvulnpilot.vercel.app/.well-known/security.txt

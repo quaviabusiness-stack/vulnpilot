@@ -2,6 +2,9 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import type { CacheHit, ResponseCache } from './source.js';
+
+export type { CacheHit } from './source.js';
 
 export const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -27,18 +30,12 @@ interface Entry<T> {
   value: T;
 }
 
-export interface CacheHit<T> {
-  value: T;
-  fetchedAt: number;
-  fresh: boolean;
-}
-
 /**
  * File-per-key JSON cache. Entries are fresh for 24 hours; stale entries are
  * only returned when explicitly requested (e.g. as a fallback when offline).
  * A null directory disables caching entirely (mock mode, tests).
  */
-export class Cache {
+export class Cache implements ResponseCache {
   constructor(
     readonly directory: string | null,
     readonly offline = false,

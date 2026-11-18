@@ -8,7 +8,7 @@ export class CancelledError extends Error {
   }
 }
 
-const YES_NO = [
+export const YES_NO = [
   { value: 'yes' as const, label: 'Yes' },
   { value: 'no' as const, label: 'No' },
   { value: 'unknown' as const, label: 'Not sure' },

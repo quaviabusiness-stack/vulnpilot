@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node"]
+  },
+  "include": [
+    "build/**/*.ts",
+    "checks/**/*.ts",
+    "server/**/*.ts",
+    "api/**/*.ts",
+    "e2e/**/*.ts",
+    "test/**/*.ts",
+    "*.config.ts"
+  ]
+}

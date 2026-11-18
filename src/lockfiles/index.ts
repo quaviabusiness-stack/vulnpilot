@@ -1,28 +1,17 @@
 import { lstat, readFile } from 'node:fs/promises';
 import { basename, join, relative, resolve } from 'node:path';
-import type { InputFormat, Inventory } from '../types.js';
-import type { ParseResult } from './common.js';
-import { parseCycloneDx } from './cyclonedx.js';
-import { parsePackageLock } from './package-lock.js';
-import { parsePnpmLock } from './pnpm-lock.js';
-import { parseYarnLock, yarnLockFormat } from './yarn-lock.js';
+import type { Inventory } from '../types.js';
+import {
+  InputError,
+  LOCKFILE_NAMES,
+  lockfileParser,
+  parseLockfile,
+  parseSbom,
+} from './detect.js';
 
-interface LockfileParser {
-  parse: (content: string) => ParseResult;
-  format: (content: string) => InputFormat;
-}
+export { InputError } from './detect.js';
 
-const LOCKFILES: Record<string, LockfileParser> = {
-  'package-lock.json': {
-    parse: parsePackageLock,
-    format: () => 'package-lock',
-  },
-  'pnpm-lock.yaml': { parse: parsePnpmLock, format: () => 'pnpm-lock' },
-  'yarn.lock': { parse: parseYarnLock, format: yarnLockFormat },
-};
-const SUPPORTED = Object.keys(LOCKFILES).join(', ');
-
-export class InputError extends Error {}
+const SUPPORTED = LOCKFILE_NAMES.join(', ');
 
 async function regularFile(file: string): Promise<string> {
   let info;
@@ -39,22 +28,9 @@ async function regularFile(file: string): Promise<string> {
   return readFile(file, 'utf8');
 }
 
-function parseWith(
-  file: string,
-  parse: () => ParseResult,
-  format: InputFormat,
-): Inventory {
-  try {
-    return { format, file, ...parse() };
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : String(error);
-    throw new InputError(`Could not parse ${file}: ${reason}`);
-  }
-}
-
 export async function readSbom(file: string): Promise<Inventory> {
   const content = await regularFile(resolve(file));
-  return parseWith(file, () => parseCycloneDx(content), 'cyclonedx');
+  return parseSbom(file, content);
 }
 
 /** Reads one supported lockfile from a project directory or an explicit lockfile path. */
@@ -73,7 +49,7 @@ export async function readLockfile(input: string): Promise<Inventory> {
   let file = target;
   if (info.isDirectory()) {
     const found: string[] = [];
-    for (const name of Object.keys(LOCKFILES)) {
+    for (const name of LOCKFILE_NAMES) {
       try {
         await lstat(join(target, name));
         found.push(name);
@@ -96,15 +72,11 @@ export async function readLockfile(input: string): Promise<Inventory> {
     file = join(target, found[0]!);
   }
   const name = basename(file);
-  const parser = Object.hasOwn(LOCKFILES, name) ? LOCKFILES[name] : undefined;
+  const parser = lockfileParser(name);
   if (!parser)
     throw new InputError(
       `Unsupported file ${name}. Expected one of ${SUPPORTED}, or use --sbom for CycloneDX.`,
     );
   const content = await regularFile(file);
-  return parseWith(
-    relative(process.cwd(), file) || file,
-    () => parser.parse(content),
-    parser.format(content),
-  );
+  return parseLockfile(relative(process.cwd(), file) || file, parser, content);
 }

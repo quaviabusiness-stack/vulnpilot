@@ -1,9 +1,10 @@
 import { errorMessage, getJson, mapLimit } from './http.js';
-import type { SourceContext } from './osv.js';
+import { reportProgress, type SourceContext } from './source.js';
 import { isRecord } from './types.js';
 
 export const EPSS_API = 'https://api.first.org/data/v1/epss';
-const BATCH_SIZE = 100;
+export const EPSS_BATCH_SIZE = 100;
+const BATCH_SIZE = EPSS_BATCH_SIZE;
 
 export interface EpssScore {
   /** Probability of exploitation activity in the next 30 days (0-1). */
@@ -44,19 +45,29 @@ export async function loadEpss(
     if (cached !== undefined) scores.set(cve, cached);
     else pending.push(cve);
   }
+  const total = scores.size + pending.length;
+  let unchecked = 0;
+  let firstError: string | undefined;
+  const progress = () =>
+    reportProgress(context, {
+      source: 'first-epss',
+      done: scores.size,
+      failed: unchecked,
+      total,
+      ...(firstError ? { error: firstError } : {}),
+    });
+  progress();
   if (pending.length === 0) return { scores, unchecked: 0 };
-  if (context.cache.offline)
-    return {
-      scores,
-      unchecked: pending.length,
-      error: `offline and ${pending.length} CVE(s) are not in the cache`,
-    };
+  if (context.cache.offline) {
+    unchecked = pending.length;
+    firstError = `offline and ${pending.length} CVE(s) are not in the cache`;
+    progress();
+    return { scores, unchecked, error: firstError };
+  }
 
   const batches: string[][] = [];
   for (let offset = 0; offset < pending.length; offset += BATCH_SIZE)
     batches.push(pending.slice(offset, offset + BATCH_SIZE));
-  let unchecked = 0;
-  let firstError: string | undefined;
   await mapLimit(batches, 3, async (batch) => {
     try {
       const url = `${EPSS_API}?cve=${batch.join(',')}&limit=${BATCH_SIZE}`;
@@ -70,6 +81,7 @@ export async function loadEpss(
       unchecked += batch.length;
       firstError ??= errorMessage(error);
     }
+    progress();
   });
   return { scores, unchecked, ...(firstError ? { error: firstError } : {}) };
 }

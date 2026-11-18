@@ -1,0 +1,57 @@
+Vulnpilot 0.1.2 · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 2.4s
+
+EU Cyber Resilience Act: LIKELY APPLIES
+  You make a firmware/hardware product available on the EU market as part of a
+  commercial activity, so you are likely a "manufacturer" under the CRA. That
+  means vulnerability handling, an SBOM, security updates for the support
+  period, and reporting actively exploited vulnerabilities to ENISA/your CSIRT.
+  Answers: EU market: yes · commercial: yes · product: firmware
+  Key dates:
+    11 September 2026 (in force): Vulnerability and incident reporting
+    obligations apply: early warning within 24 hours of becoming aware of an
+    actively exploited vulnerability or severe incident.
+    11 December 2027: Full obligations apply, including essential cybersecurity
+    requirements, conformity assessment and CE marking.
+  Not legal advice. This is an automated preliminary screen based on three answers.
+
+Dependencies            5
+Vulnerable packages     4
+Critical/high issues    10
+Actively exploited      2 (CISA KEV)
+2 entries skipped (local/git/workspace links or components without a supported purl).
+
+>>> Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.
+
+Top 10 of 23 issue(s) (KEV first, then EPSS, then CVSS)
+ 1. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-44228  CRITICAL 10.0 · EPSS >99.9% · KNOWN EXPLOITED
+    Remote code injection in Log4j
+    Fix: upgrade to 2.15.0
+ 2. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-45046  CRITICAL 9.0 · EPSS >99.9% · KNOWN EXPLOITED
+    Incomplete fix for Apache Log4j vulnerability
+    Fix: upgrade to 2.16.0
+ 3. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-45105  HIGH 8.6 · EPSS >99.9%
+    Apache Log4j2 vulnerable to Improper Input Validation and Uncontrolled Recursion
+    Fix: upgrade to 2.17.0
+ 4. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-44832  MEDIUM 6.6 · EPSS 97.9%
+    Improper Input Validation and Injection in Apache Log4j2
+    Fix: upgrade to 2.17.1
+ 5. lodash@4.17.20  CVE-2021-23337  HIGH 7.2 · EPSS 20.2%
+    Command Injection in lodash
+    Fix: upgrade to 4.17.21
+ 6. lodash@4.17.20  CVE-2020-28500  MEDIUM 5.3 · EPSS 7.4%
+    Regular Expression Denial of Service (ReDoS) in lodash
+    Fix: upgrade to 4.17.21
+ 7. urllib3@2.0.7  CVE-2026-21441  HIGH 7.5 · EPSS 2.9%
+    Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)
+    Fix: upgrade to 2.6.3
+ 8. lodash@4.17.20  CVE-2026-4800  HIGH 8.1 · EPSS 2.9%
+    lodash vulnerable to Code Injection via `_.template` imports key names
+    Fix: upgrade to 4.18.0
+ 9. lodash@4.17.20  CVE-2025-13465  MEDIUM 6.5 · EPSS 1.8%
+    Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions
+    Fix: upgrade to 4.17.23
+10. urllib3@2.0.7  CVE-2024-37891  MEDIUM 4.4 · EPSS 1.1%
+    urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
+    Fix: upgrade to 2.2.2
+
+Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli
