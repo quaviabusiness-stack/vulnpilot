@@ -1,0 +1,1065 @@
+{
+  "schemaVersion": "1.0.0",
+  "tool": {
+    "name": "vulnpilot",
+    "version": "0.1.2"
+  },
+  "generatedAt": "2026-11-18T18:23:56.888Z",
+  "durationMs": 28,
+  "mock": false,
+  "input": {
+    "format": "cyclonedx",
+    "file": "test/fixtures/sbom/cyclonedx.json",
+    "dependencies": 5,
+    "skipped": 2
+  },
+  "cra": {
+    "verdict": "likely_applies",
+    "rule": "commercial-eu-product",
+    "reason": "You make a firmware/hardware product available on the EU market as part of a commercial activity, so you are likely a \"manufacturer\" under the CRA. That means vulnerability handling, an SBOM, security updates for the support period, and reporting actively exploited vulnerabilities to ENISA/your CSIRT.",
+    "answers": [
+      {
+        "id": "euDistribution",
+        "question": "Is the product made available on the EU market (sold, distributed or offered to users in the EU)?",
+        "answer": "yes"
+      },
+      {
+        "id": "commercial",
+        "question": "Is it supplied as part of a commercial activity (sold, licensed, monetised, or with paid support/services)?",
+        "answer": "yes"
+      },
+      {
+        "id": "productType",
+        "question": "What kind of product is it?",
+        "answer": "firmware"
+      }
+    ],
+    "keyDates": [
+      {
+        "date": "2026-09-11",
+        "obligation": "Vulnerability and incident reporting obligations apply: early warning within 24 hours of becoming aware of an actively exploited vulnerability or severe incident.",
+        "inForce": true
+      },
+      {
+        "date": "2027-12-11",
+        "obligation": "Full obligations apply, including essential cybersecurity requirements, conformity assessment and CE marking.",
+        "inForce": false
+      }
+    ],
+    "disclaimer": "Not legal advice. This is an automated preliminary screen based on three answers."
+  },
+  "summary": {
+    "dependencies": 5,
+    "vulnerablePackages": 4,
+    "issues": 23,
+    "criticalOrHigh": 10,
+    "activelyExploited": 2,
+    "uncheckedDependencies": 0
+  },
+  "sources": [
+    {
+      "name": "osv",
+      "status": "ok"
+    },
+    {
+      "name": "cisa-kev",
+      "status": "ok"
+    },
+    {
+      "name": "first-epss",
+      "status": "ok"
+    }
+  ],
+  "issues": [
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-jfh8-c2jp-5v3q",
+      "aliases": [
+        "CVE-2021-44228"
+      ],
+      "cves": [
+        "CVE-2021-44228"
+      ],
+      "summary": "Remote code injection in Log4j",
+      "severity": {
+        "level": "critical",
+        "score": 10,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H/E:H"
+      },
+      "fixedVersions": [
+        "2.3.1",
+        "2.12.2",
+        "2.15.0"
+      ],
+      "recommendedFix": "2.15.0",
+      "kev": {
+        "cve": "CVE-2021-44228",
+        "dateAdded": "2021-12-10",
+        "dueDate": "2021-12-24",
+        "knownRansomwareCampaignUse": true,
+        "name": "Apache Log4j2 Remote Code Execution Vulnerability"
+      },
+      "epss": {
+        "cve": "CVE-2021-44228",
+        "score": 0.99999,
+        "percentile": 1,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+        "https://github.com/apache/logging-log4j2/pull/608",
+        "https://github.com/github/advisory-database/pull/5501",
+        "https://cert-portal.siemens.com/productcert/pdf/ssa-397453.pdf",
+        "https://packetstormsecurity.com/files/165673/UniFi-Network-Application-Unauthenticated-Log4Shell-Remote-Code-Execution.html",
+        "https://packetstormsecurity.com/files/167794/Open-Xchange-App-Suite-7.10.x-Cross-Site-Scripting-Command-Injection.html",
+        "https://packetstormsecurity.com/files/167917/MobileIron-Log4Shell-Remote-Command-Execution.html",
+        "https://packetstormsecurity.com/files/171626/AD-Manager-Plus-7122-Remote-Code-Execution.html",
+        "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2021-0032",
+        "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-apache-log4j-qRuKNEbd"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-7rjr-3q55-vv33",
+      "aliases": [
+        "CVE-2021-45046"
+      ],
+      "cves": [
+        "CVE-2021-45046"
+      ],
+      "summary": "Incomplete fix for Apache Log4j vulnerability",
+      "severity": {
+        "level": "critical",
+        "score": 9,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H"
+      },
+      "fixedVersions": [
+        "2.3.1",
+        "2.12.2",
+        "2.16.0"
+      ],
+      "recommendedFix": "2.16.0",
+      "kev": {
+        "cve": "CVE-2021-45046",
+        "dateAdded": "2023-05-01",
+        "dueDate": "2023-05-22",
+        "knownRansomwareCampaignUse": true,
+        "name": "Apache Log4j2 Deserialization of Untrusted Data Vulnerability"
+      },
+      "epss": {
+        "cve": "CVE-2021-45046",
+        "score": 0.99977,
+        "percentile": 0.9998,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-45046",
+        "https://www.oracle.com/security-alerts/cpujul2022.html",
+        "https://www.oracle.com/security-alerts/cpujan2022.html",
+        "https://www.oracle.com/security-alerts/cpuapr2022.html",
+        "https://www.oracle.com/security-alerts/alert-cve-2021-44228.html",
+        "https://www.openwall.com/lists/oss-security/2021/12/18/1",
+        "https://www.openwall.com/lists/oss-security/2021/12/15/3",
+        "https://www.openwall.com/lists/oss-security/2021/12/14/4",
+        "https://www.kb.cert.org/vuls/id/930724",
+        "https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00646.html"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-p6xc-xr62-6r2g",
+      "aliases": [
+        "CVE-2021-45105"
+      ],
+      "cves": [
+        "CVE-2021-45105"
+      ],
+      "summary": "Apache Log4j2 vulnerable to Improper Input Validation and Uncontrolled Recursion",
+      "severity": {
+        "level": "high",
+        "score": 8.6,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:H"
+      },
+      "fixedVersions": [
+        "2.3.1",
+        "2.12.3",
+        "2.17.0"
+      ],
+      "recommendedFix": "2.17.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2021-45105",
+        "score": 0.99999,
+        "percentile": 0.99991,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-45105",
+        "https://www.zerodayinitiative.com/advisories/ZDI-21-1541",
+        "https://www.oracle.com/security-alerts/cpujul2022.html",
+        "https://www.oracle.com/security-alerts/cpujan2022.html",
+        "https://www.oracle.com/security-alerts/cpuapr2022.html",
+        "https://www.kb.cert.org/vuls/id/930724",
+        "https://www.debian.org/security/2021/dsa-5024",
+        "https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-apache-log4j-qRuKNEbd",
+        "https://security.netapp.com/advisory/ntap-20211218-0001",
+        "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-apache-log4j-qRuKNEbd"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-8489-44mv-ggj8",
+      "aliases": [
+        "CVE-2021-44832"
+      ],
+      "cves": [
+        "CVE-2021-44832"
+      ],
+      "summary": "Improper Input Validation and Injection in Apache Log4j2",
+      "severity": {
+        "level": "medium",
+        "score": 6.6,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H"
+      },
+      "fixedVersions": [
+        "2.3.2",
+        "2.12.4",
+        "2.17.1"
+      ],
+      "recommendedFix": "2.17.1",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2021-44832",
+        "score": 0.97906,
+        "percentile": 0.99909,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-44832",
+        "https://cert-portal.siemens.com/productcert/pdf/ssa-784507.pdf",
+        "https://github.com/apache/logging-log4j2",
+        "https://issues.apache.org/jira/browse/LOG4J2-3293",
+        "https://lists.apache.org/thread/s1o5vlo78ypqxnzn6p8zf6t9shtq5143",
+        "https://lists.debian.org/debian-lts-announce/2021/12/msg00036.html",
+        "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/EVV25FXL4FU5X6X5BSL7RLQ7T6F65MRA",
+        "https://lists.fedoraproject.org/archives/list/package-announce%40lists.fedoraproject.org/message/T57MPJUW3MA6QGWZRTMCHHMMPQNVKGFC",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/EVV25FXL4FU5X6X5BSL7RLQ7T6F65MRA",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/T57MPJUW3MA6QGWZRTMCHHMMPQNVKGFC"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash",
+        "version": "4.17.20"
+      },
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "aliases": [
+        "CVE-2021-23337"
+      ],
+      "cves": [
+        "CVE-2021-23337"
+      ],
+      "summary": "Command Injection in lodash",
+      "severity": {
+        "level": "high",
+        "score": 7.2,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+      },
+      "fixedVersions": [
+        "4.17.21"
+      ],
+      "recommendedFix": "4.17.21",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2021-23337",
+        "score": 0.20158,
+        "percentile": 0.97511,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23337",
+        "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c",
+        "https://www.oracle.com/security-alerts/cpuoct2021.html",
+        "https://www.oracle.com/security-alerts/cpujul2022.html",
+        "https://www.oracle.com/security-alerts/cpujan2022.html",
+        "https://www.oracle.com//security-alerts/cpujul2021.html",
+        "https://snyk.io/vuln/SNYK-JS-LODASH-1040724",
+        "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074929",
+        "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074931",
+        "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074928"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash",
+        "version": "4.17.20"
+      },
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "aliases": [
+        "CVE-2020-28500"
+      ],
+      "cves": [
+        "CVE-2020-28500"
+      ],
+      "summary": "Regular Expression Denial of Service (ReDoS) in lodash",
+      "severity": {
+        "level": "medium",
+        "score": 5.3,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+      },
+      "fixedVersions": [
+        "4.17.21"
+      ],
+      "recommendedFix": "4.17.21",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2020-28500",
+        "score": 0.07424,
+        "percentile": 0.9456,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-28500",
+        "https://github.com/github/advisory-database/pull/6139",
+        "https://github.com/lodash/lodash/pull/5065",
+        "https://github.com/lodash/lodash/pull/5065/commits/02906b8191d3c100c193fe6f7b27d1c40f200bb7",
+        "https://github.com/lodash/lodash/commit/c4847ebe7d14540bb28a8b932a9ce1b9ecbfee1a",
+        "https://www.oracle.com/security-alerts/cpuoct2021.html",
+        "https://www.oracle.com/security-alerts/cpujul2022.html",
+        "https://www.oracle.com/security-alerts/cpujan2022.html",
+        "https://www.oracle.com//security-alerts/cpujul2021.html",
+        "https://snyk.io/vuln/SNYK-JS-LODASH-1018905"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-38jv-5279-wg99",
+      "aliases": [
+        "CVE-2026-21441",
+        "PYSEC-2026-1996"
+      ],
+      "cves": [
+        "CVE-2026-21441"
+      ],
+      "summary": "Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "severity": {
+        "level": "high",
+        "score": 7.5,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+      },
+      "fixedVersions": [
+        "2.6.3"
+      ],
+      "recommendedFix": "2.6.3",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-21441",
+        "score": 0.02922,
+        "percentile": 0.87313,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-38jv-5279-wg99",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-21441",
+        "https://github.com/urllib3/urllib3/commit/8864ac407bba8607950025e0979c4c69bc7abc7b",
+        "https://github.com/urllib3/urllib3",
+        "https://lists.debian.org/debian-lts-announce/2026/01/msg00017.html"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash",
+        "version": "4.17.20"
+      },
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "aliases": [
+        "CVE-2026-4800"
+      ],
+      "cves": [
+        "CVE-2026-4800"
+      ],
+      "summary": "lodash vulnerable to Code Injection via `_.template` imports key names",
+      "severity": {
+        "level": "high",
+        "score": 8.1,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+      },
+      "fixedVersions": [
+        "4.18.0"
+      ],
+      "recommendedFix": "4.18.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-4800",
+        "score": 0.0287,
+        "percentile": 0.87069,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/lodash/lodash/security/advisories/GHSA-r5fr-rjxr-66jc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-4800",
+        "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c",
+        "https://cna.openjsf.org/security-advisories.html",
+        "https://github.com/advisories/GHSA-35jh-r3h4-6jhm",
+        "https://github.com/lodash/lodash"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "lodash",
+        "version": "4.17.20"
+      },
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "aliases": [
+        "CVE-2025-13465"
+      ],
+      "cves": [
+        "CVE-2025-13465"
+      ],
+      "summary": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
+      "severity": {
+        "level": "medium",
+        "score": 6.5,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+      },
+      "fixedVersions": [
+        "4.17.23"
+      ],
+      "recommendedFix": "4.17.23",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2025-13465",
+        "score": 0.01823,
+        "percentile": 0.7921,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/lodash/lodash/security/advisories/GHSA-xxjr-mmjv-4gpg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-13465",
+        "https://github.com/lodash/lodash/commit/edadd452146f7e4bad4ea684e955708931d84d81",
+        "https://access.redhat.com/errata/RHSA-2026:41941",
+        "https://access.redhat.com/errata/RHSA-2026:41928",
+        "https://access.redhat.com/errata/RHSA-2026:41064",
+        "https://access.redhat.com/errata/RHSA-2026:40984",
+        "https://access.redhat.com/errata/RHSA-2026:40945",
+        "https://access.redhat.com/errata/RHSA-2026:40138",
+        "https://access.redhat.com/errata/RHSA-2026:40118"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-34jh-p97f-mpxf",
+      "aliases": [
+        "CVE-2024-37891",
+        "PYSEC-2026-1995"
+      ],
+      "cves": [
+        "CVE-2024-37891"
+      ],
+      "summary": "urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "severity": {
+        "level": "medium",
+        "score": 4.4,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+      },
+      "fixedVersions": [
+        "1.26.19",
+        "2.2.2"
+      ],
+      "recommendedFix": "2.2.2",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2024-37891",
+        "score": 0.01141,
+        "percentile": 0.67292,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-34jh-p97f-mpxf",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-37891",
+        "https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468",
+        "https://github.com/urllib3/urllib3/commit/accff72ecc2f6cf5a76d9570198a93ac7c90270e",
+        "https://github.com/urllib3/urllib3",
+        "https://lists.debian.org/debian-lts-announce/2024/12/msg00020.html",
+        "https://security.netapp.com/advisory/ntap-20240822-0003",
+        "https://www.vicarius.io/vsociety/posts/proxy-authorization-header-handling-vulnerability-in-urllib3-cve-2024-37891"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-3pxv-7cmr-fjr4",
+      "aliases": [
+        "CVE-2026-34480"
+      ],
+      "cves": [
+        "CVE-2026-34480"
+      ],
+      "summary": "Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severity": {
+        "level": "medium",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+      },
+      "fixedVersions": [
+        "2.25.4"
+      ],
+      "recommendedFix": "2.25.4",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-34480",
+        "score": 0.01064,
+        "percentile": 0.65333,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-34480",
+        "https://github.com/apache/logging-log4j2/pull/4077",
+        "https://github.com/apache/logging-log4j2",
+        "https://lists.apache.org/thread/5x0hcnng0chhghp6jgjdp3qmbbhfjzhb",
+        "https://logging.apache.org/cyclonedx/vdr.xml",
+        "https://logging.apache.org/log4j/2.x/manual/layouts.html#XmlLayout",
+        "https://logging.apache.org/security.html#CVE-2026-34480",
+        "http://www.openwall.com/lists/oss-security/2026/04/10/9"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "requests",
+        "version": "2.31.0"
+      },
+      "id": "GHSA-9hjg-9r4m-mvj7",
+      "aliases": [
+        "CVE-2024-47081",
+        "PYSEC-2026-1872"
+      ],
+      "cves": [
+        "CVE-2024-47081"
+      ],
+      "summary": "Requests vulnerable to .netrc credentials leak via malicious URLs",
+      "severity": {
+        "level": "medium",
+        "score": 5.3,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+      },
+      "fixedVersions": [
+        "2.32.4"
+      ],
+      "recommendedFix": "2.32.4",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2024-47081",
+        "score": 0.01022,
+        "percentile": 0.64145,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/psf/requests/security/advisories/GHSA-9hjg-9r4m-mvj7",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-47081",
+        "https://github.com/psf/requests/pull/6965",
+        "https://github.com/psf/requests/commit/96ba401c1296ab1dda74a2365ef36d88f7d144ef",
+        "https://github.com/advisories/GHSA-9hjg-9r4m-mvj7",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/releases/tag/v2.32.4",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/requests/PYSEC-2026-1872.yaml",
+        "https://pypi.org/project/requests",
+        "https://requests.readthedocs.io/en/latest/api/#requests.Session.trust_env"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-vc5p-v9hr-52mj",
+      "aliases": [
+        "CVE-2025-68161"
+      ],
+      "cves": [
+        "CVE-2025-68161"
+      ],
+      "summary": "Apache Log4j does not verify the TLS hostname in its Socket Appender",
+      "severity": {
+        "level": "medium",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:L/SA:N"
+      },
+      "fixedVersions": [
+        "2.25.3"
+      ],
+      "recommendedFix": "2.25.3",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2025-68161",
+        "score": 0.00796,
+        "percentile": 0.57163,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-68161",
+        "https://github.com/apache/logging-log4j2/pull/4002",
+        "https://github.com/apache/logging-log4j2/commit/3b93748497e1adbbd027fda8a5e7268ec5d0d578",
+        "https://github.com/apache/logging-log4j2",
+        "https://lists.apache.org/thread/xr33kyxq3sl67lwb61ggvm1fzc8k7dvx",
+        "https://logging.apache.org/cyclonedx/vdr.xml",
+        "https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName",
+        "https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName",
+        "https://logging.apache.org/security.html#CVE-2025-68161",
+        "http://www.openwall.com/lists/oss-security/2025/12/18/1"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-2xpw-w6gg-jr37",
+      "aliases": [
+        "CVE-2025-66471",
+        "PYSEC-2026-1994"
+      ],
+      "cves": [
+        "CVE-2025-66471"
+      ],
+      "summary": "urllib3 streaming API improperly handles highly compressed data",
+      "severity": {
+        "level": "high",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H"
+      },
+      "fixedVersions": [
+        "2.6.0"
+      ],
+      "recommendedFix": "2.6.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2025-66471",
+        "score": 0.00731,
+        "percentile": 0.55011,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-2xpw-w6gg-jr37",
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-66471",
+        "https://github.com/urllib3/urllib3/commit/c19571de34c47de3a766541b041637ba5f716ed7",
+        "https://github.com/urllib3/urllib3/commit/d0fde3672e4a4093f7587858dccfc298eb66e46c",
+        "https://github.com/advisories/GHSA-2xpw-w6gg-jr37",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/urllib3/PYSEC-2026-1994.yaml",
+        "https://github.com/urllib3/urllib3",
+        "https://pypi.org/project/urllib3"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-gm62-xv2j-4w53",
+      "aliases": [
+        "CVE-2025-66418",
+        "PYSEC-2026-1998"
+      ],
+      "cves": [
+        "CVE-2025-66418"
+      ],
+      "summary": "urllib3 allows an unbounded number of links in the decompression chain",
+      "severity": {
+        "level": "high",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H"
+      },
+      "fixedVersions": [
+        "2.6.0"
+      ],
+      "recommendedFix": "2.6.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2025-66418",
+        "score": 0.00731,
+        "percentile": 0.55011,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-gm62-xv2j-4w53",
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-66418",
+        "https://github.com/urllib3/urllib3/commit/24d7b67eac89f94e11003424bcf0d8f7b72222a8",
+        "https://github.com/urllib3/urllib3"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-6hg6-v5c8-fphq",
+      "aliases": [
+        "CVE-2026-34477"
+      ],
+      "cves": [
+        "CVE-2026-34477"
+      ],
+      "summary": "Apache Log4j Core: `verifyHostName` attribute silently ignored in TLS configuration",
+      "severity": {
+        "level": "medium",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:L/SA:N"
+      },
+      "fixedVersions": [
+        "2.25.4"
+      ],
+      "recommendedFix": "2.25.4",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-34477",
+        "score": 0.00569,
+        "percentile": 0.47864,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-34477",
+        "https://github.com/apache/logging-log4j2/pull/4075",
+        "https://github.com/apache/logging-log4j2",
+        "https://lists.apache.org/thread/lkx8cl46t2bvkcwfcb2pd43ygc097lq4",
+        "https://logging.apache.org/cyclonedx/vdr.xml",
+        "https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName",
+        "https://logging.apache.org/security.html#CVE-2026-34477"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "Maven",
+        "name": "org.apache.logging.log4j:log4j-core",
+        "version": "2.14.1"
+      },
+      "id": "GHSA-h383-gmxw-35v2",
+      "aliases": [
+        "CVE-2026-34479"
+      ],
+      "cves": [
+        "CVE-2026-34479"
+      ],
+      "summary": "Apache Log4j 1 to Log4j 2 bridge: silent log event loss in Log4j1XmlLayout due to unescaped XML 1.0 forbidden characters",
+      "severity": {
+        "level": "medium",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N"
+      },
+      "fixedVersions": [
+        "2.25.4"
+      ],
+      "recommendedFix": "2.25.4",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-34479",
+        "score": 0.00544,
+        "percentile": 0.46383,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-34479",
+        "https://github.com/apache/logging-log4j2/pull/4078",
+        "https://github.com/apache/logging-log4j2",
+        "https://lists.apache.org/thread/gd0hp6mj17rn3kj279vgy4p7kd4zz5on",
+        "https://logging.apache.org/cyclonedx/vdr.xml",
+        "https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html",
+        "https://logging.apache.org/security.html#CVE-2026-34479",
+        "http://www.openwall.com/lists/oss-security/2026/04/10/8"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-pq67-6m6q-mj2v",
+      "aliases": [
+        "CVE-2025-50181",
+        "PYSEC-2026-1999"
+      ],
+      "cves": [
+        "CVE-2025-50181"
+      ],
+      "summary": "urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "severity": {
+        "level": "medium",
+        "score": 5.3,
+        "vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N"
+      },
+      "fixedVersions": [
+        "2.5.0"
+      ],
+      "recommendedFix": "2.5.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2025-50181",
+        "score": 0.00494,
+        "percentile": 0.43131,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-pq67-6m6q-mj2v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-50181",
+        "https://github.com/urllib3/urllib3/commit/f05b1329126d5be6de501f9d1e3e36738bc08857",
+        "https://github.com/urllib3/urllib3",
+        "https://github.com/urllib3/urllib3/releases/tag/2.5.0"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "requests",
+        "version": "2.31.0"
+      },
+      "id": "GHSA-9wx4-h78v-vm56",
+      "aliases": [
+        "CVE-2024-35195",
+        "PYSEC-2026-1873"
+      ],
+      "cves": [
+        "CVE-2024-35195"
+      ],
+      "summary": "Requests `Session` object does not verify requests after making first request with verify=False",
+      "severity": {
+        "level": "medium",
+        "score": 5.6,
+        "vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N"
+      },
+      "fixedVersions": [
+        "2.32.0"
+      ],
+      "recommendedFix": "2.32.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2024-35195",
+        "score": 0.0034,
+        "percentile": 0.27941,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/psf/requests/security/advisories/GHSA-9wx4-h78v-vm56",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-35195",
+        "https://github.com/psf/requests/pull/6655",
+        "https://github.com/psf/requests/commit/a58d7f2ffb4d00b46dca2d70a3932a0b37e22fac",
+        "https://github.com/psf/requests",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/IYLSNK5TL46Q6XPRVMHVWS63MVJQOK4Q",
+        "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/N7WP6EYDSUOCOJYHDK5NX43PYZ4SNHGZ"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-vxq7-64xx-v4gw",
+      "aliases": [
+        "CVE-2026-97689",
+        "PYSEC-2026-4177"
+      ],
+      "cves": [
+        "CVE-2026-97689"
+      ],
+      "summary": "urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "severity": {
+        "level": "high",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H"
+      },
+      "fixedVersions": [
+        "2.8.0"
+      ],
+      "recommendedFix": "2.8.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-97689",
+        "score": 0.00335,
+        "percentile": 0.27275,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-vxq7-64xx-v4gw",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-97689",
+        "https://github.com/urllib3/urllib3/commit/cd770b059b543be29298ea5c52afb0b1b090f5ed",
+        "https://github.com/urllib3/urllib3",
+        "https://github.com/urllib3/urllib3/releases/tag/2.8.0"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-qccp-gfcp-xxvc",
+      "aliases": [
+        "CVE-2026-44431",
+        "PYSEC-2026-141"
+      ],
+      "cves": [
+        "CVE-2026-44431"
+      ],
+      "summary": "urllib3: Sensitive headers forwarded across origins in proxied low-level redirects",
+      "severity": {
+        "level": "medium",
+        "score": 5.3,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+      },
+      "fixedVersions": [
+        "2.7.0"
+      ],
+      "recommendedFix": "2.7.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-44431",
+        "score": 0.00331,
+        "percentile": 0.26745,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-qccp-gfcp-xxvc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-44431",
+        "https://github.com/urllib3/urllib3"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "urllib3",
+        "version": "2.0.7"
+      },
+      "id": "GHSA-8988-9cw3-xx77",
+      "aliases": [
+        "CVE-2026-97687",
+        "PYSEC-2026-4175"
+      ],
+      "cves": [
+        "CVE-2026-97687"
+      ],
+      "summary": "urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "severity": {
+        "level": "high",
+        "score": null,
+        "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N"
+      },
+      "fixedVersions": [
+        "2.8.0"
+      ],
+      "recommendedFix": "2.8.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-97687",
+        "score": 0.00206,
+        "percentile": 0.10712,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/urllib3/urllib3/security/advisories/GHSA-8988-9cw3-xx77",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-97687",
+        "https://github.com/urllib3/urllib3/pull/5093",
+        "https://github.com/urllib3/urllib3/commit/07408cec79d1856d81bb42c74a904a24fdb9e465",
+        "https://github.com/urllib3/urllib3/commit/b6447295fff7b38fdffc67e0df9712d60cef3cc3",
+        "https://github.com/urllib3/urllib3",
+        "https://github.com/urllib3/urllib3/releases/tag/2.8.0"
+      ],
+      "detailsAvailable": true
+    },
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "requests",
+        "version": "2.31.0"
+      },
+      "id": "GHSA-gc5v-m9x4-r6x2",
+      "aliases": [
+        "CVE-2026-25645",
+        "PYSEC-2026-2275"
+      ],
+      "cves": [
+        "CVE-2026-25645"
+      ],
+      "summary": "Requests has Insecure Temp File Reuse in its extract_zipped_paths() utility function",
+      "severity": {
+        "level": "medium",
+        "score": 4.4,
+        "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:H/A:N"
+      },
+      "fixedVersions": [
+        "2.33.0"
+      ],
+      "recommendedFix": "2.33.0",
+      "kev": null,
+      "epss": {
+        "cve": "CVE-2026-25645",
+        "score": 0.00194,
+        "percentile": 0.09128,
+        "date": "2026-11-18"
+      },
+      "references": [
+        "https://github.com/psf/requests/security/advisories/GHSA-gc5v-m9x4-r6x2",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-25645",
+        "https://github.com/psf/requests/commit/66d21cb07bd6255b1280291c4fafb71803cdb3b7",
+        "https://github.com/psf/requests",
+        "https://github.com/psf/requests/releases/tag/v2.33.0"
+      ],
+      "detailsAvailable": true
+    }
+  ]
+}

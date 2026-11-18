@@ -1,0 +1,28 @@
+{
+  "package": "vulnpilot@0.1.2",
+  "cliVersion": "0.1.2",
+  "integrity": "sha512-X8ljbBi91O0Ea0NZFkOx1+opjClIjWyLyhJlFmvfNwOh5QiUNHYvOMK6b+xxtwUT7EVIH1u5YJNTkMHif1xC9A==",
+  "capturedAt": "2026-11-18T18:23:57.025Z",
+  "shownCommand": "npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware",
+  "args": [
+    "--sbom",
+    "test/fixtures/sbom/cyclonedx.json",
+    "--non-interactive",
+    "--eu-distribution",
+    "yes",
+    "--commercial",
+    "yes",
+    "--product-type",
+    "firmware"
+  ],
+  "exitCode": 1,
+  "jsonExitCode": 1,
+  "wallMs": 2484,
+  "cache": "empty (fresh network responses)",
+  "node": "v26.13.0",
+  "sha256": {
+    "run.ansi": "ebec5dad5a9a59e2a12e1d2434f6733c323d37bdc25ea5b414bcc7a85799d802",
+    "run.json": "bdcd0db388b2cd8c5662c8445b60d42f7df6ee5b604e295e42bef14f6d56ebd6",
+    "help.txt": "e032b82dfaa01798083dbda23235e39439e18dae8831f5761f2a934c69bba304"
+  }
+}

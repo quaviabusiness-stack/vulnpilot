@@ -1,0 +1,27 @@
+Usage: vulnpilot [options]
+
+Check dependencies for known and actively exploited vulnerabilities, and screen
+EU Cyber Resilience Act applicability (not legal advice).
+
+Options:
+  -V, --version               output the version number
+  --path <path>               Project directory or lockfile (default: ".")
+  --sbom <file>               Scan a CycloneDX JSON SBOM instead of a lockfile
+  --json                      Print the machine-readable JSON report; skip
+                              prompts
+  --offline                   Use only cached vulnerability data (no network)
+  --fail-on <level>           Exit 1 only for issues at this level (default: any
+                              issue) (choices: "critical", "high", "kev")
+  --non-interactive           Skip prompts; unanswered questions become unknown
+  --eu-distribution <answer>  Made available on the EU market? (choices: "yes",
+                              "no", "unknown")
+  --commercial <answer>       Part of a commercial activity? (choices: "yes",
+                              "no", "unknown")
+  --product-type <type>       Product category (choices: "app", "library",
+                              "firmware", "saas", "saas-with-client", "unknown")
+  --no-color                  Disable coloured output
+  --no-telemetry              Disable anonymous usage telemetry
+  -h, --help                  display help for command
+
+Exit codes: 0 no issues, 1 issues found (see --fail-on), 2 error or incomplete data.
+Not legal advice.

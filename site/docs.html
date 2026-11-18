@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CLI reference · Vulnpilot</title>
+    <meta
+      name="description"
+      content="Every flag, exit code, input, data source and JSON report field of the Vulnpilot CLI, on one page."
+    />
+    <link rel="canonical" href="https://getvulnpilot.vercel.app/docs" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="theme-color"
+      content="#f7f7f4"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0b0b0c"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vulnpilot" />
+    <meta property="og:url" content="https://getvulnpilot.vercel.app/docs" />
+    <meta property="og:title" content="CLI reference · Vulnpilot" />
+    <meta
+      property="og:description"
+      content="Every flag, exit code, input, data source and JSON report field of the Vulnpilot CLI, on one page."
+    />
+    <meta
+      property="og:image"
+      content="https://getvulnpilot.vercel.app/og.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/assets/fonts/inter-latin-wght-3100e775e8.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/fonts/jetbrains-mono-latin-wght-18be452724.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/assets/styles-111fac2dab.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- generated:header -->
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Vulnpilot home">
+          <span class="brand-word">vulnpilot</span
+          ><span class="brand-cursor" aria-hidden="true"></span>
+        </a>
+        <nav class="nav" aria-label="Main">
+          <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/docs" aria-current="page">Docs</a></li>
+            <li><a href="/#method">Method</a></li>
+            <li><a href="/#ci">CI</a></li>
+            <li><a href="/#cra">CRA</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <a class="btn btn-outline btn-small" href="/#waitlist"
+          >Join the waitlist</a
+        >
+      </div>
+    </header>
+    <!-- /generated:header -->
+
+    <main id="main" class="docs-page">
+      <div class="page-head">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Docs</p>
+            <div class="section-body">
+              <h1>CLI reference</h1>
+              <p class="intro">
+                Everything <code>npx vulnpilot</code> does, on one page. The
+                help text is captured from vulnpilot
+                <span data-proof="cli-version">0.1.2</span>; the JSON field list
+                is generated from the published schema.
+              </p>
+              <nav class="toc" aria-label="On this page">
+                <ol>
+                  <li><a href="#run">Run</a></li>
+                  <li><a href="#help">Help</a></li>
+                  <li><a href="#flags">Flags</a></li>
+                  <li><a href="#exit-codes">Exit codes</a></li>
+                  <li><a href="#inputs">Inputs</a></li>
+                  <li><a href="#sources">Data sources</a></li>
+                  <li><a href="#ranking">Ranking</a></li>
+                  <li><a href="#cra">CRA screen</a></li>
+                  <li><a href="#cache">Cache and offline</a></li>
+                  <li><a href="#telemetry">Telemetry</a></li>
+                  <li><a href="#json">JSON report</a></li>
+                  <li><a href="#browser">Browser scanner</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="docs-section" id="run" aria-labelledby="run-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Run</p>
+            <div class="section-body">
+              <h2 id="run-title">Run</h2>
+              <p>
+                Vulnpilot is a free command-line tool under the MIT license. It
+                needs Node.js&nbsp;26 or later.
+              </p>
+              <figure class="code-block">
+                <pre><code>npx vulnpilot                               # scan the lockfile in the current directory
+npx vulnpilot --path ./apps/web             # another directory, or a lockfile path
+npx vulnpilot --sbom firmware.cdx.json      # CycloneDX SBOM (firmware, non-npm projects)
+npx vulnpilot --json &gt; vulnpilot.json       # machine-readable report</code></pre>
+              </figure>
+              <p>
+                In CI, give the three CRA answers as flags and pick a failure
+                threshold:
+              </p>
+              <figure class="code-block">
+                <pre><code>npx vulnpilot --non-interactive --eu-distribution yes --commercial yes --product-type app --fail-on kev</code></pre>
+              </figure>
+              <p>
+                Prompts are skipped when <code>--json</code> or
+                <code>--non-interactive</code> is used, <code>CI</code> is set,
+                or stdin or stdout is not a terminal. In interactive mode the
+                network lookups start before the questions, so they overlap.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="help" aria-labelledby="help-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Help</p>
+            <div class="section-body">
+              <h2 id="help-title">Help</h2>
+              <figure class="docs-terminal" aria-labelledby="help-caption">
+                <div class="run-cell">
+                  <!-- generated:docs-help -->
+                  <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --help
+Usage: vulnpilot [options]
+
+Check dependencies for known and actively exploited vulnerabilities, and screen
+EU Cyber Resilience Act applicability (not legal advice).
+
+Options:
+  -V, --version               output the version number
+  --path &lt;path&gt;               Project directory or lockfile (default: ".")
+  --sbom &lt;file&gt;               Scan a CycloneDX JSON SBOM instead of a lockfile
+  --json                      Print the machine-readable JSON report; skip
+                              prompts
+  --offline                   Use only cached vulnerability data (no network)
+  --fail-on &lt;level&gt;           Exit 1 only for issues at this level (default: any
+                              issue) (choices: "critical", "high", "kev")
+  --non-interactive           Skip prompts; unanswered questions become unknown
+  --eu-distribution &lt;answer&gt;  Made available on the EU market? (choices: "yes",
+                              "no", "unknown")
+  --commercial &lt;answer&gt;       Part of a commercial activity? (choices: "yes",
+                              "no", "unknown")
+  --product-type &lt;type&gt;       Product category (choices: "app", "library",
+                              "firmware", "saas", "saas-with-client", "unknown")
+  --no-color                  Disable coloured output
+  --no-telemetry              Disable anonymous usage telemetry
+  -h, --help                  display help for command
+
+Exit codes: 0 no issues, 1 issues found (see --fail-on), 2 error or incomplete data.
+Not legal advice.</code></pre>
+                  <!-- /generated:docs-help -->
+                </div>
+                <figcaption id="help-caption" class="term-caption">
+                  Captured from vulnpilot
+                  <span data-proof="cli-version">0.1.2</span> on
+                  <time data-proof="capture-date" datetime="2026-11-18"
+                    >18&nbsp;November&nbsp;2026</time
+                  >
+                  by <code>site-tools/scripts/capture-proof.mjs</code>.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="flags" aria-labelledby="flags-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Flags</p>
+            <div class="section-body">
+              <h2 id="flags-title">Flags</h2>
+              <div
+                class="table-scroll"
+                role="region"
+                aria-label="Flags table"
+                tabindex="0"
+              >
+                <table class="ref-table" id="flags-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Flag</th>
+                      <th scope="col">Meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><code>--path &lt;path&gt;</code></th>
+                      <td>
+                        Project directory (lockfile auto-detected) or a specific
+                        lockfile. Default <code>.</code>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--sbom &lt;file&gt;</code></th>
+                      <td>Scan a CycloneDX JSON SBOM instead of a lockfile.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--json</code></th>
+                      <td>
+                        Print the versioned JSON report to stdout; skips
+                        prompts.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--fail-on &lt;level&gt;</code></th>
+                      <td>
+                        <code>critical</code>, <code>high</code> or
+                        <code>kev</code>: exit 1 only for issues at that level.
+                        Default: any issue.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--offline</code></th>
+                      <td>
+                        Use only cached data (no network). Cached entries of any
+                        age are accepted.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--non-interactive</code></th>
+                      <td>
+                        Skip prompts; unanswered questions become
+                        <code>unknown</code>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>--eu-distribution &lt;answer&gt;</code>
+                      </th>
+                      <td>
+                        Made available on the EU market? <code>yes</code>,
+                        <code>no</code>, <code>unknown</code>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>--commercial &lt;answer&gt;</code>
+                      </th>
+                      <td>
+                        Supplied as part of a commercial activity?
+                        <code>yes</code>, <code>no</code>, <code>unknown</code>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>--product-type &lt;type&gt;</code>
+                      </th>
+                      <td>
+                        <code>app</code>, <code>library</code>,
+                        <code>firmware</code>, <code>saas</code>,
+                        <code>saas-with-client</code>, <code>unknown</code>.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--no-color</code></th>
+                      <td>
+                        Plain output (<code>NO_COLOR</code> is also respected).
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>--no-telemetry</code></th>
+                      <td>Disable anonymous usage telemetry.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>--version</code>, <code>--help</code>
+                      </th>
+                      <td>Print the version or help.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="docs-section"
+        id="exit-codes"
+        aria-labelledby="exit-codes-title"
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Exit codes</p>
+            <div class="section-body">
+              <h2 id="exit-codes-title">Exit codes</h2>
+              <table class="ref-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>0</code></th>
+                    <td>No issues, or none matching <code>--fail-on</code>.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>1</code></th>
+                    <td>
+                      Issues found (matching <code>--fail-on</code> if given).
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>2</code></th>
+                    <td>
+                      Error: bad flags, no, unsupported or unparseable input,
+                      cancelled questions, or incomplete data. OSV could not be
+                      reached (or, with <code>--fail-on kev</code>, the KEV
+                      feed), so “no issues” cannot be claimed.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Issues already found still exit 1 even if a source failed. A
+                missing EPSS score never changes the exit code.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="inputs" aria-labelledby="inputs-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Inputs</p>
+            <div class="section-body">
+              <h2 id="inputs-title">Inputs</h2>
+              <p>
+                Vulnpilot reads one file. The lockfile is auto-detected in
+                <code>--path</code>. If none is found the CLI exits 2 and lists
+                the supported names; if several exist it asks you to pick one.
+              </p>
+              <table class="ref-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Input</th>
+                    <th scope="col">Formats</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>package-lock.json</code></th>
+                    <td>lockfileVersion 1, 2, 3</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>pnpm-lock.yaml</code></th>
+                    <td>
+                      lockfileVersion 5.x, 6.x, 9.x (peer suffixes stripped)
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>yarn.lock</code></th>
+                    <td>Yarn Classic (v1) and Berry (v2+)</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>--sbom</code></th>
+                    <td>
+                      CycloneDX JSON, any spec version; nested components walked
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Packages are deduplicated by ecosystem, name and version.
+                Development and transitive dependencies are included. npm
+                aliases (<code>npm:real@x</code>) resolve to the real package.
+                Entries without an exact registry version (workspace,
+                <code>link:</code> and <code>file:</code> packages, git and
+                tarball dependencies, Yarn patches) are skipped and counted as
+                skipped in the output.
+              </p>
+              <p>
+                SBOM components are matched by purl. Supported purl types:
+                <code>npm</code>, <code>pypi</code>, <code>maven</code>,
+                <code>golang</code>, <code>cargo</code>, <code>gem</code>,
+                <code>nuget</code>, <code>composer</code>, <code>hex</code>,
+                <code>pub</code> and <code>conan</code> map to OSV ecosystems;
+                <code>deb</code> and <code>apk</code> purls are sent to OSV as
+                purls. Components without a purl (for example CPE-only firmware
+                parts) or with <code>pkg:generic</code> are skipped and counted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="docs-section"
+        id="sources"
+        aria-labelledby="sources-title"
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Data sources</p>
+            <div class="section-body">
+              <h2 id="sources-title">Data sources</h2>
+              <div
+                class="table-scroll"
+                role="region"
+                aria-label="Data sources table"
+                tabindex="0"
+              >
+                <table class="ref-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Source</th>
+                      <th scope="col">What is sent</th>
+                      <th scope="col">Used for</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">
+                        OSV.dev <code>POST /v1/querybatch</code>
+                      </th>
+                      <td>
+                        Package ecosystem, name and exact version (or purl)
+                      </td>
+                      <td>
+                        Vulnerability IDs per package, up to 1,000 packages per
+                        request
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        OSV.dev <code>GET /v1/vulns/{id}</code>
+                      </th>
+                      <td>Advisory ID</td>
+                      <td>Summary, aliases (CVE IDs), CVSS, fixed versions</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">CISA KEV feed</th>
+                      <td>Nothing (full catalog download)</td>
+                      <td>“Actively exploited” flag for CVE aliases</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">FIRST EPSS API</th>
+                      <td>CVE IDs, up to 100 per request</td>
+                      <td>Exploit-likelihood score</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                Advisory details are fetched with at most 10 requests in flight.
+                Every request has a timeout (10&nbsp;s; 20&nbsp;s for the KEV
+                feed) and up to two retries with exponential backoff for network
+                errors, timeouts, HTTP 429 and 5xx. Redirects are refused. If a
+                source fails, the scan continues with the others and the report
+                names the unavailable source; OSV being unavailable is never
+                reported as “no vulnerabilities”.
+              </p>
+              <p>
+                The CLI reads only the lockfile or SBOM: no source code,
+                manifests or file paths leave your machine. OSV does see the
+                dependency names you query, including private package names.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="docs-section"
+        id="ranking"
+        aria-labelledby="ranking-title"
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Ranking</p>
+            <div class="section-body">
+              <h2 id="ranking-title">Ranking, severity and fixes</h2>
+              <p>
+                <strong>Ranking:</strong> actively exploited (KEV) first, then
+                EPSS (highest first), then CVSS (highest first). The text output
+                shows the top 10; <code>--json</code> contains all issues.
+              </p>
+              <p>
+                <strong>Severity:</strong> the CVSS v3.x base score is computed
+                from the advisory’s vector. For advisories with only a CVSS v4
+                vector or none, the advisory’s own label (for example GitHub’s
+                <code>HIGH</code> or <code>MODERATE</code>) is used and no
+                numeric score is shown. Advisories for the same package that
+                share an ID or alias are merged into one issue.
+              </p>
+              <p>
+                <strong>Fix version:</strong> the fixed version of the affected
+                range that contains your installed version, falling back to the
+                nearest higher fixed version.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="cra" aria-labelledby="cra-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">CRA screen</p>
+            <div class="section-body">
+              <h2 id="cra-title">CRA screen</h2>
+              <p>
+                Three questions, an ordered rule list, and the first matching
+                rule decides. The verdict, the rule ID, the reason, the answers
+                and the key dates are in every report.
+                <strong>Not legal advice.</strong> Every rule is a draft marked
+                for legal review. You can also
+                <a href="/scan#cra">answer the questions in your browser</a>.
+              </p>
+              <!-- generated:docs-cra-questions -->
+              <ol class="docs-questions">
+                <li>
+                  <p>
+                    Is the product made available on the EU market (sold,
+                    distributed or offered to users in the EU)?
+                  </p>
+                  <p class="docs-answers">
+                    Yes (yes) · No (no) · Not sure (unknown)
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    Is it supplied as part of a commercial activity (sold,
+                    licensed, monetised, or with paid support/services)?
+                  </p>
+                  <p class="docs-answers">
+                    Yes (yes) · No (no) · Not sure (unknown)
+                  </p>
+                </li>
+                <li>
+                  <p>What kind of product is it?</p>
+                  <p class="docs-answers">
+                    Installable software (desktop, mobile, CLI, on-prem server)
+                    (app) · Library or component that others integrate (library)
+                    · Firmware or a connected hardware device (firmware) · Pure
+                    SaaS / hosted service with nothing downloadable (saas) ·
+                    SaaS with an app, desktop client, agent or firmware
+                    (saas-with-client) · Not sure (unknown)
+                  </p>
+                </li>
+              </ol>
+              <!-- /generated:docs-cra-questions -->
+              <div
+                class="table-scroll"
+                role="region"
+                aria-label="CRA rules table"
+                tabindex="0"
+              >
+                <table class="ref-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Rule</th>
+                      <th scope="col">Condition</th>
+                      <th scope="col">Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><code>not-on-eu-market</code></th>
+                      <td>Not made available on the EU market</td>
+                      <td><code>likely_out_of_scope</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>pure-saas</code></th>
+                      <td>Pure SaaS, nothing downloadable</td>
+                      <td><code>likely_out_of_scope</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>non-commercial-open-source</code>
+                      </th>
+                      <td>
+                        Not part of a commercial activity (mentions the
+                        open-source steward regime)
+                      </td>
+                      <td><code>likely_out_of_scope</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>commercial-eu-product</code></th>
+                      <td>
+                        EU market, commercial, and app, library or firmware
+                      </td>
+                      <td><code>likely_applies</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>saas-with-client</code></th>
+                      <td>
+                        SaaS with an app, desktop client, agent or firmware
+                      </td>
+                      <td><code>unclear</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>insufficient-information</code></th>
+                      <td>Anything else, for example any answer “not sure”</td>
+                      <td><code>unclear</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                Reporting obligations for actively exploited vulnerabilities and
+                severe incidents apply from
+                <time datetime="2026-09-11">11&nbsp;September&nbsp;2026</time>
+                (early warning within 24 hours, then a notification within 72
+                hours and a final report once a fix or mitigation is available,
+                including for products already on the market). Full obligations,
+                including CE marking, apply from
+                <time datetime="2027-12-11">11&nbsp;December&nbsp;2027</time>.
+                When the CRA likely applies and a KEV-listed vulnerability is
+                found, the text output adds the line
+                <code class="code-wrap"
+                  >&gt;&gt;&gt; Under the CRA, actively exploited
+                  vulnerabilities in your product must be reported within 24
+                  hours.</code
+                >
+              </p>
+              <p>
+                The rules do not cover sectoral exclusions (medical devices,
+                vehicles, aviation, marine, defence), importer or distributor
+                roles, or important and critical product classes. Zero known
+                vulnerabilities is not a security guarantee.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="cache" aria-labelledby="cache-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Cache</p>
+            <div class="section-body">
+              <h2 id="cache-title">Cache and offline</h2>
+              <p>
+                Responses are cached for 24 hours in the OS cache directory:
+                <code>%LOCALAPPDATA%\vulnpilot\Cache</code> on Windows,
+                <code>~/Library/Caches/vulnpilot</code> on macOS,
+                <code>$XDG_CACHE_HOME/vulnpilot</code> (default
+                <code>~/.cache/vulnpilot</code>) elsewhere; override it with
+                <code>VULNPILOT_CACHE_DIR</code>. Each cache file holds one OSV
+                package result, OSV advisory, EPSS score or the trimmed KEV
+                catalog.
+              </p>
+              <p>
+                Stale entries are refreshed online. <code>--offline</code> uses
+                cached entries of any age and reports what is missing. If the
+                KEV download fails, the last cached catalog is used and its date
+                is shown.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="docs-section"
+        id="telemetry"
+        aria-labelledby="telemetry-title"
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Telemetry</p>
+            <div class="section-body">
+              <h2 id="telemetry-title">Telemetry</h2>
+              <p>
+                Published builds send one anonymous event per completed scan,
+                with exactly five coarse fields:
+              </p>
+              <table class="ref-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Field</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><code>cli_version</code></th>
+                    <td>The Vulnpilot version.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>os</code></th>
+                    <td>
+                      Node’s platform (<code>linux</code>,
+                      <code>darwin</code>, <code>win32</code>, …) or
+                      <code>other</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>dep_count</code></th>
+                    <td>Number of scanned dependencies.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>result_bucket</code></th>
+                    <td>The CRA verdict.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><code>kev_count_bucket</code></th>
+                    <td>
+                      Actively exploited issues, bucketed as <code>0</code>,
+                      <code>1</code>, <code>2-5</code> or <code>6+</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                No identifiers, package names, versions, paths, answers or
+                vulnerability details are sent. Telemetry is off in CI (when
+                <code>CI</code> is set), and <code>--no-telemetry</code> or
+                <code>VULNPILOT_TELEMETRY=0</code> turns it off. It never fails
+                or slows a scan beyond a 1.5-second timeout.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="docs-section" id="json" aria-labelledby="json-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">JSON report</p>
+            <div class="section-body">
+              <h2 id="json-title">JSON report</h2>
+              <p>
+                <code>--json</code> prints a report validated against
+                <a
+                  href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                  ><code>schema/report-v1.schema.json</code></a
+                >, which is shipped in the npm package.
+                <code>schemaVersion</code> is <code>1.0.0</code>; minor versions
+                only add optional fields and a breaking change bumps the major
+                version. Warnings about unavailable sources go to stderr, so
+                stdout stays parseable. The waitlist line of the text output
+                never appears in the JSON report.
+              </p>
+            </div>
+            <div class="docs-fields">
+              <!-- generated:docs-fields -->
+              <div
+                class="table-scroll"
+                role="region"
+                aria-label="JSON report fields"
+                tabindex="0"
+              >
+                <table class="fields">
+                  <caption class="visually-hidden">
+                    Fields of the JSON report, generated from
+                    schema/report-v1.schema.json
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Field</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><code>schemaVersion</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >pattern ^1\.\d+\.\d+$</span
+                        >
+                      </td>
+                      <td>
+                        Report format version. Minor and patch versions only add
+                        optional fields; a breaking change bumps the major
+                        version.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>tool</code></th>
+                      <td>object</td>
+                      <td>The tool that produced the report.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>tool.name</code></th>
+                      <td>string<span class="field-values">vulnpilot</span></td>
+                      <td>Always vulnpilot.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>tool.version</code></th>
+                      <td>string</td>
+                      <td>Vulnpilot version that produced the report.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>generatedAt</code></th>
+                      <td>string<span class="field-values">date-time</span></td>
+                      <td>When the report was created, in UTC.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>durationMs</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>
+                        How long the vulnerability lookups took, in
+                        milliseconds.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>mock</code></th>
+                      <td>boolean</td>
+                      <td>
+                        True only for runs on the bundled mock data
+                        (VULNPILOT_MOCK=1), which is never a real scan.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>input</code></th>
+                      <td>object</td>
+                      <td>The file that was read.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>input.format</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >package-lock, pnpm-lock, yarn-v1, yarn-berry,
+                          cyclonedx</span
+                        >
+                      </td>
+                      <td>Detected input format.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>input.file</code></th>
+                      <td>string</td>
+                      <td>
+                        Name of the lockfile or SBOM, as given or relative to
+                        the working directory.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>input.dependencies</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>
+                        Packages checked, deduplicated by ecosystem, name and
+                        version.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>input.skipped</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>
+                        Entries that could not be checked: local, git or
+                        workspace links, and SBOM components without a supported
+                        purl.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra</code></th>
+                      <td>object</td>
+                      <td>The CRA applicability screen. Not legal advice.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.verdict</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >likely_applies, likely_out_of_scope, unclear</span
+                        >
+                      </td>
+                      <td>Result of the screen.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.rule</code></th>
+                      <td>string</td>
+                      <td>ID of the rule that produced the verdict.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.reason</code></th>
+                      <td>string</td>
+                      <td>Why the rule applies, in plain English.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.answers</code></th>
+                      <td>array of objects</td>
+                      <td>The three answers the verdict is based on.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.answers[].id</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >euDistribution, commercial, productType</span
+                        >
+                      </td>
+                      <td>Question ID.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.answers[].question</code></th>
+                      <td>string</td>
+                      <td>Question text.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.answers[].answer</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >yes, no, unknown, app, library, firmware, saas,
+                          saas-with-client</span
+                        >
+                      </td>
+                      <td>The answer; unknown when it was not given.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.keyDates</code></th>
+                      <td>array of objects</td>
+                      <td>CRA dates and what applies from each.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.keyDates[].date</code></th>
+                      <td>string<span class="field-values">date</span></td>
+                      <td>Date the obligation applies from.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>cra.keyDates[].obligation</code>
+                      </th>
+                      <td>string</td>
+                      <td>What applies from that date.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.keyDates[].inForce</code></th>
+                      <td>boolean</td>
+                      <td>
+                        Whether the date had passed when the report was
+                        generated.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>cra.disclaimer</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >pattern [Nn]ot legal advice</span
+                        >
+                      </td>
+                      <td>Not legal advice.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>summary</code></th>
+                      <td>object</td>
+                      <td>
+                        Counts over all issues, not only the ten the text output
+                        prints.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>summary.dependencies</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>Packages checked.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>summary.vulnerablePackages</code>
+                      </th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>Packages with at least one issue.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>summary.issues</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>All issues found.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>summary.criticalOrHigh</code></th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>Issues with critical or high severity.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>summary.activelyExploited</code>
+                      </th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>Issues with a CVE in the CISA KEV catalog.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>summary.uncheckedDependencies</code>
+                      </th>
+                      <td>integer<span class="field-values">≥ 0</span></td>
+                      <td>
+                        Packages OSV could not be asked about, for example
+                        during an outage. Anything above 0 means the result is
+                        incomplete.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>sources</code></th>
+                      <td>array of objects</td>
+                      <td>Status of each data source.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>sources[].name</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >osv, cisa-kev, first-epss</span
+                        >
+                      </td>
+                      <td>The data source.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>sources[].status</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >ok, partial, unavailable</span
+                        >
+                      </td>
+                      <td>
+                        partial or unavailable means some data is missing.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>sources[].message</code></th>
+                      <td>string, optional</td>
+                      <td>
+                        What went wrong, or a note such as a cached KEV catalog
+                        being used.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues</code></th>
+                      <td>array of objects</td>
+                      <td>
+                        One entry per issue and package. Sorted: actively
+                        exploited (KEV) first, then EPSS, then CVSS.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].package</code></th>
+                      <td>object</td>
+                      <td>The affected package.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>issues[].package.ecosystem</code>
+                      </th>
+                      <td>string</td>
+                      <td>
+                        OSV ecosystem, for example npm, PyPI or Maven. Empty for
+                        packages queried by purl.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].package.name</code></th>
+                      <td>string</td>
+                      <td>Package name.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].package.version</code></th>
+                      <td>string</td>
+                      <td>Installed version.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].package.purl</code></th>
+                      <td>string, optional</td>
+                      <td>
+                        Set for deb and apk SBOM components, which are queried
+                        by purl.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].id</code></th>
+                      <td>string</td>
+                      <td>Advisory ID.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].aliases</code></th>
+                      <td>array of strings</td>
+                      <td>
+                        Other IDs of the same issue, including advisories merged
+                        into this one.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].cves</code></th>
+                      <td>
+                        array of strings<span class="field-values"
+                          >pattern ^CVE-\d{4}-\d{4,}$</span
+                        >
+                      </td>
+                      <td>CVE IDs among the ID and aliases.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].summary</code></th>
+                      <td>string</td>
+                      <td>Advisory summary from OSV.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].severity</code></th>
+                      <td>object</td>
+                      <td>Severity of the issue.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].severity.level</code></th>
+                      <td>
+                        string<span class="field-values"
+                          >critical, high, medium, low, unknown</span
+                        >
+                      </td>
+                      <td>
+                        Severity level, from the CVSS v3.x score or the
+                        advisory's own label.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].severity.score</code></th>
+                      <td>
+                        number or null<span class="field-values">0 to 10</span>
+                      </td>
+                      <td>
+                        CVSS v3.x base score computed from the advisory's
+                        vector; null without a v3 vector.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].severity.vector</code></th>
+                      <td>string or null</td>
+                      <td>The advisory's CVSS vector, if it has one.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].fixedVersions</code></th>
+                      <td>array of strings</td>
+                      <td>
+                        Fixed versions in the advisory's affected ranges for
+                        this package.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].recommendedFix</code></th>
+                      <td>string or null</td>
+                      <td>
+                        The version to upgrade to: the fix for the range that
+                        contains the installed version, else the nearest higher
+                        fix. Null when none is published.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].kev</code></th>
+                      <td>null or object</td>
+                      <td>
+                        The CISA KEV catalog entry when a CVE of this issue is
+                        listed; otherwise null.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].kev.cve</code></th>
+                      <td>string</td>
+                      <td>The listed CVE.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].kev.dateAdded</code></th>
+                      <td>string</td>
+                      <td>Date CISA added it to the catalog.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].kev.dueDate</code></th>
+                      <td>string</td>
+                      <td>Due date from the catalog entry.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>issues[].kev.knownRansomwareCampaignUse</code>
+                      </th>
+                      <td>boolean</td>
+                      <td>
+                        True when the catalog marks the CVE as known to be used
+                        in ransomware campaigns.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].kev.name</code></th>
+                      <td>string</td>
+                      <td>Vulnerability name from the catalog.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].epss</code></th>
+                      <td>null or object</td>
+                      <td>
+                        The highest EPSS score among the issue's CVEs; null when
+                        none was scored.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].epss.cve</code></th>
+                      <td>string</td>
+                      <td>The scored CVE.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].epss.score</code></th>
+                      <td>number<span class="field-values">0 to 1</span></td>
+                      <td>
+                        Probability of exploitation activity in the next 30
+                        days.
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].epss.percentile</code></th>
+                      <td>number<span class="field-values">0 to 1</span></td>
+                      <td>Percentile of the score.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].epss.date</code></th>
+                      <td>string</td>
+                      <td>Day the score was published.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>issues[].references</code></th>
+                      <td>array of strings</td>
+                      <td>Up to 10 reference URLs from the advisory.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <code>issues[].detailsAvailable</code>
+                      </th>
+                      <td>boolean</td>
+                      <td>
+                        False when OSV returned the ID but its details could not
+                        be fetched.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- /generated:docs-fields -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="docs-section"
+        id="browser"
+        aria-labelledby="browser-title"
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Browser</p>
+            <div class="section-body">
+              <h2 id="browser-title">Browser scanner</h2>
+              <p>
+                <a href="/scan">/scan</a> runs the same parsers, sources,
+                ranking and report code in your browser. It differs from the CLI
+                in these ways:
+              </p>
+              <ul class="docs-list">
+                <li>
+                  Nothing is cached or stored, so there is no
+                  <code>--offline</code> and every scan fetches fresh data.
+                </li>
+                <li>
+                  The KEV catalog comes from <code>/api/kev</code> on this site,
+                  a copy of the CISA feed trimmed to the fields Vulnpilot uses,
+                  because browsers cannot read the CISA feed directly.
+                </li>
+                <li>
+                  Files are read up to 32&nbsp;MB, and the report names the
+                  file, not a path.
+                </li>
+                <li>
+                  The format is recognised from the file name as in the CLI, or
+                  from the content for pasted text and other names.
+                </li>
+                <li>
+                  There is no exit code; the page shows the code the CLI would
+                  return.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- generated:footer -->
+    <footer class="site-footer">
+      <div class="wrap grid footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="Vulnpilot home">
+            <span class="brand-word">vulnpilot</span
+            ><span class="brand-cursor" aria-hidden="true"></span>
+          </a>
+          <p>
+            Free and open source under the
+            <a
+              href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+              >MIT license</a
+            >.
+          </p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+            <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+            <li>
+              <a
+                href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                >JSON Schema</a
+              >
+            </li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li>
+              <a href="mailto:quavia.business@gmail.com"
+                >quavia.business@gmail.com</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <p class="footer-note">
+          CRA dates from Regulation (EU) 2024/2847. Not legal advice.
+        </p>
+      </div>
+    </footer>
+    <!-- /generated:footer -->
+  </body>
+</html>

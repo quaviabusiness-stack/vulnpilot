@@ -49,24 +49,42 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="preload"
-      href="/fonts/inter-latin-wght.woff2"
+      href="/assets/fonts/inter-latin-wght-3100e775e8.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/jetbrains-mono-latin-wght.woff2"
+      href="/assets/fonts/jetbrains-mono-latin-wght-18be452724.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="/app.js" defer></script>
+    <link rel="stylesheet" href="/assets/styles-111fac2dab.css" />
+    <script src="/assets/app-26fdaa6a73.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Vulnpilot",
+        "description": "Free, open-source CLI. Reads your lockfile or SBOM, flags dependencies listed in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, shows the fix, and screens EU Cyber Resilience Act applicability.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Node.js 26 or later",
+        "isAccessibleForFree": true,
+        "license": "https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE",
+        "url": "https://getvulnpilot.vercel.app/",
+        "sameAs": [
+          "https://github.com/quaviabusiness-stack/vulnpilot",
+          "https://www.npmjs.com/package/vulnpilot"
+        ]
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
+    <!-- generated:header -->
     <header class="site-header">
       <div class="wrap header-inner">
         <a class="brand" href="/" aria-label="Vulnpilot home">
@@ -75,6 +93,8 @@
         </a>
         <nav class="nav" aria-label="Main">
           <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/docs">Docs</a></li>
             <li><a href="#method">Method</a></li>
             <li><a href="#ci">CI</a></li>
             <li><a href="#cra">CRA</a></li>
@@ -91,6 +111,7 @@
         >
       </div>
     </header>
+    <!-- /generated:header -->
 
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
@@ -152,6 +173,7 @@
 
           <figure class="term-hero" aria-labelledby="hero-term-caption">
             <div class="term-screen">
+              <!-- generated:proof-hero -->
               <pre
                 class="term-cmd"
               ><code><span class="ln l1"><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \</span>
@@ -179,11 +201,15 @@
 <span class="ln l15"> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span></span>
 <span class="ln l16">    Incomplete fix for Apache Log4j vulnerability</span>
 <span class="ln l17">    Fix: upgrade to 2.16.0</span></code></pre>
+              <!-- /generated:proof-hero -->
             </div>
             <figcaption id="hero-term-caption" class="term-caption">
-              Real output, abridged. Vulnpilot 0.1.2 scanning the sample
+              Real output, abridged. Vulnpilot
+              <span data-proof="cli-version">0.1.2</span> scanning the sample
               firmware SBOM from its own repository on
-              17&nbsp;November&nbsp;2026.
+              <time data-proof="capture-date" datetime="2026-11-18"
+                >18&nbsp;November&nbsp;2026</time
+              >.
               <a href="#output">Full run, unedited</a>
             </figcaption>
           </figure>
@@ -211,7 +237,8 @@
                 tool cannot match, an OpenSSL entry with a generic purl and a
                 BusyBox entry with only a CPE. Clone the repository and run the
                 same command to check it. EPSS scores change daily, so your
-                numbers may differ.
+                numbers may differ. To scan your own lockfile without installing
+                anything, use the <a href="/scan">browser scanner</a>.
               </p>
             </div>
             <figure class="run" aria-labelledby="run-caption">
@@ -220,10 +247,12 @@
               </figcaption>
               <div class="run-row run-first run-blank">
                 <div class="run-cell">
+                  <!-- generated:proof-run-1 -->
                   <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
     --non-interactive --eu-distribution yes --commercial yes --product-type firmware
-<span class="t-b">Vulnpilot 0.1.2</span><span class="t-d"> · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 1.5s</span>
+<span class="t-b">Vulnpilot 0.1.2</span><span class="t-d"> · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 2.4s</span>
 </code></pre>
+                  <!-- /generated:proof-run-1 -->
                 </div>
                 <p class="run-note">
                   Version, input file, detected format and scan time.
@@ -231,6 +260,7 @@
               </div>
               <div class="run-row run-blank">
                 <div class="run-cell">
+                  <!-- generated:proof-run-2 -->
                   <pre><code><span class="t-b">EU Cyber Resilience Act:</span> <span class="t-r">LIKELY APPLIES</span>
   You make a firmware/hardware product available on the EU market as part of a
   commercial activity, so you are likely a "manufacturer" under the CRA. That
@@ -245,6 +275,7 @@
     requirements, conformity assessment and CE marking.
   <span class="t-b">Not legal advice. This is an automated preliminary screen based on three answers.</span>
 </code></pre>
+                  <!-- /generated:proof-run-2 -->
                 </div>
                 <p class="run-note">
                   The CRA screen: three answers, a rule-based verdict, the
@@ -253,21 +284,27 @@
               </div>
               <div class="run-row">
                 <div class="run-cell">
+                  <!-- generated:proof-run-3 -->
                   <pre><code>Dependencies            5
 Vulnerable packages     4
 Critical/high issues    <span class="t-r">10</span>
 Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)</span></code></pre>
+                  <!-- /generated:proof-run-3 -->
                 </div>
                 <p class="run-note">
-                  Counts cover all 23 issues, not only the ten printed.
+                  Counts cover all
+                  <span data-proof="issues">23</span> issues, not only the ten
+                  printed.
                 </p>
               </div>
               <div class="run-row run-blank">
                 <div class="run-cell">
+                  <!-- generated:proof-run-4 -->
                   <pre><code><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
 
 <span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span>
 </code></pre>
+                  <!-- /generated:proof-run-4 -->
                 </div>
                 <p class="run-note">
                   Skipped components are counted, not dropped. The 24-hour line
@@ -277,10 +314,12 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
               </div>
               <div class="run-row">
                 <div class="run-cell">
+                  <!-- generated:proof-run-5 -->
                   <pre><code><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
  1. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44228  CRITICAL 10.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
     Remote code injection in Log4j
     Fix: upgrade to 2.15.0</code></pre>
+                  <!-- /generated:proof-run-5 -->
                 </div>
                 <p class="run-note">
                   <em>KNOWN EXPLOITED</em>: in the CISA KEV catalog, so it ranks
@@ -291,6 +330,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
               </div>
               <div class="run-row run-blank">
                 <div class="run-cell">
+                  <!-- generated:proof-run-6 -->
                   <pre><code> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
     Incomplete fix for Apache Log4j vulnerability
     Fix: upgrade to 2.16.0
@@ -319,13 +359,16 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
     urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
     Fix: upgrade to 2.2.2
 </code></pre>
+                  <!-- /generated:proof-run-6 -->
                 </div>
               </div>
               <div class="run-row run-last">
                 <div class="run-cell">
+                  <!-- generated:proof-run-7 -->
                   <pre><code><span class="t-d">Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli</span>
 <span class="t-p" aria-hidden="true">$ </span>echo $?
 1</code></pre>
+                  <!-- /generated:proof-run-7 -->
                 </div>
                 <p class="run-note">
                   The only promotional line, and it is not printed with
@@ -462,7 +505,7 @@ jobs:
         with:
           node-version: 26
       - run: >-
-          npx --yes vulnpilot@0.1.2
+          npx --yes vulnpilot@<span data-proof="cli-version">0.1.2</span>
           --non-interactive
           --eu-distribution yes
           --commercial yes
@@ -510,6 +553,7 @@ jobs:
                   the summary and selected fields of the first issue.
                 </span>
               </figcaption>
+              <!-- generated:proof-json -->
               <pre><code>{
   "schemaVersion": "1.0.0",
   "summary": {
@@ -542,11 +586,12 @@ jobs:
       },
       "epss": {
         "score": 0.99999,
-        "date": "2026-11-17"
+        "date": "2026-11-18"
       }
     }
   ]
 }</code></pre>
+              <!-- /generated:proof-json -->
             </figure>
             <div class="json-notes">
               <p>
@@ -634,6 +679,10 @@ jobs:
               rule-based first pass from three answers. Whether and how the CRA
               applies to your product depends on facts it does not ask about.
               Check with a qualified adviser.
+            </p>
+            <p class="legal-note-link">
+              Answer the three questions in your browser:
+              <a href="/scan#cra">CRA screen</a>.
             </p>
           </div>
         </div>
@@ -852,6 +901,7 @@ jobs:
       </section>
     </main>
 
+    <!-- generated:footer -->
     <footer class="site-footer">
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
@@ -869,6 +919,8 @@ jobs:
         </div>
         <nav class="footer-nav" aria-label="Footer">
           <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/docs">Docs</a></li>
             <li>
               <a href="https://github.com/quaviabusiness-stack/vulnpilot"
                 >GitHub</a
@@ -894,5 +946,6 @@ jobs:
         </p>
       </div>
     </footer>
+    <!-- /generated:footer -->
   </body>
 </html>
