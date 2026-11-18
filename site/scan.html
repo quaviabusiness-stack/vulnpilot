@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scan a lockfile in your browser · Vulnpilot</title>
+    <meta
+      name="description"
+      content="Run Vulnpilot in your browser. The file is read in the tab and never uploaded; when you press Scan, package names and versions go to OSV.dev and CVE IDs to FIRST."
+    />
+    <link rel="canonical" href="https://getvulnpilot.vercel.app/scan" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="theme-color"
+      content="#f7f7f4"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0b0b0c"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vulnpilot" />
+    <meta property="og:url" content="https://getvulnpilot.vercel.app/scan" />
+    <meta
+      property="og:title"
+      content="Scan a lockfile in your browser · Vulnpilot"
+    />
+    <meta
+      property="og:description"
+      content="The Vulnpilot scanner in your browser. The file stays in the tab; nothing is sent until you press Scan."
+    />
+    <meta
+      property="og:image"
+      content="https://getvulnpilot.vercel.app/og.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="preload"
+      href="/assets/fonts/inter-latin-wght-3100e775e8.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/fonts/jetbrains-mono-latin-wght-18be452724.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/assets/styles-111fac2dab.css" />
+    <script type="module" src="/assets/scanner/scan-page-4CI2JPG7.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- generated:header -->
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label="Vulnpilot home">
+          <span class="brand-word">vulnpilot</span
+          ><span class="brand-cursor" aria-hidden="true"></span>
+        </a>
+        <nav class="nav" aria-label="Main">
+          <ul>
+            <li><a href="/scan" aria-current="page">Scan</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li><a href="/#method">Method</a></li>
+            <li><a href="/#ci">CI</a></li>
+            <li><a href="/#cra">CRA</a></li>
+            <li><a href="/#faq">FAQ</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <a class="btn btn-outline btn-small" href="/#waitlist"
+          >Join the waitlist</a
+        >
+      </div>
+    </header>
+    <!-- /generated:header -->
+
+    <main id="main" class="scan-page">
+      <div class="page-head">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Scan</p>
+            <div class="section-body">
+              <h1>Scan a lockfile in this tab</h1>
+              <p class="intro">
+                The same code as <code>npx vulnpilot</code>, compiled for the
+                browser. Your file is read here and never uploaded. Nothing
+                leaves this tab until you press Scan, and then only what is
+                listed before the button.
+              </p>
+              <noscript>
+                <p class="intro">
+                  The browser scanner needs JavaScript. The CLI does not:
+                  <code>npx vulnpilot</code>
+                </p>
+              </noscript>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="scan-step" id="input" aria-labelledby="input-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Input</p>
+            <div class="section-body">
+              <h2 id="input-title" class="step-title">Choose a file</h2>
+              <div class="dropzone" id="dropzone">
+                <p class="dropzone-text">
+                  Drop a lockfile or CycloneDX JSON SBOM here, choose one, or
+                  paste it.
+                </p>
+                <div class="dropzone-actions">
+                  <button
+                    class="btn btn-outline"
+                    type="button"
+                    id="choose-file"
+                  >
+                    Choose file
+                  </button>
+                  <button class="btn btn-outline" type="button" id="sample">
+                    Try the sample SBOM
+                  </button>
+                </div>
+                <label class="visually-hidden" for="file-input"
+                  >Lockfile or SBOM</label
+                >
+                <input
+                  class="visually-hidden"
+                  type="file"
+                  id="file-input"
+                  tabindex="-1"
+                  accept=".json,.yaml,.yml,.lock,application/json,text/yaml,text/plain"
+                />
+                <div class="paste">
+                  <label for="paste-input">Or paste its contents</label>
+                  <textarea
+                    id="paste-input"
+                    rows="3"
+                    spellcheck="false"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    aria-describedby="dropzone-limits"
+                  ></textarea>
+                  <button
+                    class="btn btn-outline btn-small"
+                    type="button"
+                    id="paste-read"
+                  >
+                    Read pasted text
+                  </button>
+                </div>
+                <p class="dropzone-limits" id="dropzone-limits">
+                  <code>package-lock.json</code>, <code>pnpm-lock.yaml</code>,
+                  <code>yarn.lock</code> or CycloneDX JSON, up to 32&nbsp;MB.
+                  Read by a worker in this tab that has no network access.
+                </p>
+              </div>
+              <div class="file-line" id="file-line" hidden>
+                <p id="file-summary"></p>
+                <button
+                  class="btn btn-outline btn-small"
+                  type="button"
+                  id="choose-another"
+                >
+                  Choose another file
+                </button>
+              </div>
+              <p class="input-status" id="input-status"></p>
+              <p
+                class="input-error"
+                id="input-error"
+                role="alert"
+                tabindex="-1"
+                hidden
+              ></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="scan-step"
+        id="found"
+        aria-labelledby="found-title"
+        hidden
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Found</p>
+            <div class="section-body">
+              <h2 id="found-title" class="step-title" tabindex="-1">
+                What the file contains
+              </h2>
+              <div id="found-body"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scan-step" id="sent" aria-labelledby="sent-title" hidden>
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Sent</p>
+            <div class="section-body">
+              <h2 id="sent-title" class="step-title">
+                What leaves this tab when you press Scan
+              </h2>
+              <ol class="sent-list" id="sent-list"></ol>
+              <p class="sent-note">
+                OSV.dev sees every name on the list, including private or
+                internal package names. Both services see your IP address, as
+                with any web request.
+              </p>
+              <div class="request-toggle">
+                <button
+                  class="btn btn-outline btn-small"
+                  type="button"
+                  id="show-request"
+                  aria-expanded="false"
+                  aria-controls="request"
+                >
+                  Show the OSV request
+                </button>
+              </div>
+              <div class="request" id="request" hidden>
+                <p class="request-line">
+                  <code>POST https://api.osv.dev/v1/querybatch</code><br /><code
+                    >Content-Type: application/json</code
+                  >
+                </p>
+                <div class="request-head">
+                  <p id="request-meta"></p>
+                  <div class="request-buttons">
+                    <button
+                      class="copy copy-quiet"
+                      type="button"
+                      id="request-previous"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      class="copy copy-quiet"
+                      type="button"
+                      id="request-next"
+                    >
+                      Next
+                    </button>
+                    <button
+                      class="copy copy-quiet"
+                      type="button"
+                      id="request-copy"
+                    >
+                      <span class="copy-label">Copy</span
+                      ><span class="visually-hidden"> the request body</span>
+                    </button>
+                  </div>
+                </div>
+                <pre
+                  class="request-body"
+                  tabindex="0"
+                  aria-label="Request body"
+                ><code id="request-body"></code></pre>
+                <p class="request-note">
+                  If OSV.dev splits an answer into pages, Vulnpilot repeats only
+                  the affected queries with OSV’s page token.
+                </p>
+              </div>
+              <div class="scan-actions">
+                <button class="btn btn-primary" type="button" id="scan-button">
+                  <span id="scan-label">Scan</span>
+                </button>
+                <button
+                  class="btn btn-outline"
+                  type="button"
+                  id="reset-from-sent"
+                >
+                  Choose another file
+                </button>
+              </div>
+              <p class="scan-hint">
+                Press Scan to send. You can stop at any time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="scan-step"
+        id="progress"
+        aria-labelledby="progress-title"
+        hidden
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Progress</p>
+            <div class="section-body">
+              <h2 id="progress-title" class="visually-hidden">Progress</h2>
+              <dl class="progress-list">
+                <div>
+                  <dt>OSV</dt>
+                  <dd id="progress-osv"></dd>
+                </div>
+                <div>
+                  <dt>Advisories</dt>
+                  <dd id="progress-advisories"></dd>
+                </div>
+                <div>
+                  <dt>KEV</dt>
+                  <dd id="progress-kev"></dd>
+                </div>
+                <div>
+                  <dt>EPSS</dt>
+                  <dd id="progress-epss"></dd>
+                </div>
+              </dl>
+              <p class="progress-note" id="progress-note"></p>
+              <button
+                class="btn btn-outline btn-small"
+                type="button"
+                id="stop"
+                hidden
+              >
+                Stop
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="scan-step"
+        id="report"
+        aria-labelledby="report-title"
+        hidden
+      >
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">Report</p>
+            <div class="section-body">
+              <h2 id="report-title" class="step-title" tabindex="-1">Report</h2>
+              <p class="report-meta" id="report-meta"></p>
+              <div class="banners" id="report-banners" hidden></div>
+            </div>
+            <div class="report-terminal">
+              <pre
+                tabindex="0"
+                aria-label="Report text"
+              ><code id="report-text"></code></pre>
+            </div>
+            <div class="section-body report-after">
+              <div class="report-actions">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  id="download-json"
+                >
+                  Download JSON
+                </button>
+                <button
+                  class="btn btn-outline"
+                  type="button"
+                  id="toggle-table"
+                  aria-expanded="false"
+                  aria-controls="report-table"
+                >
+                  Show as table
+                </button>
+                <button
+                  class="btn btn-outline"
+                  type="button"
+                  id="toggle-all"
+                  aria-pressed="false"
+                  hidden
+                >
+                  Show all issues
+                </button>
+                <button class="btn btn-outline" type="button" id="scan-another">
+                  Scan another file
+                </button>
+              </div>
+              <div class="report-table" id="report-table" hidden></div>
+              <div class="report-facts" id="report-facts"></div>
+              <p class="report-waitlist">
+                Continuous monitoring, which re-checks dependencies when new
+                advisories or KEV entries appear, is planned but not available
+                yet. <a href="/#waitlist">Join the waitlist</a> to hear when it
+                is.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scan-step" id="cra" aria-labelledby="cra-title">
+        <div class="wrap">
+          <div class="grid section-grid">
+            <p class="rail">CRA</p>
+            <div class="section-body">
+              <h2 id="cra-title" class="step-title">CRA screen</h2>
+              <p class="intro">
+                Three questions, the CLI’s rules. The verdict updates as you
+                answer and goes into the report. Answers stay in this tab.
+              </p>
+            </div>
+            <div
+              class="cra-form"
+              id="cra-form"
+              role="group"
+              aria-label="CRA questions"
+            >
+              <!-- generated:cra-questions -->
+              <fieldset class="cra-question">
+                <legend>
+                  Is the product made available on the EU market (sold,
+                  distributed or offered to users in the EU)?
+                </legend>
+                <div class="choices">
+                  <label class="choice"
+                    ><input type="radio" name="euDistribution" value="yes" />
+                    Yes</label
+                  ><label class="choice"
+                    ><input type="radio" name="euDistribution" value="no" />
+                    No</label
+                  ><label class="choice"
+                    ><input
+                      type="radio"
+                      name="euDistribution"
+                      value="unknown"
+                      checked
+                    />
+                    Not sure</label
+                  >
+                </div>
+              </fieldset>
+              <fieldset class="cra-question">
+                <legend>
+                  Is it supplied as part of a commercial activity (sold,
+                  licensed, monetised, or with paid support/services)?
+                </legend>
+                <div class="choices">
+                  <label class="choice"
+                    ><input type="radio" name="commercial" value="yes" />
+                    Yes</label
+                  ><label class="choice"
+                    ><input type="radio" name="commercial" value="no" />
+                    No</label
+                  ><label class="choice"
+                    ><input
+                      type="radio"
+                      name="commercial"
+                      value="unknown"
+                      checked
+                    />
+                    Not sure</label
+                  >
+                </div>
+              </fieldset>
+              <fieldset class="cra-question">
+                <legend>What kind of product is it?</legend>
+                <div class="choices">
+                  <label class="choice"
+                    ><input type="radio" name="productType" value="app" />
+                    Installable software (desktop, mobile, CLI, on-prem
+                    server)</label
+                  ><label class="choice"
+                    ><input type="radio" name="productType" value="library" />
+                    Library or component that others integrate</label
+                  ><label class="choice"
+                    ><input type="radio" name="productType" value="firmware" />
+                    Firmware or a connected hardware device</label
+                  ><label class="choice"
+                    ><input type="radio" name="productType" value="saas" /> Pure
+                    SaaS / hosted service with nothing downloadable</label
+                  ><label class="choice"
+                    ><input
+                      type="radio"
+                      name="productType"
+                      value="saas-with-client"
+                    />
+                    SaaS with an app, desktop client, agent or firmware</label
+                  ><label class="choice"
+                    ><input
+                      type="radio"
+                      name="productType"
+                      value="unknown"
+                      checked
+                    />
+                    Not sure</label
+                  >
+                </div>
+              </fieldset>
+              <!-- /generated:cra-questions -->
+            </div>
+            <div class="cra-result">
+              <h3 class="visually-hidden">Result</h3>
+              <div id="cra-result">
+                <!-- generated:cra-result -->
+                <div class="cra-result-body">
+                  <dl class="cra-verdict">
+                    <div>
+                      <dt>Verdict</dt>
+                      <dd class="cra-verdict-value">UNCLEAR</dd>
+                    </div>
+                    <div>
+                      <dt>Rule</dt>
+                      <dd><code>insufficient-information</code></dd>
+                    </div>
+                  </dl>
+                  <p class="cra-reason">
+                    The answers do not settle it yet: unknown whether you offer
+                    the product in the EU, whether it is part of a commercial
+                    activity, what kind of product it is. If you sell or
+                    distribute downloadable software or firmware to EU users as
+                    part of a business, the CRA most likely applies.
+                  </p>
+                  <h3 class="minor-heading">Key dates</h3>
+                  <ul class="cra-dates">
+                    <li>
+                      <time datetime="2026-09-11">11 September 2026</time> (in
+                      force): Vulnerability and incident reporting obligations
+                      apply: early warning within 24 hours of becoming aware of
+                      an actively exploited vulnerability or severe incident.
+                    </li>
+                    <li>
+                      <time datetime="2027-12-11">11 December 2027</time>: Full
+                      obligations apply, including essential cybersecurity
+                      requirements, conformity assessment and CE marking.
+                    </li>
+                  </ul>
+                  <p class="cra-disclaimer">
+                    <strong
+                      >Not legal advice. This is an automated preliminary screen
+                      based on three answers.</strong
+                    >
+                  </p>
+                  <p class="cra-flags">
+                    As flags:
+                    <code data-cra-flags
+                      >--eu-distribution unknown --commercial unknown
+                      --product-type unknown</code
+                    >
+                  </p>
+                </div>
+                <!-- /generated:cra-result -->
+              </div>
+              <button class="copy copy-quiet" type="button" id="copy-flags">
+                <span class="copy-label">Copy</span
+                ><span class="visually-hidden"> the flags</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="visually-hidden" id="scan-live" aria-live="polite"></p>
+    </main>
+
+    <!-- generated:footer -->
+    <footer class="site-footer">
+      <div class="wrap grid footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="Vulnpilot home">
+            <span class="brand-word">vulnpilot</span
+            ><span class="brand-cursor" aria-hidden="true"></span>
+          </a>
+          <p>
+            Free and open source under the
+            <a
+              href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+              >MIT license</a
+            >.
+          </p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+            <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+            <li>
+              <a
+                href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                >JSON Schema</a
+              >
+            </li>
+            <li><a href="/privacy">Privacy</a></li>
+            <li>
+              <a href="mailto:quavia.business@gmail.com"
+                >quavia.business@gmail.com</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <p class="footer-note">
+          CRA dates from Regulation (EU) 2024/2847. Not legal advice.
+        </p>
+      </div>
+    </footer>
+    <!-- /generated:footer -->
+  </body>
+</html>
