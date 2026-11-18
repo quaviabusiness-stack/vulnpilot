@@ -55,11 +55,21 @@ function cli(file: string): Record<string, Json> {
   const flag = file.endsWith('cyclonedx.json') ? '--sbom' : '--path';
   const result = spawnSync(
     process.execPath,
-    [join(ROOT, 'dist/cli.js'), flag, basename(file), '--json', '--non-interactive'],
+    [
+      join(ROOT, 'dist/cli.js'),
+      flag,
+      basename(file),
+      '--json',
+      '--non-interactive',
+    ],
     {
       cwd: dirname(file),
       encoding: 'utf8',
-      env: { ...process.env, VULNPILOT_CACHE_DIR: cache, VULNPILOT_TELEMETRY: '0' },
+      env: {
+        ...process.env,
+        VULNPILOT_CACHE_DIR: cache,
+        VULNPILOT_TELEMETRY: '0',
+      },
     },
   );
   rmSync(cache, { recursive: true, force: true });
@@ -71,11 +81,14 @@ const context = await browser.newContext({ acceptDownloads: true });
 const page = await context.newPage();
 const requests: string[] = [];
 const consoleErrors: string[] = [];
-page.on('request', (request) => requests.push(`${request.method()} ${request.url()}`));
+page.on('request', (request) =>
+  requests.push(`${request.method()} ${request.url()}`),
+);
 page.on('console', (message) => {
   if (message.type() === 'error') consoleErrors.push(message.text());
 });
-if (process.env.SHARE) await page.goto(`${BASE}/?_vercel_share=${process.env.SHARE}`);
+if (process.env.SHARE)
+  await page.goto(`${BASE}/?_vercel_share=${process.env.SHARE}`);
 
 let failures = 0;
 for (const file of files) {
@@ -91,7 +104,9 @@ for (const file of files) {
     page.waitForEvent('download'),
     page.getByRole('button', { name: 'Download JSON' }).click(),
   ]);
-  const fromBrowser = JSON.parse(readFileSync((await download.path())!, 'utf8'));
+  const fromBrowser = JSON.parse(
+    readFileSync((await download.path())!, 'utf8'),
+  );
   const hosts = [
     ...new Set(
       requests
@@ -104,10 +119,18 @@ for (const file of files) {
   console.log(
     `\n${file.replace(ROOT, '').replaceAll('\\', '/')}: ${summary.dependencies} packages, ${summary.issues} issues, ${summary.activelyExploited} KEV`,
   );
-  console.log(`  external requests before Scan: ${before.length}; after: ${hosts.join(', ')}`);
-  console.log(diff.length === 0 ? '  identical to the CLI report' : diff.map((line) => `  ${line}`).join('\n'));
+  console.log(
+    `  external requests before Scan: ${before.length}; after: ${hosts.join(', ')}`,
+  );
+  console.log(
+    diff.length === 0
+      ? '  identical to the CLI report'
+      : diff.map((line) => `  ${line}`).join('\n'),
+  );
   if (diff.length > 0 || before.length > 0) failures += 1;
 }
-console.log(`\nConsole errors: ${consoleErrors.length === 0 ? 'none' : consoleErrors.join(' | ')}`);
+console.log(
+  `\nConsole errors: ${consoleErrors.length === 0 ? 'none' : consoleErrors.join(' | ')}`,
+);
 await browser.close();
 process.exitCode = failures > 0 ? 1 : 0;
