@@ -22,6 +22,15 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - name: The npm package contains exactly the CLI's files
+        run: |
+          npm pack --dry-run --ignore-scripts --json > /tmp/pack.json
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const files = JSON.parse(fs.readFileSync('/tmp/pack.json', 'utf8'))[0].files.map((file) => file.path).sort();
+            const expected = ['LICENSE', 'README.md', 'dist/cli.js', 'package.json', 'schema/report-v1.schema.json'];
+            if (JSON.stringify(files) !== JSON.stringify(expected)) throw new Error('npm pack lists: ' + files.join(', '));
+          "
       - name: Smoke-test JSON and the packed CLI (offline mock data)
         env:
           VULNPILOT_MOCK: '1'
