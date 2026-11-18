@@ -10,3 +10,6 @@ GitHub CLI/
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+site-tools/test-results/
+site-tools/playwright-report/
+site-tools/.lighthouseci/
