@@ -1,5 +1,5 @@
 import { errorMessage, getJson } from './http.js';
-import type { SourceContext } from './osv.js';
+import { reportProgress, type SourceContext } from './source.js';
 import { isRecord } from './types.js';
 
 export const KEV_URL =
@@ -14,12 +14,15 @@ export interface KevEntry {
 
 interface KevCatalog {
   catalogVersion: string;
+  /** Absent in catalogs cached before this field was read. */
+  dateReleased?: string;
   entries: Record<string, KevEntry>;
 }
 
 export interface KevLookup {
   entries: Map<string, KevEntry> | null;
   catalogVersion?: string;
+  dateReleased?: string;
   note?: string;
   error?: string;
 }
@@ -40,43 +43,64 @@ export function parseKev(value: unknown): KevCatalog {
   }
   if (Object.keys(entries).length === 0)
     throw new Error('CISA KEV feed contained no vulnerabilities.');
-  return { catalogVersion: String(value.catalogVersion ?? ''), entries };
+  return {
+    catalogVersion: String(value.catalogVersion ?? ''),
+    dateReleased: String(value.dateReleased ?? ''),
+    entries,
+  };
 }
 
-function lookup(catalog: KevCatalog, note?: string): KevLookup {
-  return {
-    entries: new Map(Object.entries(catalog.entries)),
+function lookup(
+  context: SourceContext,
+  catalog: KevCatalog,
+  note?: string,
+): KevLookup {
+  const entries = new Map(Object.entries(catalog.entries));
+  reportProgress(context, {
+    source: 'cisa-kev',
     catalogVersion: catalog.catalogVersion,
+    dateReleased: catalog.dateReleased ?? '',
+    entries: entries.size,
+  });
+  return {
+    entries,
+    catalogVersion: catalog.catalogVersion,
+    ...(catalog.dateReleased ? { dateReleased: catalog.dateReleased } : {}),
     ...(note ? { note } : {}),
   };
 }
 
+function failure(context: SourceContext, error: string): KevLookup {
+  reportProgress(context, { source: 'cisa-kev', error });
+  return { entries: null, error };
+}
+
 export async function loadKev(context: SourceContext): Promise<KevLookup> {
-  const hit = await context.cache.get<KevCatalog>('kev', KEV_URL);
-  if (hit && (hit.fresh || context.cache.offline)) return lookup(hit.value);
+  const url = context.kevUrl ?? KEV_URL;
+  const hit = await context.cache.get<KevCatalog>('kev', url);
+  if (hit && (hit.fresh || context.cache.offline))
+    return lookup(context, hit.value);
   if (context.cache.offline)
-    return {
-      entries: null,
-      error: 'offline and the KEV catalog is not cached',
-    };
+    return failure(context, 'offline and the KEV catalog is not cached');
   try {
     // The full feed is ~2 MB, so it gets a longer timeout than API calls.
     const catalog = parseKev(
       await getJson(
         context.http,
-        KEV_URL,
+        url,
         {},
         Math.max(context.http.timeoutMs, 20_000),
       ),
     );
-    await context.cache.set('kev', KEV_URL, catalog);
-    return lookup(catalog);
+    await context.cache.set('kev', url, catalog);
+    return lookup(context, catalog);
   } catch (error) {
     if (hit)
       return lookup(
+        context,
         hit.value,
         `download failed (${errorMessage(error)}); using cached catalog from ${new Date(hit.fetchedAt).toISOString().slice(0, 10)}`,
       );
-    return { entries: null, error: errorMessage(error) };
+    return failure(context, errorMessage(error));
   }
 }

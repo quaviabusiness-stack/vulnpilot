@@ -1,6 +1,6 @@
-import type { Cache } from './cache.js';
 import { cvss3BaseScore, levelFromLabel, levelFromScore } from './cvss.js';
-import { errorMessage, getJson, type HttpClient, mapLimit } from './http.js';
+import { errorMessage, getJson, mapLimit } from './http.js';
+import { reportProgress, type SourceContext } from './source.js';
 import {
   type Dependency,
   dependencyKey,
@@ -9,13 +9,10 @@ import {
 } from './types.js';
 
 export const OSV_API = 'https://api.osv.dev/v1';
-const BATCH_SIZE = 1000;
-const DETAIL_CONCURRENCY = 10;
+export const OSV_BATCH_SIZE = 1000;
+export const OSV_DETAIL_CONCURRENCY = 10;
 
-export interface SourceContext {
-  http: HttpClient;
-  cache: Cache;
-}
+export type { SourceContext } from './source.js';
 
 // ---------------------------------------------------------------------------
 // Step 1: POST /v1/querybatch -> vulnerability IDs per package.
@@ -63,6 +60,32 @@ function toQuery(dependency: Dependency, token: string | undefined) {
   };
 }
 
+/** The exact JSON body of one POST /v1/querybatch request. */
+function batchBody(
+  queue: { dependency: Dependency; token: string | undefined }[],
+): string {
+  return JSON.stringify({
+    queries: queue.map(({ dependency, token }) => toQuery(dependency, token)),
+  });
+}
+
+/**
+ * The first-page request bodies a scan sends for these dependencies, one per
+ * batch of up to 1,000. Follow-up pages repeat some queries with a page token.
+ */
+export function osvQueryBodies(dependencies: Dependency[]): string[] {
+  const bodies: string[] = [];
+  for (let offset = 0; offset < dependencies.length; offset += OSV_BATCH_SIZE)
+    bodies.push(
+      batchBody(
+        dependencies
+          .slice(offset, offset + OSV_BATCH_SIZE)
+          .map((dependency) => ({ dependency, token: undefined })),
+      ),
+    );
+  return bodies;
+}
+
 export interface IdLookup {
   /** Vulnerability IDs per dependencyKey; absent keys could not be checked. */
   ids: Map<string, string[]>;
@@ -84,19 +107,28 @@ export async function queryVulnerabilityIds(
     if (cached) ids.set(dependencyKey(dependency), cached);
     else pending.push(dependency);
   }
+  const progress = (done: number, failed: number, error?: string) =>
+    reportProgress(context, {
+      source: 'osv',
+      step: 'packages',
+      done,
+      failed,
+      total: dependencies.length,
+      ...(error ? { error } : {}),
+    });
+  progress(ids.size, 0);
   if (pending.length === 0) return { ids, unchecked: 0 };
-  if (context.cache.offline)
-    return {
-      ids,
-      unchecked: pending.length,
-      error: `offline and ${pending.length} package(s) are not in the cache`,
-    };
+  if (context.cache.offline) {
+    const error = `offline and ${pending.length} package(s) are not in the cache`;
+    progress(ids.size, pending.length, error);
+    return { ids, unchecked: pending.length, error };
+  }
 
   let unchecked = pending.length;
   try {
-    for (let offset = 0; offset < pending.length; offset += BATCH_SIZE) {
+    for (let offset = 0; offset < pending.length; offset += OSV_BATCH_SIZE) {
       let queue = pending
-        .slice(offset, offset + BATCH_SIZE)
+        .slice(offset, offset + OSV_BATCH_SIZE)
         .map((dependency) => ({
           dependency,
           found: [] as string[],
@@ -108,11 +140,7 @@ export async function queryVulnerabilityIds(
         const response = await getJson(context.http, `${OSV_API}/querybatch`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            queries: queue.map(({ dependency, token }) =>
-              toQuery(dependency, token),
-            ),
-          }),
+          body: batchBody(queue),
         });
         const pages = parseBatch(response, queue.length);
         queue = queue.filter((item, index) => {
@@ -131,9 +159,12 @@ export async function queryVulnerabilityIds(
         await context.cache.set('osv-query', dependencyKey(dependency), found);
       }
       unchecked -= batch.length;
+      progress(ids.size, 0);
     }
   } catch (error) {
-    return { ids, unchecked, error: errorMessage(error) };
+    const message = errorMessage(error);
+    progress(ids.size, unchecked, message);
+    return { ids, unchecked, error: message };
   }
   return { ids, unchecked: 0 };
 }
@@ -235,15 +266,27 @@ export async function fetchVulnerabilities(
   const records = new Map<string, OsvRecord>();
   const failed: string[] = [];
   let firstError: string | undefined;
-  await mapLimit(ids, DETAIL_CONCURRENCY, async (id) => {
+  const progress = () =>
+    reportProgress(context, {
+      source: 'osv',
+      step: 'advisories',
+      done: records.size,
+      failed: failed.length,
+      total: ids.length,
+      ...(firstError ? { error: firstError } : {}),
+    });
+  progress();
+  await mapLimit(ids, OSV_DETAIL_CONCURRENCY, async (id) => {
     const cached = await context.cache.getUsable<OsvRecord>('osv-vuln', id);
     if (cached) {
       records.set(id, cached);
+      progress();
       return;
     }
     if (context.cache.offline) {
       failed.push(id);
       firstError ??= 'offline and some advisories are not in the cache';
+      progress();
       return;
     }
     try {
@@ -259,6 +302,7 @@ export async function fetchVulnerabilities(
       failed.push(id);
       firstError ??= errorMessage(error);
     }
+    progress();
   });
   return { records, failed, ...(firstError ? { error: firstError } : {}) };
 }
