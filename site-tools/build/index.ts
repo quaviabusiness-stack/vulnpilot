@@ -80,6 +80,11 @@ css = css.replace(/\/assets\/fonts\/[a-z0-9-]+\.woff2/g, (logical) => {
   return hashed;
 });
 emit(
+  '/assets/pages.css',
+  `/* ${generatedHeader('site-src/pages.css')} */
+${readFileSync(join(SITE_SRC, 'pages.css'), 'utf8')}`,
+);
+emit(
   '/assets/styles.css',
   `/* ${generatedHeader('site-src/styles.css')} */\n${css}`,
 );
