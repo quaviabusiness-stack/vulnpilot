@@ -1,25 +1,58 @@
 <!-- Shared header, inserted into every page by the site-tools build. The build
-     marks the current page's link and points the section links at the home page
-     from other pages. -->
+     marks the current page's links, points the section links at the home page
+     from other pages, and on /scan swaps the scan button for the design partner
+     link. The mobile menu is a <details> element and needs no script. -->
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/" aria-label="Vulnpilot home">
-      <span class="brand-word">vulnpilot</span
-      ><span class="brand-cursor" aria-hidden="true"></span>
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect class="mark-bg" width="32" height="32" rx="7" />
+        <path
+          class="mark-v"
+          d="M7 10.5 11.75 21.5 16.5 10.5"
+          fill="none"
+          stroke-width="3"
+        />
+        <rect class="mark-block" x="19.5" y="10" width="5.5" height="11.5" />
+      </svg>
+      <span class="brand-word">Vulnpilot</span>
     </a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav nav-desktop" aria-label="Main">
       <ul>
         <li><a href="/scan">Scan</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
         <li><a href="/docs">Docs</a></li>
-        <li><a href="#method">Method</a></li>
-        <li><a href="#ci">CI</a></li>
-        <li><a href="#cra">CRA</a></li>
-        <li><a href="#faq">FAQ</a></li>
         <li>
           <a href="https://github.com/quaviabusiness-stack/vulnpilot">GitHub</a>
         </li>
       </ul>
     </nav>
-    <a class="btn btn-outline btn-small" href="#waitlist">Join the waitlist</a>
+    <div class="header-actions">
+      <a class="btn btn-primary btn-small" href="/scan" data-header-cta
+        >Scan a lockfile</a
+      >
+      <details class="menu">
+        <summary>
+          <span class="menu-icon" aria-hidden="true"></span>Menu
+        </summary>
+        <nav class="nav menu-panel" aria-label="Menu">
+          <ul>
+            <li><a href="/scan">Scan</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li>
+              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                >GitHub</a
+              >
+            </li>
+          </ul>
+          <a class="btn btn-primary" href="/scan" data-header-cta
+            >Scan a lockfile</a
+          >
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

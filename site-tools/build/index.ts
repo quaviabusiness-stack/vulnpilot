@@ -80,6 +80,11 @@ css = css.replace(/\/assets\/fonts\/[a-z0-9-]+\.woff2/g, (logical) => {
   return hashed;
 });
 emit(
+  '/assets/home.css',
+  `/* ${generatedHeader('site-src/home.css')} */
+${readFileSync(join(SITE_SRC, 'home.css'), 'utf8')}`,
+);
+emit(
   '/assets/pages.css',
   `/* ${generatedHeader('site-src/pages.css')} */
 ${readFileSync(join(SITE_SRC, 'pages.css'), 'utf8')}`,
@@ -139,10 +144,25 @@ function header(page: (typeof PAGES)[number]): string {
   if (page !== 'index.html') html = html.replaceAll('href="#', 'href="/#');
   const current = CURRENT[page];
   if (current)
-    html = html.replace(
-      `<a href="${current}">`,
-      `<a href="${current}" aria-current="page">`,
+    html = html.replaceAll(
+      `<li><a href="${current}">`,
+      `<li><a href="${current}" aria-current="page">`,
     );
+  // On /scan the scan button would point at the page itself.
+  if (page === 'scan.html') {
+    let swapped = 0;
+    html = html.replace(
+      /<a class="btn btn-primary( btn-small)?" href="\/scan" data-header-cta\s*>Scan a lockfile<\/a\s*>/g,
+      (_match, small: string | undefined) => {
+        swapped += 1;
+        return `<a class="btn btn-outline${small ?? ''}" href="/#waitlist" data-header-cta>Design partners</a>`;
+      },
+    );
+    if (swapped !== 2)
+      throw new Error(
+        'header.html: expected two scan buttons to swap on /scan',
+      );
+  }
   return html;
 }
 const footer = partial('footer.html');

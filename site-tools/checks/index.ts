@@ -3,6 +3,7 @@
 //   pnpm --filter site-tools check
 //
 // proof     the CLI output on the pages equals the stored capture, byte for byte
+// faq       the FAQPage JSON-LD matches the questions shown on the home page
 // links     every internal link and fragment resolves
 // budgets   gzip sizes per page and for the scanner chunks
 // scanner   scanner chunks load only on /scan
@@ -129,6 +130,61 @@ function checkProof(): void {
 }
 
 // ---------------------------------------------------------------------------
+// faq: the FAQPage JSON-LD on the home page says exactly what the page shows.
+
+function normalise(text: string): string {
+  return unescape(text).replace(/\s+/g, ' ').trim();
+}
+
+function checkFaq(): void {
+  const home = page('index.html');
+  const json = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(
+    home,
+  )?.[1];
+  if (!json) {
+    fail('faq: the home page has no JSON-LD');
+    return;
+  }
+  const graph = (JSON.parse(json) as { '@graph'?: Record<string, unknown>[] })[
+    '@graph'
+  ];
+  const faq = graph?.find((node) => node['@type'] === 'FAQPage') as
+    | {
+        mainEntity: {
+          name: string;
+          acceptedAnswer: { text: string };
+        }[];
+      }
+    | undefined;
+  if (!faq) {
+    fail('faq: no FAQPage in the JSON-LD');
+    return;
+  }
+  const shown = [
+    ...home.matchAll(
+      /<details class="faq-item">\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>/g,
+    ),
+  ].map((match) => ({ q: normalise(match[1]!), a: normalise(match[2]!) }));
+  const listed = faq.mainEntity.map((item) => ({
+    q: item.name,
+    a: item.acceptedAnswer.text,
+  }));
+  if (shown.length !== listed.length)
+    fail(
+      `faq: the page shows ${shown.length} questions, the FAQPage lists ${listed.length}`,
+    );
+  for (const [index, item] of listed.entries()) {
+    const visible = shown[index];
+    if (visible?.q !== item.q)
+      fail(
+        `faq: question ${index + 1} differs: "${visible?.q}" vs "${item.q}"`,
+      );
+    else if (visible.a !== item.a)
+      fail(`faq: the answer to "${item.q}" differs from the page`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // links
 
 function ids(html: string): Set<string> {
@@ -156,7 +212,8 @@ function checkLinks(): void {
     for (const match of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
       const value = match[1]!;
       if (/^(?:https?:|mailto:)/.test(value)) continue;
-      const [path = '', fragment] = value.split('#');
+      const [pathAndQuery = '', fragment] = value.split('#');
+      const path = pathAndQuery.split('?')[0] ?? '';
       const file = path === '' ? name : target(path);
       if (!file) {
         fail(`links: ${name} links to missing ${value}`);
@@ -344,6 +401,7 @@ function checkCrawling(): void {
 
 const checks: [string, () => void | Promise<void>][] = [
   ['proof', checkProof],
+  ['faq', checkFaq],
   ['links', checkLinks],
   ['budgets', checkBudgets],
   ['security', () => checkSecurityTxt()],

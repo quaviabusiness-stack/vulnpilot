@@ -43,7 +43,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="preload"
-      href="/assets/fonts/inter-latin-wght-3100e775e8.woff2"
+      href="/assets/fonts/schibsted-grotesk-latin-wght-4c8b93f431.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -55,9 +55,9 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/styles-752561f567.css" />
+    <link rel="stylesheet" href="/assets/styles-98cc398111.css" />
     <link rel="stylesheet" href="/assets/pages-d55a2989b7.css" />
-    <script type="module" src="/assets/scanner/scan-page-5ZR5OQLO.js"></script>
+    <script type="module" src="/assets/scanner/scan-page-JCQYOSWS.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -66,17 +66,30 @@
     <header class="site-header">
       <div class="wrap header-inner">
         <a class="brand" href="/" aria-label="Vulnpilot home">
-          <span class="brand-word">vulnpilot</span
-          ><span class="brand-cursor" aria-hidden="true"></span>
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect class="mark-bg" width="32" height="32" rx="7" />
+            <path
+              class="mark-v"
+              d="M7 10.5 11.75 21.5 16.5 10.5"
+              fill="none"
+              stroke-width="3"
+            />
+            <rect
+              class="mark-block"
+              x="19.5"
+              y="10"
+              width="5.5"
+              height="11.5"
+            />
+          </svg>
+          <span class="brand-word">Vulnpilot</span>
         </a>
-        <nav class="nav" aria-label="Main">
+        <nav class="nav nav-desktop" aria-label="Main">
           <ul>
             <li><a href="/scan" aria-current="page">Scan</a></li>
+            <li><a href="/#how">How it works</a></li>
+            <li><a href="/#pricing">Pricing</a></li>
             <li><a href="/docs">Docs</a></li>
-            <li><a href="/#method">Method</a></li>
-            <li><a href="/#ci">CI</a></li>
-            <li><a href="/#cra">CRA</a></li>
-            <li><a href="/#faq">FAQ</a></li>
             <li>
               <a href="https://github.com/quaviabusiness-stack/vulnpilot"
                 >GitHub</a
@@ -84,9 +97,32 @@
             </li>
           </ul>
         </nav>
-        <a class="btn btn-outline btn-small" href="/#waitlist"
-          >Join the waitlist</a
-        >
+        <div class="header-actions">
+          <a class="btn btn-outline btn-small" href="/#waitlist" data-header-cta
+            >Design partners</a
+          >
+          <details class="menu">
+            <summary>
+              <span class="menu-icon" aria-hidden="true"></span>Menu
+            </summary>
+            <nav class="nav menu-panel" aria-label="Menu">
+              <ul>
+                <li><a href="/scan" aria-current="page">Scan</a></li>
+                <li><a href="/#how">How it works</a></li>
+                <li><a href="/#pricing">Pricing</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li>
+                  <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                    >GitHub</a
+                  >
+                </li>
+              </ul>
+              <a class="btn btn-outline" href="/#waitlist" data-header-cta
+                >Design partners</a
+              >
+            </nav>
+          </details>
+        </div>
       </div>
     </header>
     <!-- /generated:header -->
@@ -580,11 +616,27 @@
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
           <a class="brand" href="/" aria-label="Vulnpilot home">
-            <span class="brand-word">vulnpilot</span
-            ><span class="brand-cursor" aria-hidden="true"></span>
+            <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+              <rect class="mark-bg" width="32" height="32" rx="7" />
+              <path
+                class="mark-v"
+                d="M7 10.5 11.75 21.5 16.5 10.5"
+                fill="none"
+                stroke-width="3"
+              />
+              <rect
+                class="mark-block"
+                x="19.5"
+                y="10"
+                width="5.5"
+                height="11.5"
+              />
+            </svg>
+            <span class="brand-word">Vulnpilot</span>
           </a>
           <p>
-            Free and open source under the
+            Finds the dependencies attackers already exploit. Free and open
+            source under the
             <a
               href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
               >MIT license</a

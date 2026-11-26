@@ -10,6 +10,12 @@ const browser = {
   URLSearchParams: 'readonly',
   setTimeout: 'readonly',
   clearTimeout: 'readonly',
+  performance: 'readonly',
+  requestAnimationFrame: 'readonly',
+  IntersectionObserver: 'readonly',
+  indexedDB: 'readonly',
+  NodeFilter: 'readonly',
+  Element: 'readonly',
 };
 
 export default tseslint.config(

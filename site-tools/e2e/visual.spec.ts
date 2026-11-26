@@ -26,7 +26,7 @@ for (const scheme of ['light', 'dark'] as const)
         await page.goto('/privacy');
         await page.evaluate(() =>
           Promise.all([
-            document.fonts.load('400 16px Inter'),
+            document.fonts.load('400 16px "Schibsted Grotesk"'),
             document.fonts.load('400 16px "JetBrains Mono"'),
           ]),
         );

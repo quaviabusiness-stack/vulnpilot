@@ -46,25 +46,18 @@ test('the home page states facts only in its JSON-LD', async ({ page }) => {
   const data = JSON.parse(
     (await page.locator('script[type="application/ld+json"]').textContent()) ??
       '',
-  ) as Record<string, unknown>;
-  expect(data).toEqual({
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+  ) as { '@graph': Record<string, unknown>[] };
+  const types = data['@graph'].map((node) => node['@type']);
+  expect(types).toEqual(['SoftwareApplication', 'Organization', 'FAQPage']);
+  expect(data['@graph'][0]).toMatchObject({
     name: 'Vulnpilot',
-    description: expect.stringContaining('Free, open-source CLI.') as unknown,
-    applicationCategory: 'DeveloperApplication',
-    operatingSystem: 'Node.js 26 or later',
+    description: expect.stringContaining('Free, open-source CLI') as unknown,
     isAccessibleForFree: true,
-    license:
-      'https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
     url: 'https://getvulnpilot.vercel.app/',
-    sameAs: [
-      'https://github.com/quaviabusiness-stack/vulnpilot',
-      'https://www.npmjs.com/package/vulnpilot',
-    ],
   });
+  // The FAQ text itself is compared with the page by site-tools/checks.
 });
-
 test('every page CSP in vercel.json upgrades insecure requests', () => {
   const config = JSON.parse(
     readFileSync(join(SITE, 'vercel.json'), 'utf8'),
@@ -118,7 +111,7 @@ test.describe('waitlist form (unchanged behaviour)', () => {
     if (!(await consent.isChecked())) await page.keyboard.press('Space');
     await expect(consent).toBeChecked();
     await page
-      .getByRole('button', { name: 'Join the waitlist' })
+      .getByRole('button', { name: 'Join as a design partner' })
       .last()
       .click();
   }
@@ -196,7 +189,7 @@ test.describe('waitlist form (unchanged behaviour)', () => {
   }) => {
     await open(page, '/');
     await page
-      .getByRole('button', { name: 'Join the waitlist' })
+      .getByRole('button', { name: 'Join as a design partner' })
       .last()
       .click();
     await expect(page.locator('#email-error')).toHaveText(

@@ -3,12 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      Vulnpilot: find actively exploited vulnerabilities in your dependencies
-    </title>
+    <title>Vulnpilot: find the dependencies attackers already exploit</title>
     <meta
       name="description"
-      content="Free, open-source CLI. Reads your lockfile or SBOM, flags dependencies listed in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, shows the fix, and screens EU Cyber Resilience Act applicability."
+      content="Free scanner for lockfiles and SBOMs. Flags dependencies in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, gives the fix version and screens EU Cyber Resilience Act applicability. In your browser or with npx."
     />
     <link rel="canonical" href="https://getvulnpilot.vercel.app/" />
     <meta name="color-scheme" content="light dark" />
@@ -30,11 +28,11 @@
     <meta property="og:url" content="https://getvulnpilot.vercel.app/" />
     <meta
       property="og:title"
-      content="Which of your dependencies are being exploited right now?"
+      content="Find the dependencies attackers already exploit"
     />
     <meta
       property="og:description"
-      content="One command checks your lockfile or SBOM against OSV.dev and the CISA KEV catalog. Free and open source."
+      content="Checks your lockfile or SBOM against the CISA catalog of known exploited vulnerabilities, ranks the rest by EPSS and gives the fix. Free, in your browser or with npx."
     />
     <meta
       property="og:image"
@@ -44,12 +42,12 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Vulnpilot. Which of your dependencies are being exploited right now? Real CLI output flagging CVE-2021-44228 as known exploited."
+      content="Vulnpilot. Find the dependencies attackers already exploit. Real CLI output ranking CVE-2021-44228 first as known exploited."
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="preload"
-      href="/assets/fonts/inter-latin-wght-3100e775e8.woff2"
+      href="/assets/fonts/schibsted-grotesk-latin-wght-4c8b93f431.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -61,44 +59,148 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/styles-752561f567.css" />
-    <script src="/assets/app-26fdaa6a73.js" defer></script>
+    <link rel="stylesheet" href="/assets/styles-98cc398111.css" />
+    <link rel="stylesheet" href="/assets/home-e43a201d36.css" />
+    <script src="/assets/app-568b870f07.js" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Vulnpilot",
-        "description": "Free, open-source CLI. Reads your lockfile or SBOM, flags dependencies listed in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, shows the fix, and screens EU Cyber Resilience Act applicability.",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Node.js 26 or later",
-        "isAccessibleForFree": true,
-        "license": "https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE",
-        "url": "https://getvulnpilot.vercel.app/",
-        "sameAs": [
-          "https://github.com/quaviabusiness-stack/vulnpilot",
-          "https://www.npmjs.com/package/vulnpilot"
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://getvulnpilot.vercel.app/#software",
+            "name": "Vulnpilot",
+            "description": "Free, open-source CLI and browser scanner. Reads your lockfile or SBOM, flags dependencies listed in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, shows the fix, and screens EU Cyber Resilience Act applicability.",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Node.js 26 or later; any modern browser",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "license": "https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE",
+            "url": "https://getvulnpilot.vercel.app/",
+            "publisher": { "@id": "https://getvulnpilot.vercel.app/#org" },
+            "sameAs": [
+              "https://github.com/quaviabusiness-stack/vulnpilot",
+              "https://www.npmjs.com/package/vulnpilot"
+            ]
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://getvulnpilot.vercel.app/#org",
+            "name": "Vulnpilot",
+            "url": "https://getvulnpilot.vercel.app/",
+            "logo": "https://getvulnpilot.vercel.app/apple-touch-icon.png",
+            "email": "quavia.business@gmail.com",
+            "sameAs": ["https://github.com/quaviabusiness-stack/vulnpilot"]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://getvulnpilot.vercel.app/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How is this different from npm audit or Dependabot?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "They tell you what is vulnerable. Vulnpilot tells you which of those are known to be exploited, using the CISA KEV catalog, puts them first, ranks the rest by EPSS and CVSS, and screens whether the CRA applies. Run it next to them: it reads the same lockfile."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What leaves my machine?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Package names and versions, sent to OSV.dev, and CVE IDs, sent to FIRST for EPSS scores. The CISA catalog is downloaded; nothing is sent to CISA. Source code, file paths and manifests stay local. The CLI’s anonymous telemetry sends five coarse fields per scan, is off in CI, and --no-telemetry turns it off. In the browser scanner, nothing leaves the tab until you press Scan, and the page lists what will be sent first."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is this legal advice?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. The CRA screen is a rule-based first pass from three answers: EU market, commercial activity and product type. It returns likely applies, likely out of scope or unclear, with the reason and the key dates. Ask a qualified adviser before you rely on it."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Our product is in Python, Go or Java. Does it work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, through a CycloneDX JSON SBOM. Generate one with your build’s CycloneDX tooling and pass it with --sbom. Supported purl types include pypi, golang and maven."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Which ecosystems are supported?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Lockfiles: package-lock.json (v1–3), pnpm-lock.yaml (5.x, 6.x, 9.x) and yarn.lock (Classic and Berry). Anything else through a CycloneDX JSON SBOM with --sbom, for purl types npm, pypi, maven, golang, cargo, gem, nuget, composer, hex, pub, conan, deb and apk."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why is the scanner free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A scanner you can read is easier to trust. The code is MIT-licensed on GitHub and the CLI stays free. We plan to charge for monitoring and early-warning drafts, not for the scan."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What will the paid product cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not decided yet. We’ll set scope and pricing with the design partners."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does it work offline or in CI?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Both. Responses are cached for 24 hours and --offline uses the cache only. In CI, pass --non-interactive with the three answers as flags, read the versioned --json report, and gate on exit codes with --fail-on critical|high|kev."
+                }
+              }
+            ]
+          }
         ]
       }
     </script>
   </head>
-  <body>
+  <body class="home">
     <a class="skip-link" href="#main">Skip to content</a>
 
     <!-- generated:header -->
     <header class="site-header">
       <div class="wrap header-inner">
         <a class="brand" href="/" aria-label="Vulnpilot home">
-          <span class="brand-word">vulnpilot</span
-          ><span class="brand-cursor" aria-hidden="true"></span>
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect class="mark-bg" width="32" height="32" rx="7" />
+            <path
+              class="mark-v"
+              d="M7 10.5 11.75 21.5 16.5 10.5"
+              fill="none"
+              stroke-width="3"
+            />
+            <rect
+              class="mark-block"
+              x="19.5"
+              y="10"
+              width="5.5"
+              height="11.5"
+            />
+          </svg>
+          <span class="brand-word">Vulnpilot</span>
         </a>
-        <nav class="nav" aria-label="Main">
+        <nav class="nav nav-desktop" aria-label="Main">
           <ul>
             <li><a href="/scan">Scan</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
             <li><a href="/docs">Docs</a></li>
-            <li><a href="#method">Method</a></li>
-            <li><a href="#ci">CI</a></li>
-            <li><a href="#cra">CRA</a></li>
-            <li><a href="#faq">FAQ</a></li>
             <li>
               <a href="https://github.com/quaviabusiness-stack/vulnpilot"
                 >GitHub</a
@@ -106,9 +208,32 @@
             </li>
           </ul>
         </nav>
-        <a class="btn btn-outline btn-small" href="#waitlist"
-          >Join the waitlist</a
-        >
+        <div class="header-actions">
+          <a class="btn btn-primary btn-small" href="/scan" data-header-cta
+            >Scan a lockfile</a
+          >
+          <details class="menu">
+            <summary>
+              <span class="menu-icon" aria-hidden="true"></span>Menu
+            </summary>
+            <nav class="nav menu-panel" aria-label="Menu">
+              <ul>
+                <li><a href="/scan">Scan</a></li>
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="/docs">Docs</a></li>
+                <li>
+                  <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                    >GitHub</a
+                  >
+                </li>
+              </ul>
+              <a class="btn btn-primary" href="/scan" data-header-cta
+                >Scan a lockfile</a
+              >
+            </nav>
+          </details>
+        </div>
       </div>
     </header>
     <!-- /generated:header -->
@@ -116,31 +241,32 @@
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="wrap">
+          <h1 id="hero-title" class="hero-title">
+            <span class="hero-line">Find the dependencies</span>
+            <span class="hero-line">attackers already exploit.</span>
+          </h1>
           <div class="grid hero-grid">
-            <p class="eyebrow">
-              EU Cyber Resilience Act
-              <span aria-hidden="true">·</span> reporting obligations apply
-              since
-              <time datetime="2026-09-11">11&nbsp;September&nbsp;2026</time>
-            </p>
-            <h1 id="hero-title">
-              Which of your dependencies are being exploited right now?
-            </h1>
-            <div class="clock">
-              <p class="clock-figure">24&nbsp;h</p>
-              <p class="clock-text">
-                From becoming aware of an actively exploited vulnerability in
-                your product to the CRA early warning.
+            <div class="hero-copy">
+              <p class="lede">
+                Vulnpilot checks your lockfile or SBOM against the CISA catalog
+                of known exploited vulnerabilities, ranks everything else by
+                exploit likelihood, and names the version that fixes each.
               </p>
-            </div>
-            <p class="lede">
-              Vulnpilot reads your lockfile or SBOM, checks every dependency
-              against OSV.dev and the CISA catalog of known exploited
-              vulnerabilities, and lists the exploited ones first, with the
-              version that fixes each.
-            </p>
-            <div class="hero-actions">
-              <div class="command-row">
+              <div class="hero-actions">
+                <a class="btn btn-primary btn-large" href="/scan"
+                  >Scan a lockfile
+                  <span class="btn-arrow" aria-hidden="true">→</span></a
+                >
+                <a class="hero-sample" href="/scan?sample"
+                  >or try the sample SBOM</a
+                >
+              </div>
+              <p class="hero-note">
+                Free. The file stays in your browser; only package names and
+                versions go to OSV.dev.
+              </p>
+              <div class="hero-cli">
+                <p class="hero-cli-label">Or in your terminal</p>
                 <div class="command">
                   <code
                     ><span class="command-prompt" aria-hidden="true">$ </span
@@ -153,66 +279,72 @@
                     >
                   </button>
                 </div>
-                <p class="command-note">
-                  Node.js&nbsp;26 or later <span aria-hidden="true">·</span> MIT
-                  licensed
-                </p>
-              </div>
-              <div class="cta-row">
-                <a class="btn btn-primary" href="#waitlist"
-                  >Join the waitlist</a
-                >
-                <a
-                  class="btn btn-outline"
-                  href="https://github.com/quaviabusiness-stack/vulnpilot"
-                  >Source on GitHub</a
-                >
+                <p class="command-note">Node.js 26 or later · MIT licensed</p>
               </div>
             </div>
-          </div>
 
-          <figure class="term-hero" aria-labelledby="hero-term-caption">
-            <div class="term-screen">
-              <!-- generated:proof-hero -->
-              <pre
-                class="term-cmd"
-              ><code><span class="ln l1"><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \</span>
-<span class="ln l2">    --non-interactive --eu-distribution yes --commercial yes --product-type firmware</span></code></pre>
-              <p class="term-gap">
-                <span
-                  >Lines 1–16, the version header and the CRA screen, are in the
-                  full run below.</span
+            <figure
+              class="term term-hero"
+              id="hero-term"
+              aria-labelledby="hero-term-caption"
+            >
+              <div class="term-bar">
+                <span class="term-file">sample-router-firmware · SBOM</span>
+                <span class="term-state" aria-hidden="true"
+                  ><span class="term-state-dot"></span
+                  ><span class="term-state-text"
+                    >Ranked: KEV, EPSS, CVSS</span
+                  ></span
                 >
+              </div>
+              <div class="term-screen">
+                <!-- generated:proof-hero -->
+                <pre
+                  class="term-cmd"
+                ><code><span class="ln c1"><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
+</span><span class="ln c2">    --non-interactive --eu-distribution yes --commercial yes --product-type firmware</span></code></pre>
+                <pre
+                  class="term-out"
+                ><code><span class="ln ln-count l1">Dependencies            5
+</span><span class="ln ln-count l2">Vulnerable packages     4
+</span><span class="ln ln-count l3">Critical/high issues    <span class="t-r">10</span>
+</span><span class="ln ln-count l4">Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)</span>
+</span><span class="ln ln-note l5"><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
+</span><span class="ln ln-blank l6">
+</span><span class="ln ln-warn l7"><span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span>
+</span><span class="ln ln-blank l8">
+</span><span class="ln ln-top l9"><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
+</span><span class="issue i1 is-kev" data-found="2"><span class="ln"> 1. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44228  CRITICAL 10.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
+</span><span class="ln">    Remote code injection in Log4j
+</span><span class="ln">    Fix: upgrade to 2.15.0
+</span></span><span class="issue i2 is-kev" data-found="4"><span class="ln"> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
+</span><span class="ln">    Incomplete fix for Apache Log4j vulnerability
+</span><span class="ln">    Fix: upgrade to 2.16.0
+</span></span><span class="issue i3" data-found="5"><span class="ln"> 3. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45105  HIGH 8.6 · EPSS &gt;99.9%
+</span><span class="ln">    Apache Log4j2 vulnerable to Improper Input Validation and Uncontrolled Recursion
+</span><span class="ln">    Fix: upgrade to 2.17.0
+</span></span><span class="issue i4" data-found="3"><span class="ln"> 4. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44832  MEDIUM 6.6 · EPSS 97.9%
+</span><span class="ln">    Improper Input Validation and Injection in Apache Log4j2
+</span><span class="ln">    Fix: upgrade to 2.17.1
+</span></span><span class="issue i5" data-found="1"><span class="ln"> 5. <span class="t-b">lodash@4.17.20</span>  CVE-2021-23337  HIGH 7.2 · EPSS 20.2%
+</span><span class="ln">    Command Injection in lodash
+</span><span class="ln">    Fix: upgrade to 4.17.21</span></span></code></pre>
+                <!-- /generated:proof-hero -->
+              </div>
+              <p class="term-drop" aria-hidden="true">
+                <span>Drop it here to open it in the browser scanner.</span>
+                <span class="term-drop-sub">The file is not uploaded.</span>
               </p>
-              <pre
-                class="term-out"
-              ><code><span class="ln l3">Dependencies            5</span>
-<span class="ln l4">Vulnerable packages     4</span>
-<span class="ln l5">Critical/high issues    <span class="t-r">10</span></span>
-<span class="ln l6">Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)</span></span>
-<span class="ln l7"><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span></span>
-<span class="ln l8"></span>
-<span class="ln l9"><span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span></span>
-<span class="ln l10"></span>
-<span class="ln l11"><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span></span>
-<span class="ln l12"> 1. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44228  CRITICAL 10.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span></span>
-<span class="ln l13">    Remote code injection in Log4j</span>
-<span class="ln l14">    Fix: upgrade to 2.15.0</span>
-<span class="ln l15"> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span></span>
-<span class="ln l16">    Incomplete fix for Apache Log4j vulnerability</span>
-<span class="ln l17">    Fix: upgrade to 2.16.0</span></code></pre>
-              <!-- /generated:proof-hero -->
-            </div>
-            <figcaption id="hero-term-caption" class="term-caption">
-              Real output, abridged. Vulnpilot
-              <span data-proof="cli-version">0.1.2</span> scanning the sample
-              firmware SBOM from its own repository on
-              <time data-proof="capture-date" datetime="2026-11-18"
-                >18&nbsp;November&nbsp;2026</time
-              >.
-              <a href="#output">Full run, unedited</a>
-            </figcaption>
-          </figure>
+              <figcaption id="hero-term-caption" class="term-caption">
+                Real output, abridged: Vulnpilot
+                <span data-proof="cli-version">0.1.2</span> on the sample
+                firmware SBOM from its repository,
+                <time data-proof="capture-date" datetime="2026-11-18"
+                  >18&nbsp;November&nbsp;2026</time
+                >. <a href="#case">See the full run</a>
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 
@@ -223,45 +355,563 @@
         aria-live="polite"
       ></p>
 
-      <section class="section" id="output" aria-labelledby="output-title">
+      <section class="proofbar" aria-label="What Vulnpilot is built on">
         <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">Real output</p>
-            <div class="section-body">
-              <h2 id="output-title">One scan, unedited</h2>
-              <p class="intro">
-                This is the complete text output of the run above. The input is
-                <code>test/fixtures/sbom/cyclonedx.json</code> from the
-                Vulnpilot repository: a sample router firmware SBOM with Log4j
-                2.14.1, lodash, requests and urllib3, plus two components the
-                tool cannot match, an OpenSSL entry with a generic purl and a
-                BusyBox entry with only a CPE. Clone the repository and run the
-                same command to check it. EPSS scores change daily, so your
-                numbers may differ. To scan your own lockfile without installing
-                anything, use the <a href="/scan">browser scanner</a>.
+          <ul class="proofbar-list">
+            <li>
+              <span class="proofbar-k">Data</span>
+              OSV.dev, CISA KEV and FIRST EPSS
+            </li>
+            <li>
+              <span class="proofbar-k">Code</span>
+              Open source, MIT licensed
+            </li>
+            <li>
+              <span class="proofbar-k">Proof</span>
+              The output on this page is a real run, checked against the CLI in
+              CI
+            </li>
+            <li>
+              <span class="proofbar-k">Privacy</span>
+              No account. Your file is never uploaded
+            </li>
+          </ul>
+        </div>
+      </section>
+      <!-- slot:customer-logos. Add real, approved customer or design partner
+           logos here. Never placeholders. -->
+
+      <section class="problem" id="cra" aria-labelledby="cra-title">
+        <div class="wrap grid problem-grid">
+          <p class="problem-figure" aria-hidden="true">
+            24<span class="problem-unit">h</span>
+          </p>
+          <div class="problem-body">
+            <h2 id="cra-title" class="h2">
+              Since 11&nbsp;September, an exploited dependency comes with a
+              <span class="nowrap">24-hour deadline</span>.
+            </h2>
+            <p class="problem-text">
+              If you sell software or connected hardware in the EU, the Cyber
+              Resilience Act now requires an early warning within 24 hours of
+              becoming aware of an actively exploited vulnerability in your
+              product. Products already on the market are included. So is the
+              dependency three levels down: it ships inside your product.
+            </p>
+          </div>
+          <figure class="clock" aria-labelledby="clock-title">
+            <figcaption class="clock-title" id="clock-title">
+              After you become aware
+            </figcaption>
+            <ol class="clock-steps">
+              <li class="clock-step is-now">
+                <p class="clock-time">0&nbsp;h</p>
+                <p class="clock-name">You become aware</p>
+              </li>
+              <li class="clock-step is-due">
+                <p class="clock-time">24&nbsp;h</p>
+                <p class="clock-name">Early warning</p>
+              </li>
+              <li class="clock-step">
+                <p class="clock-time">72&nbsp;h</p>
+                <p class="clock-name">Notification</p>
+              </li>
+              <li class="clock-step">
+                <p class="clock-time">Fix</p>
+                <p class="clock-name">Final report, once a fix is available</p>
+              </li>
+            </ol>
+          </figure>
+          <div class="problem-foot">
+            <ol class="milestones">
+              <li class="milestone is-live">
+                <time datetime="2026-09-11">11&nbsp;Sep&nbsp;2026</time>
+                <span>Reporting obligations apply</span>
+              </li>
+              <li class="milestone">
+                <time datetime="2027-12-11">11&nbsp;Dec&nbsp;2027</time>
+                <span>Full obligations, including CE marking</span>
+              </li>
+            </ol>
+            <p class="problem-cta">
+              Vulnpilot shows which of your dependencies are on the CISA list
+              today, and its three-question screen tells you whether the CRA
+              likely applies.
+              <a href="/scan#cra">Run the CRA screen</a>
+            </p>
+            <p class="legal-note">
+              Not legal advice. Regulation (EU) 2024/2847, Article 14.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="how" id="how" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="how-title" class="h2">One file in. Exploited first out.</h2>
+            <p class="section-lede">
+              The same sample SBOM as above, one step at a time. Nothing here is
+              a mock-up.
+            </p>
+          </div>
+          <ol class="steps">
+            <li class="step">
+              <div class="step-text">
+                <p class="step-num" aria-hidden="true">01</p>
+                <h3 class="step-title">Read</h3>
+                <p>
+                  Point it at <code>package-lock.json</code>,
+                  <code>pnpm-lock.yaml</code>, <code>yarn.lock</code> or a
+                  CycloneDX SBOM. The file is parsed on your machine, or in your
+                  browser tab.
+                </p>
+                <p class="step-fact">
+                  Never sent: source code, file paths, manifests.
+                </p>
+              </div>
+              <div class="step-visual">
+                <!-- generated:proof-story-read -->
+                <div class="story-card story-read">
+                  <p class="story-card-head">
+                    <span class="story-file">cyclonedx.json</span
+                    ><span
+                      >CycloneDX 1.5 · firmware sample-router-firmware
+                      2.4.0</span
+                    >
+                  </p>
+                  <ul class="file-rows">
+                    <li class="file-row is-read">
+                      <span class="file-name">log4j-core</span
+                      ><span class="file-version">2.14.1</span
+                      ><span class="file-kind">Maven</span
+                      ><span class="file-status">read</span>
+                    </li>
+                    <li class="file-row is-read">
+                      <span class="file-name">lodash</span
+                      ><span class="file-version">4.17.20</span
+                      ><span class="file-kind">npm</span
+                      ><span class="file-status">read</span>
+                    </li>
+                    <li class="file-row is-read">
+                      <span class="file-name">@babel/helper-string-parser</span
+                      ><span class="file-version">7.25.9</span
+                      ><span class="file-kind">npm</span
+                      ><span class="file-status">read</span>
+                    </li>
+                    <li class="file-row is-read">
+                      <span class="file-name">requests</span
+                      ><span class="file-version">2.31.0</span
+                      ><span class="file-kind">PyPI</span
+                      ><span class="file-status">read</span>
+                    </li>
+                    <li class="file-row is-read">
+                      <span class="file-name">urllib3</span
+                      ><span class="file-version">2.0.7</span
+                      ><span class="file-kind">PyPI</span
+                      ><span class="file-status">read</span>
+                    </li>
+                    <li class="file-row is-skipped">
+                      <span class="file-name">openssl</span
+                      ><span class="file-version">3.0.13</span
+                      ><span class="file-kind">pkg:generic</span
+                      ><span class="file-status">unsupported purl type</span>
+                    </li>
+                    <li class="file-row is-skipped">
+                      <span class="file-name">busybox</span
+                      ><span class="file-version">1.36.1</span
+                      ><span class="file-kind">CPE only</span
+                      ><span class="file-status">no purl</span>
+                    </li>
+                    <li class="file-row is-duplicate">
+                      <span class="file-name">lodash</span
+                      ><span class="file-version">4.17.20</span
+                      ><span class="file-kind">npm</span
+                      ><span class="file-status">listed twice, read once</span>
+                    </li>
+                  </ul>
+                  <p class="story-card-foot">
+                    <strong>5 dependencies</strong> read · 2 skipped and
+                    counted, not dropped
+                  </p>
+                </div>
+                <!-- /generated:proof-story-read -->
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-text">
+                <p class="step-num" aria-hidden="true">02</p>
+                <h3 class="step-title">Match</h3>
+                <p>
+                  Package names and versions go to OSV.dev. The CISA KEV catalog
+                  is downloaded and matched locally. CVE IDs go to FIRST for
+                  exploit-likelihood scores.
+                </p>
+                <p class="step-fact">
+                  Responses are cached for 24&nbsp;hours.
+                  <code>--offline</code> uses the cache only.
+                </p>
+              </div>
+              <div class="step-visual">
+                <!-- generated:proof-story-match -->
+                <div class="story-card story-match">
+                  <ul class="sources">
+                    <li class="source">
+                      <p class="source-name">OSV.dev</p>
+                      <p class="source-sent">
+                        Sent: 5 package names and versions
+                      </p>
+                      <p class="source-got">
+                        <strong>23</strong> known vulnerabilities in 4 of 5
+                        packages
+                      </p>
+                    </li>
+                    <li class="source is-signal">
+                      <p class="source-name">CISA KEV</p>
+                      <p class="source-sent">
+                        Sent: nothing. The catalog is downloaded
+                      </p>
+                      <p class="source-got">
+                        <strong>2</strong> known exploited: CVE-2021-44228,
+                        CVE-2021-45046
+                      </p>
+                    </li>
+                    <li class="source">
+                      <p class="source-name">FIRST EPSS</p>
+                      <p class="source-sent">Sent: 23 CVE IDs</p>
+                      <p class="source-got">
+                        <strong>23</strong> exploit-likelihood scores,
+                        18&nbsp;November&nbsp;2026
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+                <!-- /generated:proof-story-match -->
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-text">
+                <p class="step-num" aria-hidden="true">03</p>
+                <h3 class="step-title">Rank</h3>
+                <p>
+                  Known exploited first, then by EPSS, then by CVSS. Each issue
+                  comes with the version that fixes it.
+                </p>
+                <p class="step-fact">
+                  Text for people, <code>--json</code> for machines.
+                </p>
+              </div>
+              <div class="step-visual">
+                <!-- generated:proof-story-rank -->
+                <div class="story-card story-rank">
+                  <table class="rank-table">
+                    <caption class="visually-hidden">
+                      The first 5 of 23 issues, in the order the CLI printed
+                      them
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Package</th>
+                        <th scope="col">CVE</th>
+                        <th scope="col">CVSS</th>
+                        <th scope="col">EPSS</th>
+                        <th scope="col">Fix</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="is-kev">
+                        <td class="rank-n">1</td>
+                        <td class="rank-pkg">
+                          <span>log4j-core</span>
+                          <span class="rank-ver">2.14.1</span>
+                        </td>
+                        <td class="rank-cve">
+                          CVE-2021-44228 <span class="kev-badge">KEV</span>
+                        </td>
+                        <td class="rank-cvss">critical 10.0</td>
+                        <td class="rank-epss">&gt;99.9%</td>
+                        <td class="rank-fix">2.15.0</td>
+                      </tr>
+                      <tr class="is-kev">
+                        <td class="rank-n">2</td>
+                        <td class="rank-pkg">
+                          <span>log4j-core</span>
+                          <span class="rank-ver">2.14.1</span>
+                        </td>
+                        <td class="rank-cve">
+                          CVE-2021-45046 <span class="kev-badge">KEV</span>
+                        </td>
+                        <td class="rank-cvss">critical 9.0</td>
+                        <td class="rank-epss">&gt;99.9%</td>
+                        <td class="rank-fix">2.16.0</td>
+                      </tr>
+                      <tr>
+                        <td class="rank-n">3</td>
+                        <td class="rank-pkg">
+                          <span>log4j-core</span>
+                          <span class="rank-ver">2.14.1</span>
+                        </td>
+                        <td class="rank-cve">CVE-2021-45105</td>
+                        <td class="rank-cvss">high 8.6</td>
+                        <td class="rank-epss">&gt;99.9%</td>
+                        <td class="rank-fix">2.17.0</td>
+                      </tr>
+                      <tr>
+                        <td class="rank-n">4</td>
+                        <td class="rank-pkg">
+                          <span>log4j-core</span>
+                          <span class="rank-ver">2.14.1</span>
+                        </td>
+                        <td class="rank-cve">CVE-2021-44832</td>
+                        <td class="rank-cvss">medium 6.6</td>
+                        <td class="rank-epss">97.9%</td>
+                        <td class="rank-fix">2.17.1</td>
+                      </tr>
+                      <tr>
+                        <td class="rank-n">5</td>
+                        <td class="rank-pkg">
+                          <span>lodash</span>
+                          <span class="rank-ver">4.17.20</span>
+                        </td>
+                        <td class="rank-cve">CVE-2021-23337</td>
+                        <td class="rank-cvss">high 7.2</td>
+                        <td class="rank-epss">20.2%</td>
+                        <td class="rank-fix">4.17.21</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="story-card-foot">
+                    Showing 5 of 23. Known exploited first, then EPSS, then
+                    CVSS.
+                  </p>
+                </div>
+                <!-- /generated:proof-story-rank -->
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="features" id="features" aria-labelledby="features-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="features-title" class="h2">
+              Less to read. The right order. The fix.
+            </h2>
+          </div>
+          <div class="bento">
+            <article class="cell cell-kev">
+              <h3 class="cell-title">Exploited goes first</h3>
+              <p>
+                The CISA KEV catalog lists vulnerabilities with evidence of
+                active exploitation. Vulnpilot puts those above every high CVSS
+                score that nobody is known to exploit.
               </p>
+              <!-- generated:proof-kev-entry -->
+              <div class="kev-entry">
+                <p class="kev-entry-head">
+                  <span class="kev-badge">KEV</span> <span>CVE-2021-44228</span>
+                </p>
+                <dl class="kev-facts">
+                  <div>
+                    <dt>Package</dt>
+                    <dd>log4j-core 2.14.1</dd>
+                  </div>
+                  <div>
+                    <dt>In the CISA catalog since</dt>
+                    <dd>10&nbsp;December&nbsp;2021</dd>
+                  </div>
+                  <div>
+                    <dt>Known ransomware use</dt>
+                    <dd>Yes</dd>
+                  </div>
+                  <div>
+                    <dt>Vulnpilot rank</dt>
+                    <dd>1 of 23</dd>
+                  </div>
+                </dl>
+              </div>
+              <!-- /generated:proof-kev-entry -->
+            </article>
+            <article class="cell cell-fix">
+              <h3 class="cell-title">The fix, not just the finding</h3>
+              <p class="fix-line" aria-hidden="true">
+                <span class="fix-k">Fix:</span> upgrade to
+                <span data-proof="first-fix">2.15.0</span>
+              </p>
+              <p>
+                The version that resolves it, from the advisory, next to every
+                issue that has one.
+              </p>
+            </article>
+            <article class="cell cell-privacy">
+              <h3 class="cell-title">Your code stays put</h3>
+              <p>
+                It reads one file. Package names and versions go to OSV.dev and
+                CVE IDs to FIRST. Source code, paths and manifests never leave.
+              </p>
+            </article>
+            <article class="cell cell-ci">
+              <div class="cell-ci-text">
+                <h3 class="cell-title">Fails CI only on what is exploited</h3>
+                <p>
+                  With <code>--fail-on kev</code>, a new medium advisory does
+                  not block a release. A dependency in the KEV catalog does. The
+                  daily run catches new catalog entries between commits.
+                </p>
+                <ul class="exit-list">
+                  <li>
+                    <code>0</code> nothing at the <code>--fail-on</code> level
+                  </li>
+                  <li><code>1</code> issues found</li>
+                  <li>
+                    <code>2</code> error or incomplete data: a scan that could
+                    not reach OSV never passes as clean
+                  </li>
+                </ul>
+              </div>
+              <figure class="code-block ci-yaml" aria-labelledby="ci-yaml-name">
+                <figcaption class="code-head">
+                  <code id="ci-yaml-name">.github/workflows/vulnpilot.yml</code>
+                  <button
+                    class="copy copy-quiet"
+                    type="button"
+                    data-copy-from="ci-yaml-code"
+                  >
+                    <span class="copy-label">Copy</span
+                    ><span class="visually-hidden"> the workflow</span>
+                  </button>
+                </figcaption>
+                <pre><code id="ci-yaml-code">name: vulnpilot
+on:
+  pull_request:
+  schedule:
+    - cron: '0 6 * * *'
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26
+      - run: >-
+          npx --yes vulnpilot@<span data-proof="cli-version">0.1.2</span>
+          --non-interactive
+          --eu-distribution yes
+          --commercial yes
+          --product-type app
+          --fail-on kev</code></pre>
+              </figure>
+            </article>
+            <article class="cell cell-cra">
+              <h3 class="cell-title">CRA screen in three questions</h3>
+              <p>
+                EU market, commercial activity, product type. A rule-based first
+                pass with the reason and the key dates. Not legal advice.
+              </p>
+              <a class="cell-link" href="/scan#cra"
+                >Answer them in your browser
+                <span class="btn-arrow" aria-hidden="true">→</span></a
+              >
+            </article>
+            <article class="cell cell-json">
+              <h3 class="cell-title">JSON with a schema</h3>
+              <p>
+                <code>--json</code> prints a versioned report validated against
+                a
+                <a
+                  href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                  >published JSON Schema</a
+                >.
+              </p>
+            </article>
+            <article class="cell cell-eco">
+              <h3 class="cell-title">Reads what you already have</h3>
+              <p>
+                <code>package-lock.json</code> v1–3,
+                <code>pnpm-lock.yaml</code> 5.x–9.x, <code>yarn.lock</code>
+                Classic and Berry, and CycloneDX JSON for npm, PyPI, Maven, Go,
+                Cargo, RubyGems, NuGet, Composer, Hex, Pub, Conan, Debian and
+                Alpine packages.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="case" id="case" aria-labelledby="case-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="case-title" class="h2">
+              What one scan found in a firmware SBOM
+            </h2>
+            <p class="section-lede">
+              The sample in Vulnpilot’s repository: router firmware with Log4j
+              2.14.1, lodash, requests and urllib3. One command, no
+              configuration.
+            </p>
+          </div>
+          <dl class="figures">
+            <div class="figure-item">
+              <dt>Dependencies</dt>
+              <dd><span data-proof="dependencies">5</span></dd>
             </div>
-            <figure class="run" aria-labelledby="run-caption">
-              <figcaption id="run-caption" class="visually-hidden">
-                Complete output of the scan, with notes on each part.
-              </figcaption>
-              <div class="run-row run-first run-blank">
-                <div class="run-cell">
-                  <!-- generated:proof-run-1 -->
-                  <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
+            <div class="figure-item">
+              <dt>Known vulnerabilities</dt>
+              <dd><span data-proof="issues">23</span></dd>
+            </div>
+            <div class="figure-item">
+              <dt>Critical or high</dt>
+              <dd><span data-proof="critical-high">10</span></dd>
+            </div>
+            <div class="figure-item is-signal">
+              <dt>Actively exploited</dt>
+              <dd><span data-proof="kev">2</span></dd>
+            </div>
+            <div class="figure-item">
+              <dt>Scan time</dt>
+              <dd>
+                <span data-proof="scan-time">2.4</span
+                ><span class="figure-unit">s</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="case-note">
+            Because <span data-proof="kev">2</span> issues are in the CISA
+            catalog and the CRA likely applies to this product, the run also
+            printed the 24-hour line and exited with code 1, which fails a CI
+            job. EPSS scores change daily, so a scan today can differ.
+          </p>
+
+          <details class="fullrun">
+            <summary>
+              <span class="fullrun-label">Read the full, unedited output</span>
+              <span class="fullrun-hint">with notes on each part</span>
+            </summary>
+            <div class="grid fullrun-grid">
+              <figure class="run" aria-labelledby="run-caption">
+                <figcaption id="run-caption" class="visually-hidden">
+                  Complete output of the scan, with notes on each part.
+                </figcaption>
+                <div class="run-row run-first run-blank">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-1 -->
+                    <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
     --non-interactive --eu-distribution yes --commercial yes --product-type firmware
 <span class="t-b">Vulnpilot 0.1.2</span><span class="t-d"> · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 2.4s</span>
 </code></pre>
-                  <!-- /generated:proof-run-1 -->
+                    <!-- /generated:proof-run-1 -->
+                  </div>
+                  <p class="run-note">
+                    Version, input file, detected format and scan time.
+                  </p>
                 </div>
-                <p class="run-note">
-                  Version, input file, detected format and scan time.
-                </p>
-              </div>
-              <div class="run-row run-blank">
-                <div class="run-cell">
-                  <!-- generated:proof-run-2 -->
-                  <pre><code><span class="t-b">EU Cyber Resilience Act:</span> <span class="t-r">LIKELY APPLIES</span>
+                <div class="run-row run-blank">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-2 -->
+                    <pre><code><span class="t-b">EU Cyber Resilience Act:</span> <span class="t-r">LIKELY APPLIES</span>
   You make a firmware/hardware product available on the EU market as part of a
   commercial activity, so you are likely a "manufacturer" under the CRA. That
   means vulnerability handling, an SBOM, security updates for the support
@@ -275,63 +925,63 @@
     requirements, conformity assessment and CE marking.
   <span class="t-b">Not legal advice. This is an automated preliminary screen based on three answers.</span>
 </code></pre>
-                  <!-- /generated:proof-run-2 -->
+                    <!-- /generated:proof-run-2 -->
+                  </div>
+                  <p class="run-note">
+                    The CRA screen: three answers, a rule-based verdict, the
+                    reason and the key dates.
+                  </p>
                 </div>
-                <p class="run-note">
-                  The CRA screen: three answers, a rule-based verdict, the
-                  reason and the key dates. Not legal advice.
-                </p>
-              </div>
-              <div class="run-row">
-                <div class="run-cell">
-                  <!-- generated:proof-run-3 -->
-                  <pre><code>Dependencies            5
+                <div class="run-row">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-3 -->
+                    <pre><code>Dependencies            5
 Vulnerable packages     4
 Critical/high issues    <span class="t-r">10</span>
 Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)</span></code></pre>
-                  <!-- /generated:proof-run-3 -->
+                    <!-- /generated:proof-run-3 -->
+                  </div>
+                  <p class="run-note">
+                    Counts cover all
+                    <span data-proof="issues">23</span> issues, not only the ten
+                    printed.
+                  </p>
                 </div>
-                <p class="run-note">
-                  Counts cover all
-                  <span data-proof="issues">23</span> issues, not only the ten
-                  printed.
-                </p>
-              </div>
-              <div class="run-row run-blank">
-                <div class="run-cell">
-                  <!-- generated:proof-run-4 -->
-                  <pre><code><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
+                <div class="run-row run-blank">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-4 -->
+                    <pre><code><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
 
 <span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span>
 </code></pre>
-                  <!-- /generated:proof-run-4 -->
+                    <!-- /generated:proof-run-4 -->
+                  </div>
+                  <p class="run-note">
+                    Skipped components are counted, not dropped. The 24-hour
+                    line appears because the CRA likely applies and a dependency
+                    is actively exploited.
+                  </p>
                 </div>
-                <p class="run-note">
-                  Skipped components are counted, not dropped. The 24-hour line
-                  appears because the CRA likely applies and a dependency is
-                  actively exploited.
-                </p>
-              </div>
-              <div class="run-row">
-                <div class="run-cell">
-                  <!-- generated:proof-run-5 -->
-                  <pre><code><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
+                <div class="run-row">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-5 -->
+                    <pre><code><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
  1. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44228  CRITICAL 10.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
     Remote code injection in Log4j
     Fix: upgrade to 2.15.0</code></pre>
-                  <!-- /generated:proof-run-5 -->
+                    <!-- /generated:proof-run-5 -->
+                  </div>
+                  <p class="run-note">
+                    <em>KNOWN EXPLOITED</em>: in the CISA KEV catalog, so it
+                    ranks first. <em>CRITICAL 10.0</em>: the CVSS v3.x base
+                    score from the advisory’s vector. <em>Fix</em>: the version
+                    that resolves it.
+                  </p>
                 </div>
-                <p class="run-note">
-                  <em>KNOWN EXPLOITED</em>: in the CISA KEV catalog, so it ranks
-                  first. <em>CRITICAL 10.0</em>: the CVSS v3.x base score from
-                  the advisory’s vector. <em>Fix</em>: the version that resolves
-                  it.
-                </p>
-              </div>
-              <div class="run-row run-blank">
-                <div class="run-cell">
-                  <!-- generated:proof-run-6 -->
-                  <pre><code> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
+                <div class="run-row run-blank">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-6 -->
+                    <pre><code> 2. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45046  CRITICAL 9.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
     Incomplete fix for Apache Log4j vulnerability
     Fix: upgrade to 2.16.0
  3. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-45105  HIGH 8.6 · EPSS &gt;99.9%
@@ -359,202 +1009,32 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
     urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
     Fix: upgrade to 2.2.2
 </code></pre>
-                  <!-- /generated:proof-run-6 -->
+                    <!-- /generated:proof-run-6 -->
+                  </div>
                 </div>
-              </div>
-              <div class="run-row run-last">
-                <div class="run-cell">
-                  <!-- generated:proof-run-7 -->
-                  <pre><code><span class="t-d">Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli</span>
+                <div class="run-row run-last">
+                  <div class="run-cell">
+                    <!-- generated:proof-run-7 -->
+                    <pre><code><span class="t-d">Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli</span>
 <span class="t-p" aria-hidden="true">$ </span>echo $?
 1</code></pre>
-                  <!-- /generated:proof-run-7 -->
+                    <!-- /generated:proof-run-7 -->
+                  </div>
+                  <p class="run-note">
+                    The only promotional line, and it is not printed with
+                    <code>--json</code>. Exit code 1 means issues were found.
+                  </p>
                 </div>
-                <p class="run-note">
-                  The only promotional line, and it is not printed with
-                  <code>--json</code>. Exit code 1 means issues were found, so a
-                  CI job fails.
-                </p>
-              </div>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="method" aria-labelledby="method-title">
-        <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">Method</p>
-            <div class="section-body">
-              <h2 id="method-title">From lockfile to ranked report</h2>
-              <p class="intro">
-                Vulnpilot reads one file. Everything after that is a lookup
-                against public data, joined and sorted on your machine.
-              </p>
-            </div>
-            <figure class="pipeline-figure" aria-labelledby="pipeline-caption">
-              <div class="zones" aria-hidden="true">
-                <span class="zone zone-local">Your machine</span>
-                <span class="zone zone-net">Public data</span>
-                <span class="zone zone-local zone-end">Your machine</span>
-              </div>
-              <ol class="pipeline">
-                <li class="stage">
-                  <h3 class="stage-name">Read</h3>
-                  <p class="stage-io">
-                    <span class="visually-hidden">Runs locally. </span>Reads one
-                    file
-                  </p>
-                  <p class="stage-text">
-                    <code>package-lock.json</code> v1–3,
-                    <code>pnpm-lock.yaml</code> 5.x, 6.x, 9.x,
-                    <code>yarn.lock</code> Classic and Berry, or a CycloneDX
-                    JSON SBOM with <code>--sbom</code>.
-                  </p>
-                </li>
-                <li class="stage">
-                  <h3 class="stage-name">OSV.dev</h3>
-                  <p class="stage-io">Sends package names and versions</p>
-                  <p class="stage-text">
-                    Known vulnerabilities for every package and version.
-                  </p>
-                </li>
-                <li class="stage">
-                  <h3 class="stage-name">CISA KEV</h3>
-                  <p class="stage-io">Downloads the catalog, sends nothing</p>
-                  <p class="stage-text">
-                    Marks each CVE that appears in the Known Exploited
-                    Vulnerabilities catalog as actively exploited.
-                  </p>
-                </li>
-                <li class="stage">
-                  <h3 class="stage-name">EPSS and CVSS</h3>
-                  <p class="stage-io">Sends CVE IDs to FIRST</p>
-                  <p class="stage-text">
-                    Exploit likelihood from FIRST EPSS, and a CVSS v3.x base
-                    score computed from each advisory’s vector.
-                  </p>
-                </li>
-                <li class="stage">
-                  <h3 class="stage-name">Report</h3>
-                  <p class="stage-io">
-                    <span class="visually-hidden">Runs locally. </span>Prints
-                    text or JSON
-                  </p>
-                  <p class="stage-text">
-                    Actively exploited first, then EPSS, then CVSS, with a fix
-                    version for every issue and the CRA screen from three
-                    answers.
-                  </p>
-                </li>
-              </ol>
-              <figcaption id="pipeline-caption" class="pipeline-notes">
-                <span
-                  ><strong>Never leaves your machine:</strong> source code, file
-                  paths, manifests.</span
-                >
-                <span
-                  >Responses are cached for 24&nbsp;hours.
-                  <code>--offline</code> uses the cache only.</span
-                >
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="ci" aria-labelledby="ci-title">
-        <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">CI</p>
-            <div class="section-body">
-              <h2 id="ci-title">
-                Fail the build on what is actually exploited
-              </h2>
-              <p class="intro">
-                In CI, answer the three CRA questions with flags and choose a
-                threshold. With
-                <code>--fail-on kev</code> the job fails only when a dependency
-                is in the CISA catalog, so a new medium-severity advisory does
-                not block a release.
-              </p>
-            </div>
-            <figure class="code-block ci-yaml" aria-labelledby="ci-yaml-name">
-              <figcaption class="code-head">
-                <code id="ci-yaml-name">.github/workflows/vulnpilot.yml</code>
-                <button
-                  class="copy copy-quiet"
-                  type="button"
-                  data-copy-from="ci-yaml-code"
-                >
-                  <span class="copy-label">Copy</span
-                  ><span class="visually-hidden"> the workflow</span>
-                </button>
-              </figcaption>
-              <pre><code id="ci-yaml-code">name: vulnpilot
-on:
-  pull_request:
-  schedule:
-    - cron: '0 6 * * *'
-jobs:
-  scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 26
-      - run: >-
-          npx --yes vulnpilot@<span data-proof="cli-version">0.1.2</span>
-          --non-interactive
-          --eu-distribution yes
-          --commercial yes
-          --product-type app
-          --fail-on kev</code></pre>
-              <p class="code-note">
-                The daily run catches new KEV entries between commits. Pin the
-                version you have reviewed.
-              </p>
-            </figure>
-            <div class="exit-codes">
-              <h3 class="minor-heading" id="exit-title">Exit codes</h3>
-              <table aria-labelledby="exit-title">
-                <thead>
-                  <tr>
-                    <th scope="col">Code</th>
-                    <th scope="col">Meaning</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><code>0</code></td>
-                    <td>
-                      No issues, or none at the <code>--fail-on</code> level.
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><code>1</code></td>
-                    <td>Issues found.</td>
-                  </tr>
-                  <tr>
-                    <td><code>2</code></td>
-                    <td>
-                      Error or incomplete data. A scan that could not reach OSV
-                      never passes as clean.
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <figure class="code-block ci-json">
-              <figcaption class="code-head">
-                <span>
-                  Excerpt of the <code>--json</code> report from the same scan:
-                  the summary and selected fields of the first issue.
-                </span>
-              </figcaption>
-              <!-- generated:proof-json -->
-              <pre><code>{
+              </figure>
+              <figure class="code-block json-excerpt">
+                <figcaption class="code-head">
+                  <span>
+                    The same scan as <code>--json</code>: the summary and
+                    selected fields of the first issue.
+                  </span>
+                </figcaption>
+                <!-- generated:proof-json -->
+                <pre><code>{
   "schemaVersion": "1.0.0",
   "summary": {
     "dependencies": 5,
@@ -591,326 +1071,452 @@ jobs:
     }
   ]
 }</code></pre>
-              <!-- /generated:proof-json -->
-            </figure>
-            <div class="json-notes">
-              <p>
-                <code>--json</code> prints a versioned report validated against
-                a published JSON Schema,
-                <a
-                  href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
-                  ><code>schema/report-v1.schema.json</code></a
-                >.
-              </p>
-              <p>
-                <code>kev</code> carries the CISA catalog entry,
-                <code>epss</code> the score and the day it was published, and
-                <code>recommendedFix</code> the version to upgrade to.
-              </p>
+                <!-- /generated:proof-json -->
+              </figure>
             </div>
+          </details>
+        </div>
+      </section>
+      <!-- slot:customer-case. Replace or follow the sample with a real
+           customer scan, with their written approval and real numbers. -->
+
+      <section class="compare" id="compare" aria-labelledby="compare-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="compare-title" class="h2">
+              Already run npm audit or Dependabot? Keep them.
+            </h2>
+            <p class="section-lede">
+              They tell you what is vulnerable. Vulnpilot tells you what is
+              known to be exploited, what to fix first, and whether the CRA
+              clock applies to you.
+            </p>
           </div>
+          <div
+            class="table-scroll compare-scroll"
+            role="region"
+            aria-labelledby="compare-caption"
+            tabindex="0"
+          >
+            <table class="compare-table">
+              <caption id="compare-caption" class="visually-hidden">
+                Vulnpilot compared with npm audit, Dependabot alerts and
+                OSV-Scanner, as documented on 25 November 2026
+              </caption>
+              <thead>
+                <tr>
+                  <td></td>
+                  <th scope="col" class="is-us">Vulnpilot</th>
+                  <th scope="col">npm audit</th>
+                  <th scope="col">Dependabot alerts</th>
+                  <th scope="col">OSV-Scanner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Known exploited (CISA KEV) first</th>
+                  <td class="is-us">Yes</td>
+                  <td class="is-none">—</td>
+                  <td class="is-none">—</td>
+                  <td class="is-none">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">Exploit likelihood (EPSS)</th>
+                  <td class="is-us">Ranks by it</td>
+                  <td class="is-none">—</td>
+                  <td>Sort and filter by it</td>
+                  <td class="is-none">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">Version that fixes it</th>
+                  <td class="is-us">Yes</td>
+                  <td>Yes, with <code>npm audit fix</code></td>
+                  <td>Yes, when the advisory has a patch</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <th scope="row">What fails a CI job</th>
+                  <td class="is-us">
+                    Your choice, down to known exploited only (<code
+                      >--fail-on kev</code
+                    >)
+                  </td>
+                  <td>A severity threshold (<code>--audit-level</code>)</td>
+                  <td>Alerts in GitHub, not a CI step</td>
+                  <td>Any finding (exit code 1)</td>
+                </tr>
+                <tr>
+                  <th scope="row">EU CRA applicability screen</th>
+                  <td class="is-us">Three questions, rule-based</td>
+                  <td class="is-none">—</td>
+                  <td class="is-none">—</td>
+                  <td class="is-none">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">Where it runs</th>
+                  <td class="is-us">Terminal, CI, browser</td>
+                  <td>npm CLI</td>
+                  <td>GitHub</td>
+                  <td>Terminal, CI</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cost</th>
+                  <td class="is-us">Free, MIT</td>
+                  <td>Free, part of npm</td>
+                  <td>Part of GitHub</td>
+                  <td>Free, Apache-2.0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="compare-note">
+            — means we found no mention in that tool’s documentation on
+            25&nbsp;November&nbsp;2026. Sources:
+            <a href="https://docs.npmjs.com/cli/v11/commands/npm-audit"
+              >npm audit</a
+            >,
+            <a
+              href="https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-alerts-filters"
+              >Dependabot alert filters</a
+            >,
+            <a href="https://google.github.io/osv-scanner/output/"
+              >OSV-Scanner output</a
+            >. Something out of date?
+            <a href="mailto:quavia.business@gmail.com">Tell us</a>.
+          </p>
         </div>
       </section>
 
-      <section class="section" id="cra" aria-labelledby="cra-title">
+      <section class="pricing" id="pricing" aria-labelledby="pricing-title">
         <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">CRA</p>
-            <div class="section-body">
-              <h2 id="cra-title">
-                The reporting clock has been running since 11&nbsp;September
-              </h2>
-              <p class="intro">
-                The Cyber Resilience Act (Regulation (EU) 2024/2847) applies in
-                stages. Reporting came first, and it covers products already on
-                the market, not only new ones.
-              </p>
-            </div>
-            <ol class="milestones">
-              <li class="milestone is-live">
-                <p class="milestone-date">
-                  <time datetime="2026-09-11">11&nbsp;September&nbsp;2026</time>
-                  <span class="tag">In force</span>
-                </p>
-                <h3>Reporting obligations apply</h3>
-                <p>
-                  For actively exploited vulnerabilities and severe incidents.
-                </p>
-              </li>
-              <li class="milestone">
-                <p class="milestone-date">
-                  <time datetime="2027-12-11">11&nbsp;December&nbsp;2027</time>
-                </p>
-                <h3>Full obligations apply</h3>
-                <p>Including CE marking.</p>
-              </li>
-            </ol>
-            <figure class="sequence-figure" aria-labelledby="sequence-title">
-              <figcaption class="minor-heading" id="sequence-title">
-                After you become aware
-              </figcaption>
-              <ol class="sequence">
-                <li class="step step-0">
-                  <p class="step-time">0&nbsp;h</p>
-                  <h3 class="step-name">You become aware</h3>
-                  <p class="step-text">
-                    Of an actively exploited vulnerability or a severe incident.
-                  </p>
-                </li>
-                <li class="step step-24">
-                  <p class="step-time">24&nbsp;h</p>
-                  <h3 class="step-name">Early warning</h3>
-                </li>
-                <li class="step step-72">
-                  <p class="step-time">72&nbsp;h</p>
-                  <h3 class="step-name">Notification</h3>
-                </li>
-                <li class="step step-final">
-                  <p class="step-time">Fix</p>
-                  <h3 class="step-name">Final report</h3>
-                  <p class="step-text">
-                    Once a fix or mitigation is available.
-                  </p>
-                </li>
-              </ol>
-            </figure>
-            <p class="legal-note">
-              <strong>Not legal advice.</strong> Vulnpilot’s CRA screen is a
-              rule-based first pass from three answers. Whether and how the CRA
-              applies to your product depends on facts it does not ask about.
-              Check with a qualified adviser.
-            </p>
-            <p class="legal-note-link">
-              Answer the three questions in your browser:
-              <a href="/scan#cra">CRA screen</a>.
-            </p>
+          <div class="section-head">
+            <h2 id="pricing-title" class="h2">
+              Free to scan. Paid when it watches for you.
+            </h2>
           </div>
+          <div class="plans">
+            <article class="plan plan-free" aria-labelledby="plan-free-title">
+              <div class="plan-head">
+                <h3 class="plan-name" id="plan-free-title">Scanner</h3>
+                <p class="plan-price">Free</p>
+                <p class="plan-sub">
+                  Available today. The CLI and the browser scanner stay free and
+                  MIT-licensed.
+                </p>
+              </div>
+              <ul class="plan-list">
+                <li>Lockfiles and CycloneDX SBOMs</li>
+                <li>Known exploited first, then EPSS and CVSS</li>
+                <li>The fix version for every issue that has one</li>
+                <li>CI gate, exit codes and versioned JSON</li>
+                <li>CRA applicability screen</li>
+              </ul>
+              <a class="btn btn-primary" href="/scan"
+                >Scan a lockfile
+                <span class="btn-arrow" aria-hidden="true">→</span></a
+              >
+            </article>
+            <article class="plan plan-team" aria-labelledby="plan-team-title">
+              <div class="plan-head">
+                <p class="tag">Planned · not available yet</p>
+                <h3 class="plan-name" id="plan-team-title">Team</h3>
+                <p class="plan-price plan-price-open">
+                  Price set with design partners
+                </p>
+                <p class="plan-sub">
+                  For teams that ship into the EU and carry the 24-hour duty.
+                </p>
+              </div>
+              <ul class="plan-list">
+                <li>
+                  <strong>Continuous monitoring.</strong> Your dependencies
+                  checked again when new advisories or KEV entries appear,
+                  without a manual scan.
+                </li>
+                <li>
+                  <strong>24-hour early-warning drafts.</strong> When an
+                  actively exploited vulnerability affects your product, a
+                  ready-to-review draft of the CRA early warning.
+                </li>
+                <li>Everything in Scanner.</li>
+              </ul>
+              <a class="btn btn-outline" href="#waitlist"
+                >Become a design partner</a
+              >
+            </article>
+          </div>
+          <p class="plans-note">
+            Neither paid feature exists yet. Scope and pricing are open and set
+            with the first teams. The scanner stays free either way.
+          </p>
         </div>
       </section>
 
-      <section class="section" id="planned" aria-labelledby="planned-title">
-        <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">Planned</p>
-            <div class="section-body">
-              <h2 id="planned-title">
-                Next: watching between scans, and drafting the 24-hour warning
-              </h2>
-            </div>
-            <ul class="planned">
-              <li>
-                <p class="tag">Planned</p>
-                <h3>Continuous monitoring</h3>
-                <p>
-                  Your dependencies checked again whenever new advisories or KEV
-                  entries are published, so a newly exploited dependency reaches
-                  you without a manual scan.
-                </p>
-              </li>
-              <li>
-                <p class="tag">Planned</p>
-                <h3>Early-warning drafts</h3>
-                <p>
-                  When an actively exploited vulnerability affects your product,
-                  a ready-to-send draft of the CRA 24-hour early warning, for
-                  you to review and send.
-                </p>
-              </li>
+      <section class="partner" id="waitlist" aria-labelledby="waitlist-title">
+        <div class="wrap grid partner-grid">
+          <div class="partner-intro">
+            <h2 id="waitlist-title" class="h2">Become a design partner</h2>
+            <p class="section-lede">
+              For teams that ship software into the EU and now carry the 24-hour
+              duty. Design partners get first access to monitoring and the
+              24-hour drafts, and a say in how they work.
+            </p>
+            <ul class="partner-terms">
+              <li>No cost to join</li>
+              <li>We email you when there is something to try</li>
+              <li>Unsubscribe any time</li>
             </ul>
-            <p class="planned-note">
-              Neither is available yet, and scope and pricing are open. We’re
-              building this with the first teams who sign up. The CLI stays free
-              and MIT-licensed.
-            </p>
           </div>
-        </div>
-      </section>
+          <div class="form-panel">
+            <form id="waitlist-form" novalidate>
+              <div class="field">
+                <label for="email">Work email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  inputmode="email"
+                  autocomplete="email"
+                  maxlength="254"
+                  required
+                  aria-describedby="email-error"
+                />
+                <p class="field-error" id="email-error" hidden></p>
+              </div>
 
-      <section class="section" id="waitlist" aria-labelledby="waitlist-title">
-        <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">Waitlist</p>
-            <div class="waitlist-intro">
-              <h2 id="waitlist-title">Join the waitlist</h2>
-              <p class="intro">
-                For teams that ship software into the EU and now carry the
-                24-hour duty. We’ll email you about Vulnpilot, starting when
-                monitoring and early-warning drafts are ready to try.
+              <div class="field">
+                <label for="company-size"
+                  >Company size <span class="optional">(optional)</span></label
+                >
+                <div class="select">
+                  <select id="company-size" name="company_size">
+                    <option value="">Prefer not to say</option>
+                    <option value="1">Just me</option>
+                    <option value="2-10">2–10 people</option>
+                    <option value="11-50">11–50 people</option>
+                    <option value="51-250">51–250 people</option>
+                    <option value="250+">More than 250 people</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="hp" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
+
+              <div class="field field-check">
+                <input
+                  id="consent"
+                  name="consent"
+                  type="checkbox"
+                  required
+                  aria-describedby="consent-error"
+                />
+                <label for="consent"
+                  >I agree to receive emails about Vulnpilot. Unsubscribe
+                  anytime. See the <a href="/privacy">privacy notice</a>.</label
+                >
+              </div>
+              <p
+                class="field-error field-error-check"
+                id="consent-error"
+                hidden
+              ></p>
+
+              <button class="btn btn-primary btn-block" type="submit">
+                <span class="btn-label">Join as a design partner</span>
+              </button>
+
+              <p
+                class="form-status"
+                id="form-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </form>
+
+            <div class="form-success" id="form-success" tabindex="-1" hidden>
+              <h3>You’re on the list</h3>
+              <p>
+                We’ll email you when there is something to try. Until then,
+                <code>npx vulnpilot</code> works today.
               </p>
             </div>
-            <div class="form-panel">
-              <form id="waitlist-form" novalidate>
-                <div class="field">
-                  <label for="email">Work email</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    inputmode="email"
-                    autocomplete="email"
-                    maxlength="254"
-                    required
-                    aria-describedby="email-error"
-                  />
-                  <p class="field-error" id="email-error" hidden></p>
-                </div>
-
-                <div class="field">
-                  <label for="company-size"
-                    >Company size
-                    <span class="optional">(optional)</span></label
-                  >
-                  <div class="select">
-                    <select id="company-size" name="company_size">
-                      <option value="">Prefer not to say</option>
-                      <option value="1">Just me</option>
-                      <option value="2-10">2–10 people</option>
-                      <option value="11-50">11–50 people</option>
-                      <option value="51-250">51–250 people</option>
-                      <option value="250+">More than 250 people</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="hp" aria-hidden="true">
-                  <label for="website">Leave this field empty</label>
-                  <input
-                    id="website"
-                    name="website"
-                    type="text"
-                    tabindex="-1"
-                    autocomplete="off"
-                  />
-                </div>
-
-                <div class="field field-check">
-                  <input
-                    id="consent"
-                    name="consent"
-                    type="checkbox"
-                    required
-                    aria-describedby="consent-error"
-                  />
-                  <label for="consent"
-                    >I agree to receive emails about Vulnpilot. Unsubscribe
-                    anytime. See the
-                    <a href="/privacy">privacy notice</a>.</label
-                  >
-                </div>
-                <p
-                  class="field-error field-error-check"
-                  id="consent-error"
-                  hidden
-                ></p>
-
-                <button class="btn btn-primary btn-block" type="submit">
-                  <span class="btn-label">Join the waitlist</span>
-                </button>
-
-                <p
-                  class="form-status"
-                  id="form-status"
-                  role="status"
-                  aria-live="polite"
-                ></p>
-              </form>
-
-              <div class="form-success" id="form-success" tabindex="-1" hidden>
-                <h3>You’re on the list</h3>
-                <p>
-                  We’ll email you when there is something to try. Until then,
-                  <code>npx vulnpilot</code> works today.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="faq" aria-labelledby="faq-title">
+      <section class="faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="wrap grid faq-grid">
+          <div class="faq-head">
+            <h2 id="faq-title" class="h2">Questions</h2>
+            <p class="section-lede">
+              Something else? Email
+              <a href="mailto:quavia.business@gmail.com"
+                >quavia.business@gmail.com</a
+              >.
+            </p>
+          </div>
+          <div class="faq">
+            <details class="faq-item">
+              <summary>
+                How is this different from npm audit or Dependabot?
+              </summary>
+              <p>
+                They tell you what is vulnerable. Vulnpilot tells you which of
+                those are known to be exploited, using the CISA KEV catalog,
+                puts them first, ranks the rest by EPSS and CVSS, and screens
+                whether the CRA applies. Run it next to them: it reads the same
+                lockfile.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>What leaves my machine?</summary>
+              <p>
+                Package names and versions, sent to OSV.dev, and CVE IDs, sent
+                to FIRST for EPSS scores. The CISA catalog is downloaded;
+                nothing is sent to CISA. Source code, file paths and manifests
+                stay local. The CLI’s anonymous telemetry sends five coarse
+                fields per scan, is off in CI, and
+                <code>--no-telemetry</code> turns it off. In the browser
+                scanner, nothing leaves the tab until you press Scan, and the
+                page lists what will be sent first.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Is this legal advice?</summary>
+              <p>
+                No. The CRA screen is a rule-based first pass from three
+                answers: EU market, commercial activity and product type. It
+                returns likely applies, likely out of scope or unclear, with the
+                reason and the key dates. Ask a qualified adviser before you
+                rely on it.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>
+                Our product is in Python, Go or Java. Does it work?
+              </summary>
+              <p>
+                Yes, through a CycloneDX JSON SBOM. Generate one with your
+                build’s CycloneDX tooling and pass it with
+                <code>--sbom</code>. Supported purl types include
+                <code>pypi</code>, <code>golang</code> and <code>maven</code>.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Which ecosystems are supported?</summary>
+              <p>
+                Lockfiles: <code>package-lock.json</code> (v1–3),
+                <code>pnpm-lock.yaml</code> (5.x, 6.x, 9.x) and
+                <code>yarn.lock</code> (Classic and Berry). Anything else
+                through a CycloneDX JSON SBOM with <code>--sbom</code>, for purl
+                types <code>npm</code>, <code>pypi</code>, <code>maven</code>,
+                <code>golang</code>, <code>cargo</code>, <code>gem</code>,
+                <code>nuget</code>, <code>composer</code>, <code>hex</code>,
+                <code>pub</code>, <code>conan</code>, <code>deb</code> and
+                <code>apk</code>.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Why is the scanner free?</summary>
+              <p>
+                A scanner you can read is easier to trust. The code is
+                MIT-licensed on GitHub and the CLI stays free. We plan to charge
+                for monitoring and early-warning drafts, not for the scan.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>What will the paid product cost?</summary>
+              <p>
+                Not decided yet. We’ll set scope and pricing with the design
+                partners.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Does it work offline or in CI?</summary>
+              <p>
+                Both. Responses are cached for 24&nbsp;hours and
+                <code>--offline</code> uses the cache only. In CI, pass
+                <code>--non-interactive</code> with the three answers as flags,
+                read the versioned <code>--json</code> report, and gate on exit
+                codes with <code>--fail-on critical|high|kev</code>.
+              </p>
+            </details>
+            <!-- slot:faq-who. Add "Who is behind Vulnpilot?" with real names
+                 and a photo once the founders agree to be named. -->
+          </div>
+        </div>
+      </section>
+
+      <section class="final" aria-labelledby="final-title">
         <div class="wrap">
-          <div class="grid section-grid">
-            <p class="rail">FAQ</p>
-            <div class="section-body">
-              <h2 id="faq-title">Questions</h2>
-            </div>
-            <div class="faq">
-              <div class="faq-item">
-                <h3>Is this legal advice?</h3>
-                <p>
-                  No. The CRA screen is a rule-based first pass from three
-                  answers: EU market, commercial activity and product type. It
-                  returns likely applies, likely out of scope or unclear, with
-                  the reason and the key dates. Ask a qualified adviser before
-                  you rely on it.
-                </p>
-              </div>
-              <div class="faq-item">
-                <h3>What leaves my machine?</h3>
-                <p>
-                  Package names and versions, sent to OSV.dev. Vulnpilot reads
-                  only the lockfile or SBOM you point it at; source code, file
-                  paths and manifests stay local. Anonymous telemetry sends five
-                  coarse fields per scan, is off in CI, and
-                  <code>--no-telemetry</code> turns it off.
-                </p>
-              </div>
-              <div class="faq-item">
-                <h3>Why is the CLI free?</h3>
-                <p>
-                  A scanner you can read is easier to trust. The code is
-                  MIT-licensed on GitHub and the CLI stays free. We plan to
-                  charge for monitoring and early-warning drafts, not for the
-                  scan.
-                </p>
-              </div>
-              <div class="faq-item">
-                <h3>What will the paid product cost?</h3>
-                <p>
-                  Not decided yet. We’ll set scope and pricing with the first
-                  teams on the waitlist.
-                </p>
-              </div>
-              <div class="faq-item">
-                <h3>Which ecosystems are supported?</h3>
-                <p>
-                  Lockfiles: <code>package-lock.json</code> (v1–3),
-                  <code>pnpm-lock.yaml</code> (5.x, 6.x, 9.x) and
-                  <code>yarn.lock</code> (Classic and Berry). Anything else
-                  through a CycloneDX JSON SBOM with <code>--sbom</code>, for
-                  purl types <code>npm</code>, <code>pypi</code>,
-                  <code>maven</code>, <code>golang</code>, <code>cargo</code>,
-                  <code>gem</code>, <code>nuget</code>, <code>composer</code>,
-                  <code>hex</code>, <code>pub</code>, <code>conan</code>,
-                  <code>deb</code> and <code>apk</code>.
-                </p>
-              </div>
-              <div class="faq-item">
-                <h3>Does it work offline or in CI?</h3>
-                <p>
-                  Both. Responses are cached for 24&nbsp;hours and
-                  <code>--offline</code> uses the cache only. In CI, pass
-                  <code>--non-interactive</code> with the three answers as
-                  flags, read the versioned <code>--json</code> report, and gate
-                  on exit codes with <code>--fail-on critical|high|kev</code>.
-                </p>
-              </div>
+          <h2 id="final-title" class="final-title">
+            See what is exploited in your dependencies.
+          </h2>
+          <p class="final-text">
+            Drop a lockfile on the scanner. It takes seconds, and the file stays
+            in your browser.
+          </p>
+          <div class="final-actions">
+            <a class="btn btn-primary btn-large" href="/scan"
+              >Scan a lockfile
+              <span class="btn-arrow" aria-hidden="true">→</span></a
+            >
+            <div class="command">
+              <code
+                ><span class="command-prompt" aria-hidden="true">$ </span>npx
+                vulnpilot</code
+              >
+              <button class="copy" type="button" data-copy="npx vulnpilot">
+                <span class="copy-label">Copy</span
+                ><span class="visually-hidden"> the command npx vulnpilot</span>
+              </button>
             </div>
           </div>
         </div>
       </section>
     </main>
 
+    <div class="sticky-cta" id="sticky-cta" hidden>
+      <a class="btn btn-primary btn-block" href="/scan"
+        >Scan a lockfile <span class="btn-arrow" aria-hidden="true">→</span></a
+      >
+    </div>
+
     <!-- generated:footer -->
     <footer class="site-footer">
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
           <a class="brand" href="/" aria-label="Vulnpilot home">
-            <span class="brand-word">vulnpilot</span
-            ><span class="brand-cursor" aria-hidden="true"></span>
+            <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+              <rect class="mark-bg" width="32" height="32" rx="7" />
+              <path
+                class="mark-v"
+                d="M7 10.5 11.75 21.5 16.5 10.5"
+                fill="none"
+                stroke-width="3"
+              />
+              <rect
+                class="mark-block"
+                x="19.5"
+                y="10"
+                width="5.5"
+                height="11.5"
+              />
+            </svg>
+            <span class="brand-word">Vulnpilot</span>
           </a>
           <p>
-            Free and open source under the
+            Finds the dependencies attackers already exploit. Free and open
+            source under the
             <a
               href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
               >MIT license</a
