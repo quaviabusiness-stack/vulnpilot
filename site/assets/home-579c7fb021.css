@@ -998,6 +998,12 @@
   font-size: 0.75rem;
 }
 
+@media (max-width: 479px) {
+  .kev-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .kev-facts dd {
   margin: 2px 0 0;
   font-family: var(--mono);
@@ -1025,6 +1031,15 @@
 
 .cell-ci {
   gap: var(--space-5);
+}
+
+.cell-ci-text {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.cell-ci-text > p {
+  color: var(--muted);
 }
 
 .exit-list {
@@ -1146,7 +1161,6 @@
   font-weight: 650;
   line-height: 0.9;
   letter-spacing: -0.055em;
-  font-variant-numeric: tabular-nums;
 }
 
 .figure-item.is-signal dd {
@@ -1821,6 +1835,7 @@
 
 /* Sticky call to action on phones, after the hero has scrolled away. */
 
+/* Hidden off screen it must not take focus either, so visibility follows the slide. */
 .sticky-cta {
   position: fixed;
   right: 0;
@@ -1830,12 +1845,19 @@
   padding: 10px var(--margin) calc(10px + env(safe-area-inset-bottom));
   background: var(--bg);
   border-top: 1px solid var(--rule);
+  visibility: hidden;
   transform: translateY(110%);
-  transition: transform var(--dur-slow) var(--ease-out);
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    visibility 0s linear var(--dur-slow);
 }
 
 .sticky-cta.is-shown {
+  visibility: visible;
   transform: none;
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    visibility 0s;
 }
 
 @media (min-width: 768px) {
