@@ -605,11 +605,13 @@ strong {
   align-items: center;
   padding: 0 16px;
   font-size: 0.9375rem;
-  white-space: pre;
+  white-space: nowrap;
 }
 
+/* Only the prompt keeps its space; whitespace from formatting does not. */
 .command-prompt {
   color: var(--muted);
+  white-space: pre;
   user-select: none;
 }
 
