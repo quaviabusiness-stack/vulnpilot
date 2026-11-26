@@ -1,5 +1,6 @@
-# RFC 9116. Add the Contact line (the address shown in the site footer) before
-# this is deployed; CI fails until it is present and 30 days before Expires.
+# RFC 9116. Contact is the address shown in the site footer. CI fails 30 days
+# before Expires; set a new date (at most a year ahead) before then.
+Contact: mailto:quavia.business@gmail.com
 Expires: 2027-11-01T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://getvulnpilot.vercel.app/.well-known/security.txt
