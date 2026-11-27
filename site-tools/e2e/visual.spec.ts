@@ -21,15 +21,18 @@ for (const scheme of ['light', 'dark'] as const)
           colorScheme: scheme,
           reducedMotion: 'reduce',
         });
-        // font-display: optional keeps fallback fonts when a font is slow on a
-        // first visit; load both once so every screenshot uses the real fonts.
-        await page.goto('/privacy');
-        await page.evaluate(() =>
-          Promise.all([
-            document.fonts.load('400 16px "Schibsted Grotesk"'),
-            document.fonts.load('400 16px "JetBrains Mono"'),
-          ]),
-        );
+        // Playwright routing disables HTTP caching, so warming up fonts on a
+        // different page cannot prevent `font-display: optional` from falling
+        // back. Allow the fonts to swap in before measuring the screenshot.
+        await page.route(/\/assets\/styles-[a-f0-9]+\.css$/, async (route) => {
+          const response = await route.fetch();
+          expect(response.ok()).toBe(true);
+          const css = (await response.text()).replaceAll(
+            'font-display: optional',
+            'font-display: swap',
+          );
+          await route.fulfill({ contentType: 'text/css', body: css });
+        });
         await state.setup(page, network);
         await page.evaluate(() => document.fonts.ready);
         // No page-level horizontal scrolling at any width.
