@@ -60,8 +60,8 @@
       crossorigin
     />
     <link rel="stylesheet" href="/assets/styles-2cbdab4707.css" />
-    <link rel="stylesheet" href="/assets/home-579c7fb021.css" />
-    <script src="/assets/app-568b870f07.js" defer></script>
+    <link rel="stylesheet" href="/assets/home-731720004e.css" />
+    <script src="/assets/app-366e5d353c.js" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -311,9 +311,7 @@
 </span><span class="ln ln-count l4">Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)</span>
 </span><span class="ln ln-note l5"><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
 </span><span class="ln ln-blank l6">
-</span><span class="ln ln-warn l7"><span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span>
-</span><span class="ln ln-blank l8">
-</span><span class="ln ln-top l9"><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
+</span><span class="ln ln-top l7"><span class="t-b">Top 10 of 23 issue(s)</span><span class="t-d"> (KEV first, then EPSS, then CVSS)</span>
 </span><span class="issue i1 is-kev" data-found="2"><span class="ln"> 1. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44228  CRITICAL 10.0 · EPSS &gt;99.9% · <span class="t-r">KNOWN EXPLOITED</span>
 </span><span class="ln">    Remote code injection in Log4j
 </span><span class="ln">    Fix: upgrade to 2.15.0
@@ -331,17 +329,13 @@
 </span><span class="ln">    Fix: upgrade to 4.17.21</span></span></code></pre>
                 <!-- /generated:proof-hero -->
               </div>
-              <p class="term-drop" aria-hidden="true">
-                <span>Drop it here to open it in the browser scanner.</span>
-                <span class="term-drop-sub">The file is not uploaded.</span>
-              </p>
               <figcaption id="hero-term-caption" class="term-caption">
                 Real output, abridged: Vulnpilot
                 <span data-proof="cli-version">0.1.2</span> on the sample
                 firmware SBOM from its repository,
                 <time data-proof="capture-date" datetime="2026-11-18"
                   >18&nbsp;November&nbsp;2026</time
-                >. <a href="#case">See the full run</a>
+                >. <a href="#case">See the annotated run</a>
               </figcaption>
             </figure>
           </div>
@@ -388,15 +382,17 @@
           </p>
           <div class="problem-body">
             <h2 id="cra-title" class="h2">
-              Since 11&nbsp;September, an exploited dependency comes with a
-              <span class="nowrap">24-hour deadline</span>.
+              The CRA gives manufacturers up to
+              <span class="nowrap">24 hours</span> to send an early warning.
             </h2>
             <p class="problem-text">
-              If you sell software or connected hardware in the EU, the Cyber
-              Resilience Act now requires an early warning within 24 hours of
-              becoming aware of an actively exploited vulnerability in your
-              product. Products already on the market are included. So is the
-              dependency three levels down: it ships inside your product.
+              The deadline starts when a manufacturer becomes aware of an
+              actively exploited vulnerability in its product. If a dependency
+              matches CISA KEV, check whether the affected component and version
+              are in the product you ship.
+              <a href="https://eur-lex.europa.eu/eli/reg/2024/2847/oj"
+                >Read Article 14</a
+              >.
             </p>
           </div>
           <figure class="clock" aria-labelledby="clock-title">
@@ -418,7 +414,9 @@
               </li>
               <li class="clock-step">
                 <p class="clock-time">Fix</p>
-                <p class="clock-name">Final report, once a fix is available</p>
+                <p class="clock-name">
+                  Final report within 14 days of a fix or mitigation
+                </p>
               </li>
             </ol>
           </figure>
@@ -879,21 +877,21 @@ jobs:
             </div>
           </dl>
           <p class="case-note">
-            Because <span data-proof="kev">2</span> issues are in the CISA
-            catalog and the CRA likely applies to this product, the run also
-            printed the 24-hour line and exited with code 1, which fails a CI
-            job. EPSS scores change daily, so a scan today can differ.
+            The scan found <span data-proof="kev">2</span> matches in the CISA
+            catalog and exited with code 1, which fails a CI job. Use the
+            matches to check whether your shipped product is affected. EPSS
+            scores change daily, so a scan today can differ.
           </p>
 
           <details class="fullrun">
             <summary>
-              <span class="fullrun-label">Read the full, unedited output</span>
+              <span class="fullrun-label">Read the annotated scan output</span>
               <span class="fullrun-hint">with notes on each part</span>
             </summary>
             <div class="grid fullrun-grid">
               <figure class="run" aria-labelledby="run-caption">
                 <figcaption id="run-caption" class="visually-hidden">
-                  Complete output of the scan, with notes on each part.
+                  Excerpts from the scan, with notes on each part.
                 </figcaption>
                 <div class="run-row run-first run-blank">
                   <div class="run-cell">
@@ -951,15 +949,11 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                   <div class="run-cell">
                     <!-- generated:proof-run-4 -->
                     <pre><code><span class="t-d">2 entries skipped (local/git/workspace links or components without a supported purl).</span>
-
-<span class="t-r">&gt;&gt;&gt; Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.</span>
 </code></pre>
                     <!-- /generated:proof-run-4 -->
                   </div>
                   <p class="run-note">
-                    Skipped components are counted, not dropped. The 24-hour
-                    line appears because the CRA likely applies and a dependency
-                    is actively exploited.
+                    The scan counts components it could not check.
                   </p>
                 </div>
                 <div class="run-row">

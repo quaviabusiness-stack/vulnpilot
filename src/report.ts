@@ -110,7 +110,7 @@ export function exitCodeFor(report: Report, failOn?: FailOn): 0 | 1 | 2 {
 // Plain-text output.
 
 export const REPORTING_WARNING =
-  'Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.';
+  'CISA KEV match: check whether your product is affected. Under CRA Article 14, manufacturers must send an early warning without undue delay and within 24 hours of becoming aware of an actively exploited vulnerability in their product.';
 
 interface TextOptions {
   color: boolean;

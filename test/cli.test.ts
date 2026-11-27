@@ -42,7 +42,12 @@ it('scans a project with mock data and exits 1 when issues are found', async () 
   ]);
   expect(result.code).toBe(1);
   expect(result.stdout).toContain('LIKELY APPLIES');
-  expect(result.stdout).toContain('must be reported within 24 hours');
+  expect(result.stdout).toContain(
+    'CISA KEV match: check whether your product is affected.',
+  );
+  expect(result.stdout).toContain(
+    'within 24 hours of becoming aware of an actively exploited vulnerability in their product.',
+  );
   expect(result.stdout).toContain('Not legal advice');
   expect(fetch).not.toHaveBeenCalled();
 });

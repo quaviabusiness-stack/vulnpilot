@@ -2,7 +2,7 @@
 //
 //   pnpm --filter site-tools check
 //
-// proof     the CLI output on the pages equals the stored capture, byte for byte
+// proof     CLI excerpts equal the corresponding lines of the stored capture
 // faq       the FAQPage JSON-LD matches the questions shown on the home page
 // links     every internal link and fragment resolves
 // budgets   gzip sizes per page and for the scanner chunks
@@ -51,7 +51,11 @@ function codeText(html: string): string {
 
 function checkProof(): void {
   const proof = join(TOOLS, 'proof');
-  const run = readFileSync(join(proof, 'run.txt'), 'utf8');
+  // The page provides current CRA guidance separately from the captured output.
+  const run = readFileSync(join(proof, 'run.txt'), 'utf8').replace(
+    /^>>> [^\n]*\n\n/m,
+    '',
+  );
   const help = readFileSync(join(proof, 'help.txt'), 'utf8');
   const meta = JSON.parse(readFileSync(join(proof, 'meta.json'), 'utf8')) as {
     args: string[];
@@ -76,7 +80,7 @@ function checkProof(): void {
   const text = `${rows.join('\n')}\n`;
   if (text !== run)
     fail(
-      'proof: the full run on the home page differs from site-tools/proof/run.txt',
+      'proof: the annotated run on the home page differs from the expected excerpt',
     );
 
   const hero = region(home, 'proof-hero');

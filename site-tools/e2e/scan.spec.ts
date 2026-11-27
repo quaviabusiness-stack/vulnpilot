@@ -10,6 +10,9 @@ const fixture = (path: string) => join(ROOT, 'test/fixtures', path);
 const schema = JSON.parse(
   readFileSync(join(ROOT, 'schema/report-v1.schema.json'), 'utf8'),
 );
+const { version } = JSON.parse(
+  readFileSync(join(ROOT, 'package.json'), 'utf8'),
+) as { version: string };
 
 async function loadSample(page: Page) {
   await open(page, '/scan');
@@ -116,7 +119,7 @@ test('result: the CLI text report, JSON download, table and facts @cross', async
 }) => {
   await loadSample(page);
   await scan(page);
-  await expect(reportText(page)).toContainText('Vulnpilot 0.1.2');
+  await expect(reportText(page)).toContainText(`Vulnpilot ${version}`);
   await expect(reportText(page)).toContainText('Top 4 of 4 issue(s)');
   await expect(
     reportText(page).locator('.t-r', { hasText: 'KNOWN EXPLOITED' }),
@@ -380,6 +383,44 @@ test('nothing is stored in the browser', async ({ page, context }) => {
   expect(page.url()).toBe('http://127.0.0.1:4173/scan');
 });
 
+test('the scanner clears files left by the old home-page handoff', async ({
+  page,
+  network,
+}) => {
+  await open(page, '/privacy');
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve, reject) => {
+        const request = indexedDB.open('vulnpilot-handoff', 1);
+        request.onupgradeneeded = () =>
+          request.result.createObjectStore('files');
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const db = request.result;
+          const transaction = db.transaction('files', 'readwrite');
+          transaction
+            .objectStore('files')
+            .put(
+              { file: new File(['{}'], 'package-lock.json'), at: Date.now() },
+              'dropped',
+            );
+          transaction.oncomplete = () => {
+            db.close();
+            resolve();
+          };
+          transaction.onabort = () => reject(transaction.error);
+        };
+      }),
+  );
+  await open(page, '/scan?handoff');
+  await expect(page).toHaveURL(/\/scan$/);
+  await expect(page.locator('#found-title')).toBeHidden();
+  await expect
+    .poll(() => page.evaluate(() => indexedDB.databases()))
+    .toEqual([]);
+  expect(network.external()).toEqual([]);
+});
+
 test('the CRA screen uses the CLI rules and feeds the report @cross', async ({
   page,
 }) => {
@@ -403,7 +444,10 @@ test('the CRA screen uses the CLI rules and feeds the report @cross', async ({
     'EU Cyber Resilience Act: LIKELY APPLIES',
   );
   await expect(reportText(page)).toContainText(
-    '>>> Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.',
+    '>>> CISA KEV match: check whether your product is affected.',
+  );
+  await expect(reportText(page)).toContainText(
+    'must send an early warning without undue delay and within 24 hours of becoming aware of an actively exploited vulnerability in their product.',
   );
   await expect(page.locator('#terminal-command')).toHaveText(
     'npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware',

@@ -39,7 +39,7 @@ Install the browsers once with `pnpm --filter site-tools exec playwright install
 
 ## Refreshing the proof
 
-The run on the home page and the `--help` text in `/docs` are real output of
+The scan excerpts on the home page and the `--help` text in `/docs` are real output of
 the published CLI. Refreshing them is a deliberate act:
 
 ```sh
@@ -48,8 +48,9 @@ pnpm --filter site-tools build                # puts the capture into the pages
 git diff site/ site-tools/proof/              # review, then commit
 ```
 
-Nobody edits the output on the pages by hand: the build rewrites it, and
-`check` compares the page text with the capture byte for byte. If the output
+The generator omits the captured CRA reporting warning from the excerpts and
+the page provides current reporting guidance separately. The `check` command
+compares the displayed output with the corresponding lines of the capture. If the output
 changes shape (for example no skipped entries), the build stops and asks for a
 decision instead of guessing how to annotate it.
 

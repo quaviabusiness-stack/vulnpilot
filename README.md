@@ -107,7 +107,7 @@ Responses are cached for 24 hours in the OS cache directory: `%LOCALAPPDATA%\vul
 | `saas-with-client`           | SaaS with an app, desktop client, agent or firmware                         | `unclear`             |
 | `insufficient-information`   | Anything else (e.g. any answer "not sure")                                  | `unclear`             |
 
-Every result shows the reason, the three answers and the key dates: reporting obligations for actively exploited vulnerabilities and severe incidents apply from **11 September 2026** (early warning within 24 hours); full obligations including CE marking apply from **11 December 2027**. When the CRA likely applies and a KEV-listed vulnerability is found, the output adds: "Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours."
+Every result shows the reason, the three answers and the key dates. Reporting obligations for actively exploited vulnerabilities and severe incidents apply from **11 September 2026**. Full obligations including CE marking apply from **11 December 2027**. When the CRA likely applies and a dependency matches CISA KEV, the text report asks you to check whether your product is affected. Under [CRA Article 14](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), manufacturers must send an early warning within 24 hours of becoming aware of an actively exploited vulnerability in their product.
 
 The rules do not cover sectoral exclusions (medical devices, vehicles, aviation, marine, defence), importer/distributor roles, or important/critical product classes. Zero known vulnerabilities is not a security guarantee.
 

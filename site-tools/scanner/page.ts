@@ -1117,47 +1117,11 @@ if (flagsButton instanceof HTMLButtonElement)
 renderCra(false);
 
 // ---------------------------------------------------------------------------
-// Arriving from the home page: a file dropped there waits in this browser's
-// IndexedDB (it was never uploaded), and "try the sample SBOM" links here
-// with ?sample. Both are read once and the address is cleaned up.
-
-const HANDOFF_DB = 'vulnpilot-handoff';
-const HANDOFF_MAX_AGE = 5 * 60 * 1000;
-
-function takeHandoff(): Promise<File | undefined> {
-  return new Promise((resolve) => {
-    if (!('indexedDB' in window)) {
-      resolve(undefined);
-      return;
-    }
-    const request = indexedDB.open(HANDOFF_DB, 1);
-    request.onupgradeneeded = () => request.result.createObjectStore('files');
-    request.onerror = () => resolve(undefined);
-    request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction('files', 'readwrite');
-      const store = transaction.objectStore('files');
-      const get = store.get('dropped');
-      let record: { file?: unknown; at?: unknown } | undefined;
-      get.onsuccess = () => {
-        record = get.result as typeof record;
-        store.delete('dropped');
-      };
-      transaction.oncomplete = () => {
-        db.close();
-        const fresh =
-          typeof record?.at === 'number' &&
-          Date.now() - record.at < HANDOFF_MAX_AGE;
-        resolve(
-          fresh && record?.file instanceof File ? record.file : undefined,
-        );
-      };
-      transaction.onerror = () => {
-        db.close();
-        resolve(undefined);
-      };
-    };
-  });
+// Remove any lockfile left by the old home-page drop flow, without reading it.
+try {
+  window.indexedDB?.deleteDatabase('vulnpilot-handoff');
+} catch {
+  // Storage may be unavailable in this browser. The scanner uses memory only.
 }
 
 const arrival = new URLSearchParams(window.location.search);
@@ -1168,8 +1132,4 @@ if (arrival.has('handoff') || arrival.has('sample')) {
     window.location.pathname + window.location.hash,
   );
   if (arrival.has('sample')) void readSample();
-  else
-    void takeHandoff().then((file) => {
-      if (file) void readFile(file);
-    });
 }

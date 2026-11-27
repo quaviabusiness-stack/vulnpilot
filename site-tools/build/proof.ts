@@ -88,7 +88,6 @@ export interface Layout {
   craEnd: number;
   countsStart: number;
   skipped: number;
-  warning: number;
   topStart: number;
   issuesEnd: number;
   cta: number;
@@ -126,7 +125,7 @@ export function runLayout(plain: string[]): Layout {
   const cta = issuesEnd + 1;
   expect(at(cta).startsWith('Get continuous monitoring'), 'waitlist line');
   expect(cta === plain.length - 1, 'nothing after the waitlist line');
-  return { craEnd, countsStart, skipped, warning, topStart, issuesEnd, cta };
+  return { craEnd, countsStart, skipped, topStart, issuesEnd, cta };
 }
 
 const PROMPT = '<span class="t-p" aria-hidden="true">$ </span>';
@@ -152,8 +151,8 @@ export function issueKey(plainLine: string): { pkg: string; cve: string } {
 }
 
 /**
- * The hero terminal: the command, then one contiguous slice of the run from
- * the summary counts to the fifth issue. Issues are wrapped three lines at a
+ * The hero terminal: the command, counts and first five issues. Reporting
+ * guidance is presented separately as page copy. Issues are wrapped three lines at a
  * time so the page can show them sorted by package first and then move them
  * to the order the CLI printed. `data-found` is that package order; the HTML
  * order is always the CLI's.
@@ -165,12 +164,17 @@ function heroRegion(
   command2: string,
 ): string {
   const { lines, plain } = proof;
-  const head = lines.slice(layout.countsStart, layout.topStart + 1);
-  const headPlain = plain.slice(layout.countsStart, layout.topStart + 1);
+  const head = [
+    ...lines.slice(layout.countsStart, layout.skipped + 2),
+    lines[layout.topStart]!,
+  ];
+  const headPlain = [
+    ...plain.slice(layout.countsStart, layout.skipped + 2),
+    plain[layout.topStart]!,
+  ];
   const kind = (index: number, text: string) => {
     if (index < 4) return 'ln-count';
     if (text === '') return 'ln-blank';
-    if (text.startsWith('>>> ')) return 'ln-warn';
     if (index === head.length - 1) return 'ln-top';
     return 'ln-note';
   };
@@ -444,7 +448,7 @@ export function homeRegions(proof: Proof): Record<string, string> {
     ),
     'proof-run-2': pre(slice(2, layout.craEnd, true)),
     'proof-run-3': pre(slice(layout.countsStart, layout.countsStart + 4)),
-    'proof-run-4': pre(slice(layout.skipped, layout.warning + 1, true)),
+    'proof-run-4': pre(slice(layout.skipped, layout.skipped + 1, true)),
     'proof-run-5': pre(slice(layout.topStart, layout.topStart + 4)),
     'proof-run-6': pre(slice(layout.topStart + 4, layout.issuesEnd, true)),
     'proof-run-7': pre(
