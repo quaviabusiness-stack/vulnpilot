@@ -1,14 +1,18 @@
 name: Supabase keepalive
 
-# The Supabase free plan pauses a project after about a week without
-# activity, which silently breaks the waitlist form and CLI telemetry.
-# This pings a harmless function (supabase/keepalive.sql) every two days.
+# The Supabase free plan pauses a project that gets too little database
+# activity over a week, which silently breaks the waitlist form and CLI
+# telemetry. Supabase's guideline is "a few user requests to the database
+# each day"; one ping every two days was not enough (the project paused on
+# 2026-11-24, 22 hours after a successful ping). This calls a harmless
+# function (supabase/keepalive.sql) every three hours, which leaves a margin
+# for scheduled runs that GitHub starts hours late or drops under load.
 # A failed run means the project is paused or unreachable: restore it in the
-# Supabase dashboard.
+# Supabase dashboard. Only a paid Supabase plan rules out pausing entirely.
 
 on:
   schedule:
-    - cron: '17 6 */2 * *'
+    - cron: '41 */3 * * *'
   workflow_dispatch:
 
 permissions: {}
