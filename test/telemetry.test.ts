@@ -1,17 +1,19 @@
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { CLI_VERSION } from '../src/build-info.js';
+import { resetLegacyWarnings } from '../src/legacy.js';
 import {
   kevCountBucket,
   sendTelemetry,
+  telemetryDisabled,
   telemetryEvent,
 } from '../src/telemetry.js';
 
 let stateDirectory: string;
 beforeEach(async () => {
-  stateDirectory = await mkdtemp(join(tmpdir(), 'vulnpilot-telemetry-test-'));
+  stateDirectory = await mkdtemp(join(tmpdir(), 'relvet-telemetry-test-'));
 });
 afterEach(async () => {
   await rm(stateDirectory, { recursive: true, force: true });
@@ -68,7 +70,9 @@ it('builds exactly the five documented fields', () => {
 
 it.each([
   { enabled: false, env: {} },
+  { enabled: true, env: { RELVET_TELEMETRY: '0' } },
   { enabled: true, env: { VULNPILOT_TELEMETRY: '0' } },
+  { enabled: true, env: { RELVET_TELEMETRY: '1', VULNPILOT_TELEMETRY: '0' } },
   { enabled: true, env: { CI: 'true' } },
   { enabled: true, env: { CI: '' } },
 ])('never sends or shows notices when disabled: %j', async (override) => {
@@ -83,7 +87,7 @@ it('does nothing when no Supabase project was embedded at build time', async () 
   await sendTelemetry({
     enabled: true,
     event,
-    env: { VULNPILOT_SUPABASE_URL: 'https://runtime.example' },
+    env: { RELVET_SUPABASE_URL: 'https://runtime.example' },
     stateDirectory,
   });
   expect(fetch).not.toHaveBeenCalled();
@@ -152,4 +156,42 @@ it('rejects non-HTTPS Supabase URLs', async () => {
     fetch: request,
   });
   expect(request).not.toHaveBeenCalled();
+});
+
+it('honours the deprecated VULNPILOT_TELEMETRY opt-out and warns once', () => {
+  resetLegacyWarnings();
+  const warn = vi.fn();
+  expect(telemetryDisabled(true, { VULNPILOT_TELEMETRY: '0' }, warn)).toBe(
+    true,
+  );
+  expect(telemetryDisabled(true, { VULNPILOT_TELEMETRY: '0' }, warn)).toBe(
+    true,
+  );
+  expect(warn).toHaveBeenCalledTimes(1);
+  expect(warn).toHaveBeenCalledWith(
+    'Relvet: VULNPILOT_TELEMETRY is deprecated; use RELVET_TELEMETRY instead.',
+  );
+  expect(telemetryDisabled(true, {}, warn)).toBe(false);
+});
+
+it('does not repeat the notice already shown under the old config directory', async () => {
+  const legacyStateDirectory = join(stateDirectory, 'legacy');
+  const current = join(stateDirectory, 'current');
+  await mkdir(legacyStateDirectory, { recursive: true });
+  await writeFile(join(legacyStateDirectory, 'telemetry-notice'), '1\n');
+  const request = vi
+    .fn<typeof fetch>()
+    .mockResolvedValue(new Response(null, { status: 201 }));
+  const notice = vi.fn();
+  await sendTelemetry({
+    ...configured,
+    stateDirectory: current,
+    legacyStateDirectory,
+    env: {},
+    fetch: request,
+    notice,
+  });
+  expect(notice).not.toHaveBeenCalled();
+  expect(request).toHaveBeenCalledTimes(1);
+  expect(await readFile(join(current, 'telemetry-notice'), 'utf8')).toBe('1\n');
 });

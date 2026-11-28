@@ -1,4 +1,4 @@
-# Vulnpilot
+# Relvet
 
 Run one command in your project and within seconds learn:
 
@@ -7,28 +7,28 @@ Run one command in your project and within seconds learn:
 3. which of them are **actively exploited** (CISA KEV), ranked by exploit likelihood (FIRST EPSS).
 
 ```sh
-npx vulnpilot
+npx relvet
 ```
 
 The CRA screen is a transparent, rule-based first pass. It is **not legal advice**.
 
 ## Status and requirements
 
-Node.js 26 LTS (26.13.0 pinned for development) and pnpm 12.16.1. Published on npm as [`vulnpilot`](https://www.npmjs.com/package/vulnpilot).
+Node.js 26 LTS (26.13.0 pinned for development) and pnpm 12.16.1. Published on npm as [`relvet`](https://www.npmjs.com/package/relvet).
 
 ## Usage
 
 ```sh
-npx vulnpilot                               # scan the lockfile in the current directory
-npx vulnpilot --path ./apps/web             # another directory, or a lockfile path
-npx vulnpilot --sbom firmware.cdx.json      # CycloneDX SBOM (firmware, non-npm projects)
-npx vulnpilot --json > vulnpilot.json       # machine-readable report
+npx relvet                               # scan the lockfile in the current directory
+npx relvet --path ./apps/web             # another directory, or a lockfile path
+npx relvet --sbom firmware.cdx.json      # CycloneDX SBOM (firmware, non-npm projects)
+npx relvet --json > relvet.json       # machine-readable report
 ```
 
 In CI, give the three CRA answers as flags and pick a failure threshold:
 
 ```sh
-npx vulnpilot --non-interactive --eu-distribution yes --commercial yes --product-type app --fail-on kev
+npx relvet --non-interactive --eu-distribution yes --commercial yes --product-type app --fail-on kev
 ```
 
 | Flag                         | Meaning                                                                                |
@@ -92,7 +92,7 @@ Advisory details are fetched with at most 10 requests in flight. Every request h
 
 ### Cache
 
-Responses are cached for 24 hours in the OS cache directory: `%LOCALAPPDATA%\vulnpilot\Cache` on Windows, `~/Library/Caches/vulnpilot` on macOS, `$XDG_CACHE_HOME/vulnpilot` (default `~/.cache/vulnpilot`) elsewhere; override with `VULNPILOT_CACHE_DIR`. Each cache file holds one OSV package result, OSV advisory, EPSS score or the trimmed KEV catalog. Stale entries are refreshed online; `--offline` uses cached entries of any age and reports what is missing. If the KEV download fails, the last cached catalog is used and its date is shown.
+Responses are cached for 24 hours in the OS cache directory: `%LOCALAPPDATA%\relvet\Cache` on Windows, `~/Library/Caches/relvet` on macOS, `$XDG_CACHE_HOME/relvet` (default `~/.cache/relvet`) elsewhere; override with `RELVET_CACHE_DIR`. The cache from before the 0.2.0 rename is not migrated or read; you can delete the old directory. Each cache file holds one OSV package result, OSV advisory, EPSS score or the trimmed KEV catalog. Stale entries are refreshed online; `--offline` uses cached entries of any age and reports what is missing. If the KEV download fails, the last cached catalog is used and its date is shown.
 
 ## CRA applicability
 
@@ -136,21 +136,21 @@ Telemetry is off unless a build embeds a Supabase project (see below); the defau
 
 No identifiers, timestamps (the database adds `created_at`), package names, versions, paths, answers or vulnerability details are sent. The receiving server sees the connection's IP address, as with any HTTPS request; it is not stored in the table.
 
-Opt out with `--no-telemetry`, `VULNPILOT_TELEMETRY=0`, or by setting `CI` (any value). Mock runs, `--help`/`--version`, errors and cancelled questionnaires send nothing. Delivery has a 1.5-second timeout, follows no redirects, never retries and never fails a scan. Before the first event, a one-line notice is printed to stderr and a marker file containing `1` is saved under `XDG_CONFIG_HOME/vulnpilot`, `%APPDATA%\vulnpilot` on Windows, or `~/.config/vulnpilot`; if it cannot be saved, telemetry is skipped.
+Opt out with `--no-telemetry`, `RELVET_TELEMETRY=0`, or by setting `CI` (any value). The environment variable names from before the 0.2.0 rename still work for the telemetry opt-out and the cache directory, with a deprecation warning on stderr (see [CHANGELOG.md](CHANGELOG.md)); an opt-out under either name wins. Mock runs, `--help`/`--version`, errors and cancelled questionnaires send nothing. Delivery has a 1.5-second timeout, follows no redirects, never retries and never fails a scan. Before the first event, a one-line notice is printed to stderr and a marker file containing `1` is saved under `XDG_CONFIG_HOME/relvet`, `%APPDATA%\relvet` on Windows, or `~/.config/relvet`; if it cannot be saved, telemetry is skipped. If the marker exists in the config directory used before the rename, the notice is not shown again.
 
 ### Supabase setup
 
 1. Run [`supabase/telemetry.sql`](supabase/telemetry.sql) in the project's SQL editor. It creates `cli_runs(id, created_at, cli_version, os, dep_count, result_bucket, kev_count_bucket)` with check constraints, enables RLS, grants the `anon` role column-level `INSERT` only, and adds an insert-only policy. There are no select/update/delete policies, so the anon key cannot read or change rows; query them with the service role or the dashboard.
-2. Set the GitHub repository **variables** `VULNPILOT_SUPABASE_URL` (e.g. `https://xyz.supabase.co`) and `VULNPILOT_SUPABASE_ANON_KEY`. The anon key is public by design; the RLS policy is what protects the table. These are embedded at build time only; runtime environment variables cannot enable telemetry in a published build.
-3. On the Supabase free plan, also run [`supabase/keepalive.sql`](supabase/keepalive.sql). Free projects pause after about a week without activity, which silently stops telemetry and the waitlist form; [`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml) calls the harmless `vulnpilot_keepalive()` function every two days with the anon key and fails if the project is unreachable.
+2. Set the GitHub repository **variables** `RELVET_SUPABASE_URL` (e.g. `https://xyz.supabase.co`) and `RELVET_SUPABASE_ANON_KEY`. The anon key is public by design; the RLS policy is what protects the table. These are embedded at build time only; runtime environment variables cannot enable telemetry in a published build.
+3. On the Supabase free plan, also run [`supabase/keepalive.sql`](supabase/keepalive.sql). Free projects pause after about a week without activity, which silently stops telemetry and the waitlist form; [`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml) calls the harmless `relvet_keepalive()` function every two days with the anon key and fails if the project is unreachable.
 
 ## Waitlist link
 
-If `VULNPILOT_WAITLIST_URL` is set at build time (repository variable of the same name), the text output ends with one line: "Get continuous monitoring and ready-to-send 24h report drafts: `<url>?utm_source=cli`". It never appears in `--json` output or in builds without the variable.
+If `RELVET_WAITLIST_URL` is set at build time (repository variable of the same name), the text output ends with one line: "Get continuous monitoring and ready-to-send 24h report drafts: `<url>?utm_source=cli`". It never appears in `--json` output or in builds without the variable.
 
-Published builds link to the waitlist at [getvulnpilot.vercel.app](https://getvulnpilot.vercel.app) for a planned paid add-on (continuous monitoring and ready-to-send 24-hour CRA report drafts); the CLI itself stays free and MIT-licensed. Joining is optional and needs an email address and explicit consent; see the [privacy notice](https://getvulnpilot.vercel.app/privacy).
+Published builds link to the waitlist at [relvet.vercel.app](https://relvet.vercel.app) for a planned paid add-on (continuous monitoring and ready-to-send 24-hour CRA report drafts); the CLI itself stays free and MIT-licensed. Joining is optional and needs an email address and explicit consent; see the [privacy notice](https://relvet.vercel.app/privacy).
 
-The page is plain static files in [`site/`](site/) (no build step, cookies, trackers or third-party scripts), deployed by Vercel from `main` with `site` as the project root. It is not part of the npm package. The form posts directly to the Supabase REST API (`POST {SUPABASE_URL}/rest/v1/vulnpilot_waitlist`, `Prefer: return=minimal`) with the anon key. [`supabase/waitlist.sql`](supabase/waitlist.sql) creates the table with the same model as telemetry: RLS on, column-level `INSERT` (`email`, `consent`, `source`, `company_size`) for `anon` only, and no select/update/delete policies. A unique index on `lower(email)` returns HTTP 409 for duplicates, which the page shows as success so it never reveals whether an address is registered.
+The page is plain static files in [`site/`](site/) (no build step, cookies, trackers or third-party scripts), deployed by Vercel from `main` with `site` as the project root. It is not part of the npm package. The form posts directly to the Supabase REST API (`POST {SUPABASE_URL}/rest/v1/relvet_waitlist`, `Prefer: return=minimal`) with the anon key. [`supabase/waitlist.sql`](supabase/waitlist.sql) creates the table with the same model as telemetry: RLS on, column-level `INSERT` (`email`, `consent`, `source`, `company_size`) for `anon` only, and no select/update/delete policies. A unique index on `lower(email)` returns HTTP 409 for duplicates, which the page shows as success so it never reveals whether an address is registered.
 
 ## Local development
 
@@ -168,16 +168,16 @@ pnpm build
 Offline smoke test with bundled mock data (synthetic `CVE-2099-*` IDs, clearly marked as MOCK in every report; no network, cache or telemetry):
 
 ```sh
-VULNPILOT_MOCK=1 node dist/cli.js --path test/fixtures/projects/npm
-VULNPILOT_MOCK=1 node dist/cli.js --sbom test/fixtures/sbom/cyclonedx.json --json
+RELVET_MOCK=1 node dist/cli.js --path test/fixtures/projects/npm
+RELVET_MOCK=1 node dist/cli.js --sbom test/fixtures/sbom/cyclonedx.json --json
 ```
 
 PowerShell:
 
 ```powershell
-$env:VULNPILOT_MOCK = '1'
+$env:RELVET_MOCK = '1'
 node dist/cli.js --path test/fixtures/projects/pnpm
-Remove-Item Env:VULNPILOT_MOCK
+Remove-Item Env:RELVET_MOCK
 ```
 
 Fixtures live in `test/fixtures/projects/{npm,pnpm,yarn-v1,yarn-berry}`, `test/fixtures/sbom` and `test/fixtures/mock` (OSV, KEV and EPSS responses). Tests never touch the network: `test/setup.ts` replaces the global `fetch` with one that throws, and sources are exercised through injected fetch mocks.
@@ -197,10 +197,25 @@ Use the pinned Node and pnpm versions and run `pnpm lint`, `pnpm typecheck`, `pn
 
 ## Publishing setup
 
-1. Create an npm account, confirm name availability, and obtain publish access to `vulnpilot` (or your fallback scope).
-2. The public repository is [quaviabusiness-stack/vulnpilot](https://github.com/quaviabusiness-stack/vulnpilot), and its URL is configured in `package.json`. If you fork it or choose another owner or repository name, update that metadata to match its actual case-sensitive path. This metadata is required for npm provenance; the publish workflow checks it before publishing.
-3. Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers): no npm token is stored in GitHub. On npmjs.com, open the `vulnpilot` package → **Settings** → **Trusted Publisher** → **GitHub Actions**, and enter owner `quaviabusiness-stack`, repository `vulnpilot`, workflow `publish.yml` (no environment). The workflow's `id-token: write` permission lets npm verify the run. Trusted publishing needs the package to exist, so a brand-new fork must publish its first version with a token.
-4. Optionally set the repository variables `VULNPILOT_SUPABASE_URL`, `VULNPILOT_SUPABASE_ANON_KEY` and `VULNPILOT_WAITLIST_URL` (see Telemetry and Waitlist link). Unset variables produce a build without telemetry or CTA.
-5. Run the checks, update the package version, and push a matching version tag such as `v0.1.0`. The publish workflow reruns the checks, builds with the variables above, checks that the bundle embeds the telemetry settings when they are set, and runs `npm publish --provenance --access public`.
+1. Create an npm account, confirm name availability, and obtain publish access to `relvet` (or your fallback scope).
+2. The public repository is [quaviabusiness-stack/relvet](https://github.com/quaviabusiness-stack/relvet), and its URL is configured in `package.json`. If you fork it or choose another owner or repository name, update that metadata to match its actual case-sensitive path. This metadata is required for npm provenance; the publish workflow checks it before publishing.
+3. **First release of `relvet`: publish manually.** Trusted publishing can only be configured for a package that already exists on npm, so the first version is published from your machine. Set the build variables in the same shell, so telemetry and the waitlist link are embedded (`npm publish` rebuilds through `prepack`):
+
+   ```powershell
+   npm login
+   $env:RELVET_SUPABASE_URL = 'https://xyz.supabase.co'
+   $env:RELVET_SUPABASE_ANON_KEY = '<anon key>'
+   $env:RELVET_WAITLIST_URL = 'https://relvet.vercel.app'
+   pnpm install --frozen-lockfile; pnpm lint; pnpm typecheck; pnpm test
+   pnpm build
+   Select-String -Path dist/cli.js -SimpleMatch $env:RELVET_SUPABASE_URL  # must find a match
+   npm publish --access public
+   ```
+
+   Use the same values as the repository variables in step 5. Then tag that commit (`v0.2.0`) and push the tag only after step 4 is done, or the publish workflow will fail on the version that already exists.
+
+4. **Then configure trusted publishing** ([npm docs](https://docs.npmjs.com/trusted-publishers)), so later releases need no npm token in GitHub: on npmjs.com, open the `relvet` package → **Settings** → **Trusted Publisher** → **GitHub Actions**, enter owner `quaviabusiness-stack`, repository `relvet`, workflow `publish.yml` (no environment), and tick **Allow npm publish** (only staged publishing is allowed by default, and `npm publish` then fails with E404). The workflow's `id-token: write` permission lets npm verify the run.
+5. Set the repository variables `RELVET_SUPABASE_URL`, `RELVET_SUPABASE_ANON_KEY` and `RELVET_WAITLIST_URL` (see Telemetry and Waitlist link). Unset variables produce a build without telemetry or CTA. During the transition the build scripts and workflows fall back to the variable names used before 0.2.0.
+6. For later releases, run the checks, update the package version, and push a matching version tag such as `v0.2.1`. The publish workflow reruns the checks, builds with the variables above, checks that the bundle embeds the telemetry settings when they are set, and runs `npm publish --provenance --access public`.
 
 CI runs install, lint, typecheck, tests, build, and a packed-CLI smoke test with mock data on pushes and pull requests. MIT licensed; see [LICENSE](LICENSE).

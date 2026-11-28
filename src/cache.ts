@@ -2,27 +2,34 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { defaultWarn, envSetting, type Warn } from './legacy.js';
 import type { CacheHit, ResponseCache } from './source.js';
 
 export type { CacheHit } from './source.js';
 
 export const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
-/** Platform cache directory: LOCALAPPDATA, ~/Library/Caches or XDG_CACHE_HOME. */
+/**
+ * Platform cache directory: LOCALAPPDATA, ~/Library/Caches or XDG_CACHE_HOME.
+ * RELVET_CACHE_DIR (or the deprecated VULNPILOT_CACHE_DIR) overrides it. The
+ * cache from before the rename is not migrated; it refills within a day.
+ */
 export function defaultCacheDir(
   env: NodeJS.ProcessEnv = process.env,
   platform: NodeJS.Platform = process.platform,
+  warn: Warn = defaultWarn,
 ): string {
-  if (env.VULNPILOT_CACHE_DIR) return env.VULNPILOT_CACHE_DIR;
+  const override = envSetting(env, 'CACHE_DIR', warn);
+  if (override) return override;
   if (platform === 'win32')
     return join(
       env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'),
-      'vulnpilot',
+      'relvet',
       'Cache',
     );
   if (platform === 'darwin')
-    return join(homedir(), 'Library', 'Caches', 'vulnpilot');
-  return join(env.XDG_CACHE_HOME ?? join(homedir(), '.cache'), 'vulnpilot');
+    return join(homedir(), 'Library', 'Caches', 'relvet');
+  return join(env.XDG_CACHE_HOME ?? join(homedir(), '.cache'), 'relvet');
 }
 
 interface Entry<T> {

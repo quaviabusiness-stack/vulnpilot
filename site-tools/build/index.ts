@@ -4,7 +4,9 @@
 //   pnpm --filter site-tools build
 //
 // Writes site/assets/ (hashed CSS, JS, fonts and the scanner bundle),
-// site/api/kev.mjs, site/samples/ and the generated parts of site/*.html.
+// site/api/kev.mjs, site/samples/, robots.txt, sitemap.xml, the Canonical
+// field of security.txt and the generated parts of site/*.html, including
+// every absolute URL on the site's own origin (SITE_URL in paths.ts).
 import {
   copyFileSync,
   mkdirSync,
@@ -44,6 +46,7 @@ import {
   proofValues,
 } from './proof.js';
 import { buildKevFunction, buildScanner } from './scanner.js';
+import { currentOrigin, rewriteOrigin, writeCrawlFiles } from './site-url.js';
 
 const version = (
   JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as {
@@ -167,12 +170,14 @@ function header(page: (typeof PAGES)[number]): string {
 }
 const footer = partial('footer.html');
 
+const previousOrigin = currentOrigin();
 const used = new Set<string>(['header', 'footer']);
-let changed = 0;
+let changed = writeCrawlFiles(previousOrigin);
 for (const page of PAGES) {
   const file = join(SITE, page);
   const before = readFileSync(file, 'utf8');
-  let html = rewriteAssets(before, manifest, page);
+  let html = rewriteOrigin(before, previousOrigin);
+  html = rewriteAssets(html, manifest, page);
   html = replaceRegions(
     html,
     { ...regions, header: header(page), footer },
@@ -191,5 +196,5 @@ if (unused.length > 0)
   throw new Error(`Regions not found in any page: ${unused.join(', ')}`);
 
 console.log(
-  `Built ${manifest.size} hashed assets and ${scanner.files.length} scanner chunks; ${changed} page(s) updated. Proof: vulnpilot ${proof.meta.cliVersion}, captured ${captureDate(proof)}.`,
+  `Built ${manifest.size} hashed assets and ${scanner.files.length} scanner chunks; ${changed} file(s) updated. Proof: relvet ${proof.meta.cliVersion}, captured ${captureDate(proof)}.`,
 );

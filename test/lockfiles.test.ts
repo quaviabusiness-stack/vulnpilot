@@ -15,7 +15,7 @@ import type { Dependency } from '../src/types.js';
 
 const directories: string[] = [];
 async function directory() {
-  const path = await mkdtemp(join(tmpdir(), 'vulnpilot-lock-test-'));
+  const path = await mkdtemp(join(tmpdir(), 'relvet-lock-test-'));
   directories.push(path);
   return path;
 }

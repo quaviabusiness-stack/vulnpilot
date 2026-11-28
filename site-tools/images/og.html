@@ -1,0 +1,116 @@
+<!doctype html>
+<!-- Template for site/og.png (1200 x 630), rendered by
+     "pnpm --filter site-tools images". Double-brace placeholders are filled from
+     the proof capture (site-tools/proof/run.json); fonts are the site's own. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Schibsted Grotesk';
+        font-weight: 400 900;
+        src: url('{{fonts}}/schibsted-grotesk-latin-wght.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        font-weight: 100 800;
+        src: url('{{fonts}}/jetbrains-mono-latin-wght.woff2') format('woff2');
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        background: #0b0b0c;
+        color: #ededea;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 64px 72px;
+        display: flex;
+        flex-direction: column;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .word {
+        font:
+          700 30px/1 'Schibsted Grotesk',
+          sans-serif;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+      }
+      .cursor {
+        display: inline-block;
+        width: 13px;
+        height: 26px;
+        margin-left: 3px;
+        background: #ededea;
+      }
+      .cmd {
+        font:
+          400 18px/1 'JetBrains Mono',
+          monospace;
+        color: #8e8e8a;
+      }
+      h1 {
+        margin: 52px 0 0;
+        max-width: 820px;
+        font:
+          700 70px/1.08 'Schibsted Grotesk',
+          sans-serif;
+        letter-spacing: -0.035em;
+      }
+      .term {
+        margin-top: auto;
+        padding: 26px 32px;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
+        background: #111113;
+        font:
+          400 24px/1.65 'JetBrains Mono',
+          monospace;
+        color: #d6d6d2;
+      }
+      .row {
+        display: flex;
+      }
+      .label {
+        width: 360px;
+      }
+      .num {
+        color: #ff5b37;
+        font-weight: 700;
+      }
+      .dim {
+        color: #8e8e8a;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="top">
+        <div class="word">relvet<span class="cursor"></span></div>
+        <div class="cmd">npx relvet</div>
+      </div>
+      <h1>Which of your dependencies are being exploited right now?</h1>
+      <div class="term">
+        <div class="row">
+          <span class="label">Critical/high issues</span
+          ><span class="num">{{criticalOrHigh}}</span>
+        </div>
+        <div class="row">
+          <span class="label">Actively exploited</span
+          ><span class="num">{{activelyExploited}}</span>&nbsp;<span class="dim"
+            >(CISA KEV)</span
+          >
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

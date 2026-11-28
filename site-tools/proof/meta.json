@@ -1,9 +1,10 @@
 {
-  "package": "vulnpilot@0.1.2",
-  "cliVersion": "0.1.2",
-  "integrity": "sha512-X8ljbBi91O0Ea0NZFkOx1+opjClIjWyLyhJlFmvfNwOh5QiUNHYvOMK6b+xxtwUT7EVIH1u5YJNTkMHif1xC9A==",
-  "capturedAt": "2026-11-18T18:23:57.025Z",
-  "shownCommand": "npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware",
+  "package": "relvet@0.2.0",
+  "source": "packed build (not from the npm registry)",
+  "cliVersion": "0.2.0",
+  "integrity": "sha512-zcQJ+TVf1vt3YGUTJrYBRTplrfQBDke/1mQhQy8deyULsja0Nwy3c6z0JG+goNjElPMVqouu/jI3m3y2SApM+Q==",
+  "capturedAt": "2026-11-28T10:58:52.939Z",
+  "shownCommand": "npx relvet --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware",
   "args": [
     "--sbom",
     "test/fixtures/sbom/cyclonedx.json",
@@ -17,12 +18,12 @@
   ],
   "exitCode": 1,
   "jsonExitCode": 1,
-  "wallMs": 2484,
+  "wallMs": 1517,
   "cache": "empty (fresh network responses)",
   "node": "v26.13.0",
   "sha256": {
-    "run.ansi": "ebec5dad5a9a59e2a12e1d2434f6733c323d37bdc25ea5b414bcc7a85799d802",
-    "run.json": "bdcd0db388b2cd8c5662c8445b60d42f7df6ee5b604e295e42bef14f6d56ebd6",
-    "help.txt": "e032b82dfaa01798083dbda23235e39439e18dae8831f5761f2a934c69bba304"
+    "run.ansi": "714728a936c6e8553b94cac1003b441651091c1e1ab2a55af7019cab23ed3cc8",
+    "run.json": "05ec49cb675fb7db9eed1306d912c57aefafc66c7f4aefa3569552b4927d04d8",
+    "help.txt": "6c5a67ebe8a401849e858ed400cbc80c2ac088d71d37f21c17411e837d69ac5b"
   }
 }

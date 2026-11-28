@@ -1,15 +1,19 @@
 {
-  "name": "vulnpilot",
-  "version": "0.1.3",
+  "name": "relvet",
+  "version": "0.2.0",
   "description": "Find known and actively exploited (CISA KEV) vulnerabilities in your dependencies and screen EU Cyber Resilience Act applicability. Not legal advice.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/quaviabusiness-stack/vulnpilot.git"
+    "url": "git+https://github.com/quaviabusiness-stack/relvet.git"
+  },
+  "homepage": "https://relvet.vercel.app",
+  "bugs": {
+    "url": "https://github.com/quaviabusiness-stack/relvet/issues"
   },
   "type": "module",
   "bin": {
-    "vulnpilot": "dist/cli.js"
+    "relvet": "dist/cli.js"
   },
   "files": [
     "dist/cli.js",

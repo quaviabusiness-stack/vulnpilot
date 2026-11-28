@@ -10,7 +10,7 @@ import { generatedHeader, TOOLS } from './paths.js';
 const banner = (sources: string) => ({ js: `// ${generatedHeader(sources)}` });
 
 async function bundle(options: Options): Promise<string[]> {
-  const outDir = mkdtempSync(join(tmpdir(), 'vulnpilot-site-'));
+  const outDir = mkdtempSync(join(tmpdir(), 'relvet-site-'));
   try {
     await build({
       format: ['esm'],

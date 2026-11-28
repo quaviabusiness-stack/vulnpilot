@@ -1,4 +1,4 @@
-// Vulnpilot home page: copy buttons, the design partner (waitlist) form, the
+// Relvet home page: copy buttons, the design partner (waitlist) form, the
 // hero run and small motion. Every
 // part checks for its elements, and every animated state is also the final
 // state in the HTML, so nothing depends on this script to be readable.
@@ -9,7 +9,7 @@
 const SUPABASE_URL = 'https://xvdwfhadpmsgfpschnbp.supabase.co';
 const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2ZHdmaGFkcG1zZ2Zwc2NobmJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5NzQwMTcsImV4cCI6MjEwOTU1MDAxN30.dj4dk1UgF0IlkYG7g3ovSAUhMpv1LuIv73P_UqGCrDQ';
-const ENDPOINT = `${SUPABASE_URL}/rest/v1/vulnpilot_waitlist`;
+const ENDPOINT = `${SUPABASE_URL}/rest/v1/relvet_waitlist`;
 const COMPANY_SIZES = ['1', '2-10', '11-50', '51-250', '250+'];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SOURCE_PATTERN = /^[a-z0-9._-]{1,32}$/;

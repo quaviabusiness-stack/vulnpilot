@@ -51,7 +51,7 @@ const strip = (report: Record<string, Json>) => {
 };
 
 function cli(file: string): Record<string, Json> {
-  const cache = mkdtempSync(join(tmpdir(), 'vulnpilot-live-'));
+  const cache = mkdtempSync(join(tmpdir(), 'relvet-live-'));
   const flag = file.endsWith('cyclonedx.json') ? '--sbom' : '--path';
   const result = spawnSync(
     process.execPath,
@@ -67,8 +67,8 @@ function cli(file: string): Record<string, Json> {
       encoding: 'utf8',
       env: {
         ...process.env,
-        VULNPILOT_CACHE_DIR: cache,
-        VULNPILOT_TELEMETRY: '0',
+        RELVET_CACHE_DIR: cache,
+        RELVET_TELEMETRY: '0',
       },
     },
   );

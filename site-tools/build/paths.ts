@@ -8,7 +8,12 @@ export const SITE_SRC = join(ROOT, 'site-src');
 export const TOOLS = join(ROOT, 'site-tools');
 export const ASSETS = join(SITE, 'assets');
 
-export const ORIGIN = 'https://getvulnpilot.vercel.app';
+/**
+ * The site's public origin, and the only place it is written down. The build
+ * writes it into canonical and Open Graph URLs, JSON-LD, robots.txt,
+ * sitemap.xml and security.txt; checks and tests import it from here.
+ */
+export const SITE_URL = 'https://relvet.vercel.app';
 export const BUILD_COMMAND = 'pnpm --filter site-tools build';
 
 /** Every HTML page in site/. */

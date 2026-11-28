@@ -43,10 +43,18 @@ The scan excerpts on the home page and the `--help` text in `/docs` are real out
 the published CLI. Refreshing them is a deliberate act:
 
 ```sh
-pnpm --filter site-tools capture-proof        # installs vulnpilot@<package.json version> from npm, runs it with an empty cache
+pnpm --filter site-tools capture-proof        # installs relvet@<package.json version> from npm, runs it with an empty cache
 pnpm --filter site-tools build                # puts the capture into the pages
 git diff site/ site-tools/proof/              # review, then commit
 ```
+
+Before a version is on npm (for example right after a rename), capture a packed
+build instead: run `pnpm build` and `pnpm pack` in the repository root with the
+release's `RELVET_WAITLIST_URL` set, then
+`pnpm --filter site-tools capture-proof --tarball ../relvet-<version>.tgz`.
+`meta.json` then records the tarball's own integrity hash and
+`"source": "packed build (not from the npm registry)"`. Recapture from npm once
+the version is published.
 
 The generator omits the captured CRA reporting warning from the excerpts and
 the page provides current reporting guidance separately. The `check` command

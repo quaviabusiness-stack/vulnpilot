@@ -18,18 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      SUPABASE_URL: ${{ vars.VULNPILOT_SUPABASE_URL }}
-      SUPABASE_ANON_KEY: ${{ vars.VULNPILOT_SUPABASE_ANON_KEY }}
+      SUPABASE_URL: ${{ vars.RELVET_SUPABASE_URL || vars.VULNPILOT_SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ vars.RELVET_SUPABASE_ANON_KEY || vars.VULNPILOT_SUPABASE_ANON_KEY }}
     steps:
-      - name: Call vulnpilot_keepalive
+      - name: Call relvet_keepalive
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "::error::Set the VULNPILOT_SUPABASE_URL and VULNPILOT_SUPABASE_ANON_KEY repository variables."
+            echo "::error::Set the RELVET_SUPABASE_URL and RELVET_SUPABASE_ANON_KEY repository variables."
             exit 1
           fi
           status=$(curl --silent --show-error --output response.txt --write-out '%{http_code}' \
             --retry 3 --retry-delay 20 --retry-all-errors --max-time 30 \
-            -X POST "$SUPABASE_URL/rest/v1/rpc/vulnpilot_keepalive" \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/relvet_keepalive" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
             -H 'Content-Type: application/json' \

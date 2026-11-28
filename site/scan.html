@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Scan a lockfile in your browser · Vulnpilot</title>
+    <title>Scan a lockfile in your browser · Relvet</title>
     <meta
       name="description"
-      content="Run Vulnpilot in your browser. The file is read in the tab and never uploaded; when you press Scan, package names and versions go to OSV.dev and CVE IDs to FIRST."
+      content="Run Relvet in your browser. The file is read in the tab and never uploaded; when you press Scan, package names and versions go to OSV.dev and CVE IDs to FIRST."
     />
-    <link rel="canonical" href="https://getvulnpilot.vercel.app/scan" />
+    <link rel="canonical" href="https://relvet.vercel.app/scan" />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
@@ -24,20 +24,17 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Vulnpilot" />
-    <meta property="og:url" content="https://getvulnpilot.vercel.app/scan" />
+    <meta property="og:site_name" content="Relvet" />
+    <meta property="og:url" content="https://relvet.vercel.app/scan" />
     <meta
       property="og:title"
-      content="Scan a lockfile in your browser · Vulnpilot"
+      content="Scan a lockfile in your browser · Relvet"
     />
     <meta
       property="og:description"
-      content="The Vulnpilot scanner in your browser. The file stays in the tab; nothing is sent until you press Scan."
+      content="The Relvet scanner in your browser. The file stays in the tab; nothing is sent until you press Scan."
     />
-    <meta
-      property="og:image"
-      content="https://getvulnpilot.vercel.app/og.png"
-    />
+    <meta property="og:image" content="https://relvet.vercel.app/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -55,9 +52,9 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/styles-2cbdab4707.css" />
+    <link rel="stylesheet" href="/assets/styles-e5dc61ce5d.css" />
     <link rel="stylesheet" href="/assets/pages-bc9f91c6c9.css" />
-    <script type="module" src="/assets/scanner/scan-page-D23IOAR4.js"></script>
+    <script type="module" src="/assets/scanner/scan-page-7YTEKRH3.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -65,12 +62,12 @@
     <!-- generated:header -->
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="brand" href="/" aria-label="Vulnpilot home">
+        <a class="brand" href="/" aria-label="Relvet home">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
             <rect class="mark-bg" width="32" height="32" rx="7" />
             <path
-              class="mark-v"
-              d="M7 10.5 11.75 21.5 16.5 10.5"
+              class="mark-r"
+              d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
               fill="none"
               stroke-width="3"
             />
@@ -82,7 +79,7 @@
               height="11.5"
             />
           </svg>
-          <span class="brand-word">Vulnpilot</span>
+          <span class="brand-word">Relvet</span>
         </a>
         <nav class="nav nav-desktop" aria-label="Main">
           <ul>
@@ -91,7 +88,7 @@
             <li><a href="/#pricing">Pricing</a></li>
             <li><a href="/docs">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
@@ -112,7 +109,7 @@
                 <li><a href="/#pricing">Pricing</a></li>
                 <li><a href="/docs">Docs</a></li>
                 <li>
-                  <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                  <a href="https://github.com/quaviabusiness-stack/relvet"
                     >GitHub</a
                   >
                 </li>
@@ -135,7 +132,7 @@
             <div class="section-body">
               <h1>Scan a lockfile in this tab</h1>
               <p class="intro">
-                The same code as <code>npx vulnpilot</code>, compiled for the
+                The same code as <code>npx relvet</code>, compiled for the
                 browser. Your file is read here and never uploaded. Nothing
                 leaves this tab until you press Scan, and then only what is
                 listed before the button.
@@ -143,7 +140,7 @@
               <noscript>
                 <p class="intro">
                   The browser scanner needs JavaScript. The CLI does not:
-                  <code>npx vulnpilot</code>
+                  <code>npx relvet</code>
                 </p>
               </noscript>
             </div>
@@ -315,7 +312,7 @@
                   aria-label="Request body"
                 ><code id="request-body"></code></pre>
                 <p class="request-note">
-                  If OSV.dev splits an answer into pages, Vulnpilot repeats only
+                  If OSV.dev splits an answer into pages, Relvet repeats only
                   the affected queries with OSV’s page token.
                 </p>
               </div>
@@ -615,12 +612,12 @@
     <footer class="site-footer">
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="/" aria-label="Vulnpilot home">
+          <a class="brand" href="/" aria-label="Relvet home">
             <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
               <rect class="mark-bg" width="32" height="32" rx="7" />
               <path
-                class="mark-v"
-                d="M7 10.5 11.75 21.5 16.5 10.5"
+                class="mark-r"
+                d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
                 fill="none"
                 stroke-width="3"
               />
@@ -632,13 +629,13 @@
                 height="11.5"
               />
             </svg>
-            <span class="brand-word">Vulnpilot</span>
+            <span class="brand-word">Relvet</span>
           </a>
           <p>
             Finds the dependencies attackers already exploit. Free and open
             source under the
             <a
-              href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+              href="https://github.com/quaviabusiness-stack/relvet/blob/main/LICENSE"
               >MIT license</a
             >.
           </p>
@@ -648,14 +645,14 @@
             <li><a href="/scan">Scan</a></li>
             <li><a href="/docs">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
-            <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+            <li><a href="https://www.npmjs.com/package/relvet">npm</a></li>
             <li>
               <a
-                href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                href="https://github.com/quaviabusiness-stack/relvet/blob/main/schema/report-v1.schema.json"
                 >JSON Schema</a
               >
             </li>
