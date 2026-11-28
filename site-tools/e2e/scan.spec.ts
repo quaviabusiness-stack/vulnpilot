@@ -383,44 +383,6 @@ test('nothing is stored in the browser', async ({ page, context }) => {
   expect(page.url()).toBe('http://127.0.0.1:4173/scan');
 });
 
-test('the scanner clears files left by the old home-page handoff', async ({
-  page,
-  network,
-}) => {
-  await open(page, '/privacy');
-  await page.evaluate(
-    () =>
-      new Promise<void>((resolve, reject) => {
-        const request = indexedDB.open('vulnpilot-handoff', 1);
-        request.onupgradeneeded = () =>
-          request.result.createObjectStore('files');
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => {
-          const db = request.result;
-          const transaction = db.transaction('files', 'readwrite');
-          transaction
-            .objectStore('files')
-            .put(
-              { file: new File(['{}'], 'package-lock.json'), at: Date.now() },
-              'dropped',
-            );
-          transaction.oncomplete = () => {
-            db.close();
-            resolve();
-          };
-          transaction.onabort = () => reject(transaction.error);
-        };
-      }),
-  );
-  await open(page, '/scan?handoff');
-  await expect(page).toHaveURL(/\/scan$/);
-  await expect(page.locator('#found-title')).toBeHidden();
-  await expect
-    .poll(() => page.evaluate(() => indexedDB.databases()))
-    .toEqual([]);
-  expect(network.external()).toEqual([]);
-});
-
 test('the CRA screen uses the CLI rules and feeds the report @cross', async ({
   page,
 }) => {

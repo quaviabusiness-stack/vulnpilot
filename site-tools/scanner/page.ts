@@ -1116,16 +1116,6 @@ if (flagsButton instanceof HTMLButtonElement)
 // Today's date decides which key dates are in force.
 renderCra(false);
 
-// ---------------------------------------------------------------------------
-// Remove any lockfile left by the old home-page drop flow, without reading it.
-// That flow ran before the rename to Relvet, so the database keeps its old
-// name; renaming it here would leave those files behind.
-try {
-  window.indexedDB?.deleteDatabase('vulnpilot-handoff');
-} catch {
-  // Storage may be unavailable in this browser. The scanner uses memory only.
-}
-
 const arrival = new URLSearchParams(window.location.search);
 if (arrival.has('handoff') || arrival.has('sample')) {
   history.replaceState(
