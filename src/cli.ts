@@ -9,7 +9,7 @@ runCli().then(
     const message =
       error instanceof Error ? error.message : 'Unexpected error.';
     // Diagnostics stay off stdout so --json output remains machine-readable.
-    console.error(`Vulnpilot: ${message}`);
+    console.error(`Relvet: ${message}`);
     process.exitCode = EXIT.error;
   },
 );

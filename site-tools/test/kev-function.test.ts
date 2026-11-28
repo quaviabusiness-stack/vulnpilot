@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { KEV_URL, parseKev } from '../../src/kev.js';
 import { handle, trimKev } from '../api/kev.js';
-import { ROOT } from '../build/paths.js';
+import { ROOT, SITE_URL } from '../build/paths.js';
 
 const feed = JSON.parse(
   readFileSync(join(ROOT, 'test/fixtures/mock/kev.json'), 'utf8'),
@@ -14,7 +14,7 @@ const upstream = (body: unknown, init: ResponseInit = {}) =>
       ? new Response(body, init)
       : Response.json(body, init),
   );
-const get = (url = 'https://getvulnpilot.vercel.app/api/kev', method = 'GET') =>
+const get = (url = `${SITE_URL}/api/kev`, method = 'GET') =>
   new Request(url, { method });
 
 describe('trimKev', () => {
@@ -80,10 +80,7 @@ describe('GET /api/kev', () => {
 
   it('refuses any query string without contacting CISA', async () => {
     const fetcher = upstream(feed);
-    const response = await handle(
-      get('https://getvulnpilot.vercel.app/api/kev?bust=1'),
-      fetcher,
-    );
+    const response = await handle(get(`${SITE_URL}/api/kev?bust=1`), fetcher);
     expect(response.status).toBe(400);
     expect(response.headers.get('cache-control')).toBe('no-store');
     expect(fetcher).not.toHaveBeenCalled();

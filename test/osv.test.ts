@@ -28,7 +28,7 @@ const context = (fetchMock: typeof fetch, cache = new Cache(null)) => ({
 
 let cacheDir: string;
 beforeEach(async () => {
-  cacheDir = await mkdtemp(join(tmpdir(), 'vulnpilot-osv-test-'));
+  cacheDir = await mkdtemp(join(tmpdir(), 'relvet-osv-test-'));
 });
 afterEach(async () => {
   await rm(cacheDir, { recursive: true, force: true });

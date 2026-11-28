@@ -1,5 +1,5 @@
 // GET /api/kev: the CISA Known Exploited Vulnerabilities catalog, trimmed to
-// the fields Vulnpilot uses and served same-origin, because browsers cannot
+// the fields Relvet uses and served same-origin, because browsers cannot
 // read the CISA feed cross-origin (it sends no CORS headers).
 //
 // It takes no input: the upstream URL is fixed, query strings are refused, and

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Captures real output of the published Vulnpilot CLI for the website.
+// Captures real output of the published Relvet CLI for the website.
 //
 // Refreshing the capture is a deliberate act: run this, then
 // `pnpm --filter site-tools build`, then review the diff. Nobody edits the
@@ -8,6 +8,9 @@
 //
 //   pnpm --filter site-tools capture-proof            # version from package.json
 //   pnpm --filter site-tools capture-proof 0.1.3      # a specific published version
+//   pnpm --filter site-tools capture-proof --tarball ../relvet-0.2.0.tgz
+//                                     # a packed build (`pnpm pack`), for a
+//                                     # version that is not on npm yet
 //
 // Writes site-tools/proof/: run.ansi (raw stdout bytes), run.txt (the same
 // without ANSI codes), run.json (the --json report), help.txt (--help) and
@@ -29,8 +32,15 @@ const ESC = String.fromCharCode(27);
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '../..');
 const out = join(root, 'site-tools/proof');
+const cli = process.argv.slice(2);
+const tarballIndex = cli.indexOf('--tarball');
+const tarball =
+  tarballIndex === -1
+    ? undefined
+    : resolve(process.cwd(), cli[tarballIndex + 1] ?? '');
+if (tarballIndex !== -1) cli.splice(tarballIndex, 2);
 const version =
-  process.argv[2] ??
+  cli[0] ??
   JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 if (!/^\d+\.\d+\.\d+$/.test(version)) throw new Error(`Bad version ${version}`);
 
@@ -47,23 +57,24 @@ const ARGS = [
   'firmware',
 ];
 
-const env = { ...process.env, VULNPILOT_TELEMETRY: '0' };
+const env = { ...process.env, RELVET_TELEMETRY: '0' };
 for (const name of ['NO_COLOR', 'FORCE_COLOR', 'CI', 'NODE_OPTIONS'])
   delete env[name];
 
 // Install the published package from the npm registry into a scratch
 // directory (npm checks the registry's integrity hash) and run its entry
-// point directly, which is what `npx vulnpilot@<version>` runs.
-const prefix = mkdtempSync(join(tmpdir(), 'vulnpilot-proof-'));
+// point directly, which is what `npx relvet@<version>` runs. With --tarball,
+// install that packed build instead and record its own integrity hash.
+const prefix = mkdtempSync(join(tmpdir(), 'relvet-proof-'));
 // An empty cache of its own, so every response comes from the network now.
-env.VULNPILOT_CACHE_DIR = join(prefix, 'cache');
+env.RELVET_CACHE_DIR = join(prefix, 'cache');
 const install = spawnSync(
-  `npm install --prefix "${prefix}" --no-audit --no-fund --ignore-scripts vulnpilot@${version}`,
+  `npm install --prefix "${prefix}" --no-audit --no-fund --ignore-scripts "${tarball ?? `relvet@${version}`}"`,
   { cwd: prefix, env, encoding: 'utf8', shell: true },
 );
 if (install.status !== 0)
   throw new Error(`npm install failed:\n${install.stderr}`);
-const installed = join(prefix, 'node_modules/vulnpilot');
+const installed = join(prefix, 'node_modules/relvet');
 const installedVersion = JSON.parse(
   readFileSync(join(installed, 'package.json'), 'utf8'),
 ).version;
@@ -72,7 +83,9 @@ if (installedVersion !== version)
 const lock = JSON.parse(
   readFileSync(join(prefix, 'package-lock.json'), 'utf8'),
 );
-const integrity = lock.packages?.['node_modules/vulnpilot']?.integrity;
+const integrity = tarball
+  ? `sha512-${createHash('sha512').update(readFileSync(tarball)).digest('base64')}`
+  : lock.packages?.['node_modules/relvet']?.integrity;
 if (!integrity) throw new Error('No registry integrity hash for the package.');
 const entry = join(installed, 'dist/cli.js');
 
@@ -110,7 +123,7 @@ for (const [name, result, allowed] of [
 }
 
 const ansi = text.stdout.toString('utf8');
-if (!ansi.startsWith(`${ESC}[1mVulnpilot ${version}`))
+if (!ansi.startsWith(`${ESC}[1mRelvet ${version}`))
   throw new Error(`Unexpected output:\n${ansi.slice(0, 500)}`);
 const plain = ansi
   .split(ESC)
@@ -118,7 +131,7 @@ const plain = ansi
 const report = JSON.parse(json.stdout.toString('utf8'));
 if (report.tool.version !== version || report.mock)
   throw new Error('The JSON run is not a real run of the requested version.');
-if (!help.stdout.toString('utf8').startsWith('Usage: vulnpilot'))
+if (!help.stdout.toString('utf8').startsWith('Usage: relvet'))
   throw new Error('Unexpected --help output.');
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -132,11 +145,12 @@ writeFileSync(
   join(out, 'meta.json'),
   `${JSON.stringify(
     {
-      package: `vulnpilot@${version}`,
+      package: `relvet@${version}`,
+      ...(tarball && { source: 'packed build (not from the npm registry)' }),
       cliVersion: version,
       integrity,
       capturedAt,
-      shownCommand: ['npx', 'vulnpilot', ...ARGS].join(' '),
+      shownCommand: ['npx', 'relvet', ...ARGS].join(' '),
       args: ARGS,
       exitCode: text.exitCode,
       jsonExitCode: json.exitCode,
@@ -154,5 +168,5 @@ writeFileSync(
   )}\n`,
 );
 console.log(
-  `Captured vulnpilot ${version} at ${capturedAt}: exit ${text.exitCode}, ${report.summary.issues} issues, ${report.summary.activelyExploited} actively exploited.`,
+  `Captured relvet ${version} at ${capturedAt}: exit ${text.exitCode}, ${report.summary.issues} issues, ${report.summary.activelyExploited} actively exploited.`,
 );

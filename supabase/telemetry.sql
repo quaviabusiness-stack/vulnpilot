@@ -1,4 +1,4 @@
--- Vulnpilot CLI anonymous telemetry.
+-- Relvet CLI anonymous telemetry.
 --
 -- The CLI sends exactly five fields per successful scan via the Supabase REST
 -- API (POST /rest/v1/cli_runs) using the project's anon key:

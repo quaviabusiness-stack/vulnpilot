@@ -184,9 +184,9 @@ describe('text output', () => {
   it('prints a one-line CTA only when a waitlist URL was built in', async () => {
     const report = await build(await npmProject());
     expect(text(report)).not.toContain('continuous monitoring');
-    const output = text(report, 'https://vulnpilot.example/waitlist');
+    const output = text(report, 'https://relvet.example/waitlist');
     expect(output.split('\n').at(-1)).toBe(
-      'Get continuous monitoring and ready-to-send 24h report drafts: https://vulnpilot.example/waitlist?utm_source=cli',
+      'Get continuous monitoring and ready-to-send 24h report drafts: https://relvet.example/waitlist?utm_source=cli',
     );
     expect(formatEpss(0.99999)).toBe('>99.9%');
     expect(formatEpss(0.0123)).toBe('1.2%');

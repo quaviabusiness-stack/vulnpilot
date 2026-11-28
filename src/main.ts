@@ -49,7 +49,7 @@ function buildProgram(
   stdout: (text: string) => void,
 ) {
   return new Command()
-    .name('vulnpilot')
+    .name('relvet')
     .description(
       'Check dependencies for known and actively exploited vulnerabilities, and screen EU Cyber Resilience Act applicability (not legal advice).',
     )
@@ -133,11 +133,11 @@ export async function runCli(
       ? await readSbom(options.sbom)
       : await readLockfile(options.path);
   } catch (error) {
-    stderr(`Vulnpilot: ${errorMessage(error)}`);
+    stderr(`Relvet: ${errorMessage(error)}`);
     return EXIT.error;
   }
 
-  const mock = env.VULNPILOT_MOCK === '1';
+  const mock = env.RELVET_MOCK === '1';
   const context = {
     http: createHttpClient({
       ...(mock
@@ -148,7 +148,7 @@ export async function runCli(
       ...(io.sleep ? { sleep: io.sleep } : {}),
     }),
     cache: new Cache(
-      mock ? null : defaultCacheDir(env),
+      mock ? null : defaultCacheDir(env, process.platform, stderr),
       Boolean(options.offline),
     ),
   };
@@ -185,7 +185,7 @@ export async function runCli(
     );
   } catch (error) {
     stderr(
-      `Vulnpilot: ${error instanceof CancelledError ? error.message : errorMessage(error)}`,
+      `Relvet: ${error instanceof CancelledError ? error.message : errorMessage(error)}`,
     );
     return EXIT.error;
   }
@@ -194,7 +194,7 @@ export async function runCli(
   try {
     result = await scanning;
   } catch (error) {
-    stderr(`Vulnpilot: scan failed: ${errorMessage(error)}`);
+    stderr(`Relvet: scan failed: ${errorMessage(error)}`);
     return EXIT.error;
   }
   const now = io.now?.() ?? new Date();
@@ -212,7 +212,7 @@ export async function runCli(
     for (const source of report.sources)
       if (source.status !== 'ok')
         stderr(
-          `Vulnpilot: ${source.name} ${source.status}: ${source.message ?? ''}`,
+          `Relvet: ${source.name} ${source.status}: ${source.message ?? ''}`,
         );
   } else {
     stdout(
@@ -230,6 +230,7 @@ export async function runCli(
   await sendTelemetry({
     enabled: options.telemetry && !mock,
     env,
+    warn: stderr,
     event: telemetryEvent({
       dependencyCount: report.summary.dependencies,
       verdict: report.cra.verdict,

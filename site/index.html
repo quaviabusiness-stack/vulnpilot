@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vulnpilot: find the dependencies attackers already exploit</title>
+    <title>Relvet: find the dependencies attackers already exploit</title>
     <meta
       name="description"
       content="Free scanner for lockfiles and SBOMs. Flags dependencies in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, gives the fix version and screens EU Cyber Resilience Act applicability. In your browser or with npx."
     />
-    <link rel="canonical" href="https://getvulnpilot.vercel.app/" />
+    <link rel="canonical" href="https://relvet.vercel.app/" />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
@@ -24,8 +24,8 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Vulnpilot" />
-    <meta property="og:url" content="https://getvulnpilot.vercel.app/" />
+    <meta property="og:site_name" content="Relvet" />
+    <meta property="og:url" content="https://relvet.vercel.app/" />
     <meta
       property="og:title"
       content="Find the dependencies attackers already exploit"
@@ -34,15 +34,12 @@
       property="og:description"
       content="Checks your lockfile or SBOM against the CISA catalog of known exploited vulnerabilities, ranks the rest by EPSS and gives the fix. Free, in your browser or with npx."
     />
-    <meta
-      property="og:image"
-      content="https://getvulnpilot.vercel.app/og.png"
-    />
+    <meta property="og:image" content="https://relvet.vercel.app/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Vulnpilot. Find the dependencies attackers already exploit. Real CLI output ranking CVE-2021-44228 first as known exploited."
+      content="Relvet. Find the dependencies attackers already exploit. Real CLI output ranking CVE-2021-44228 first as known exploited."
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link
@@ -59,17 +56,17 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/styles-2cbdab4707.css" />
+    <link rel="stylesheet" href="/assets/styles-e5dc61ce5d.css" />
     <link rel="stylesheet" href="/assets/home-731720004e.css" />
-    <script src="/assets/app-366e5d353c.js" defer></script>
+    <script src="/assets/app-208e6e1e43.js" defer></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
           {
             "@type": "SoftwareApplication",
-            "@id": "https://getvulnpilot.vercel.app/#software",
-            "name": "Vulnpilot",
+            "@id": "https://relvet.vercel.app/#software",
+            "name": "Relvet",
             "description": "Free, open-source CLI and browser scanner. Reads your lockfile or SBOM, flags dependencies listed in the CISA Known Exploited Vulnerabilities catalog, ranks the rest by EPSS and CVSS, shows the fix, and screens EU Cyber Resilience Act applicability.",
             "applicationCategory": "DeveloperApplication",
             "operatingSystem": "Node.js 26 or later; any modern browser",
@@ -79,33 +76,33 @@
               "price": "0",
               "priceCurrency": "EUR"
             },
-            "license": "https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE",
-            "url": "https://getvulnpilot.vercel.app/",
-            "publisher": { "@id": "https://getvulnpilot.vercel.app/#org" },
+            "license": "https://github.com/quaviabusiness-stack/relvet/blob/main/LICENSE",
+            "url": "https://relvet.vercel.app/",
+            "publisher": { "@id": "https://relvet.vercel.app/#org" },
             "sameAs": [
-              "https://github.com/quaviabusiness-stack/vulnpilot",
-              "https://www.npmjs.com/package/vulnpilot"
+              "https://github.com/quaviabusiness-stack/relvet",
+              "https://www.npmjs.com/package/relvet"
             ]
           },
           {
             "@type": "Organization",
-            "@id": "https://getvulnpilot.vercel.app/#org",
-            "name": "Vulnpilot",
-            "url": "https://getvulnpilot.vercel.app/",
-            "logo": "https://getvulnpilot.vercel.app/apple-touch-icon.png",
+            "@id": "https://relvet.vercel.app/#org",
+            "name": "Relvet",
+            "url": "https://relvet.vercel.app/",
+            "logo": "https://relvet.vercel.app/apple-touch-icon.png",
             "email": "quavia.business@gmail.com",
-            "sameAs": ["https://github.com/quaviabusiness-stack/vulnpilot"]
+            "sameAs": ["https://github.com/quaviabusiness-stack/relvet"]
           },
           {
             "@type": "FAQPage",
-            "@id": "https://getvulnpilot.vercel.app/#faq",
+            "@id": "https://relvet.vercel.app/#faq",
             "mainEntity": [
               {
                 "@type": "Question",
                 "name": "How is this different from npm audit or Dependabot?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "They tell you what is vulnerable. Vulnpilot tells you which of those are known to be exploited, using the CISA KEV catalog, puts them first, ranks the rest by EPSS and CVSS, and screens whether the CRA applies. Run it next to them: it reads the same lockfile."
+                  "text": "They tell you what is vulnerable. Relvet tells you which of those are known to be exploited, using the CISA KEV catalog, puts them first, ranks the rest by EPSS and CVSS, and screens whether the CRA applies. Run it next to them: it reads the same lockfile."
                 }
               },
               {
@@ -176,12 +173,12 @@
     <!-- generated:header -->
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="brand" href="/" aria-label="Vulnpilot home">
+        <a class="brand" href="/" aria-label="Relvet home">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
             <rect class="mark-bg" width="32" height="32" rx="7" />
             <path
-              class="mark-v"
-              d="M7 10.5 11.75 21.5 16.5 10.5"
+              class="mark-r"
+              d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
               fill="none"
               stroke-width="3"
             />
@@ -193,7 +190,7 @@
               height="11.5"
             />
           </svg>
-          <span class="brand-word">Vulnpilot</span>
+          <span class="brand-word">Relvet</span>
         </a>
         <nav class="nav nav-desktop" aria-label="Main">
           <ul>
@@ -202,7 +199,7 @@
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="/docs">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
@@ -223,7 +220,7 @@
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="/docs">Docs</a></li>
                 <li>
-                  <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                  <a href="https://github.com/quaviabusiness-stack/relvet"
                     >GitHub</a
                   >
                 </li>
@@ -248,8 +245,8 @@
           <div class="grid hero-grid">
             <div class="hero-copy">
               <p class="lede">
-                Vulnpilot checks your lockfile or SBOM against the CISA catalog
-                of known exploited vulnerabilities, ranks everything else by
+                Relvet checks your lockfile or SBOM against the CISA catalog of
+                known exploited vulnerabilities, ranks everything else by
                 exploit likelihood, and names the version that fixes each.
               </p>
               <div class="hero-actions">
@@ -270,12 +267,12 @@
                 <div class="command">
                   <code
                     ><span class="command-prompt" aria-hidden="true">$ </span
-                    >npx vulnpilot</code
+                    >npx relvet</code
                   >
-                  <button class="copy" type="button" data-copy="npx vulnpilot">
+                  <button class="copy" type="button" data-copy="npx relvet">
                     <span class="copy-label">Copy</span
                     ><span class="visually-hidden">
-                      the command npx vulnpilot</span
+                      the command npx relvet</span
                     >
                   </button>
                 </div>
@@ -301,7 +298,7 @@
                 <!-- generated:proof-hero -->
                 <pre
                   class="term-cmd"
-                ><code><span class="ln c1"><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
+                ><code><span class="ln c1"><span class="t-p" aria-hidden="true">$ </span>npx relvet --sbom test/fixtures/sbom/cyclonedx.json \
 </span><span class="ln c2">    --non-interactive --eu-distribution yes --commercial yes --product-type firmware</span></code></pre>
                 <pre
                   class="term-out"
@@ -324,17 +321,17 @@
 </span></span><span class="issue i4" data-found="3"><span class="ln"> 4. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44832  MEDIUM 6.6 · EPSS 97.9%
 </span><span class="ln">    Improper Input Validation and Injection in Apache Log4j2
 </span><span class="ln">    Fix: upgrade to 2.17.1
-</span></span><span class="issue i5" data-found="1"><span class="ln"> 5. <span class="t-b">lodash@4.17.20</span>  CVE-2021-23337  HIGH 7.2 · EPSS 20.2%
+</span></span><span class="issue i5" data-found="1"><span class="ln"> 5. <span class="t-b">lodash@4.17.20</span>  CVE-2021-23337  HIGH 7.2 · EPSS 20.6%
 </span><span class="ln">    Command Injection in lodash
 </span><span class="ln">    Fix: upgrade to 4.17.21</span></span></code></pre>
                 <!-- /generated:proof-hero -->
               </div>
               <figcaption id="hero-term-caption" class="term-caption">
-                Real output, abridged: Vulnpilot
-                <span data-proof="cli-version">0.1.2</span> on the sample
+                Real output, abridged: Relvet
+                <span data-proof="cli-version">0.2.0</span> on the sample
                 firmware SBOM from its repository,
-                <time data-proof="capture-date" datetime="2026-11-18"
-                  >18&nbsp;November&nbsp;2026</time
+                <time data-proof="capture-date" datetime="2026-11-28"
+                  >28&nbsp;November&nbsp;2026</time
                 >. <a href="#case">See the annotated run</a>
               </figcaption>
             </figure>
@@ -349,7 +346,7 @@
         aria-live="polite"
       ></p>
 
-      <section class="proofbar" aria-label="What Vulnpilot is built on">
+      <section class="proofbar" aria-label="What Relvet is built on">
         <div class="wrap">
           <ul class="proofbar-list">
             <li>
@@ -432,7 +429,7 @@
               </li>
             </ol>
             <p class="problem-cta">
-              Vulnpilot shows which of your dependencies are on the CISA list
+              Relvet shows which of your dependencies are on the CISA list
               today, and its three-question screen tells you whether the CRA
               likely applies.
               <a href="/scan#cra">Run the CRA screen</a>
@@ -579,7 +576,7 @@
                       <p class="source-sent">Sent: 23 CVE IDs</p>
                       <p class="source-got">
                         <strong>23</strong> exploit-likelihood scores,
-                        18&nbsp;November&nbsp;2026
+                        27&nbsp;November&nbsp;2026
                       </p>
                     </li>
                   </ul>
@@ -674,7 +671,7 @@
                         </td>
                         <td class="rank-cve">CVE-2021-23337</td>
                         <td class="rank-cvss">high 7.2</td>
-                        <td class="rank-epss">20.2%</td>
+                        <td class="rank-epss">20.6%</td>
                         <td class="rank-fix">4.17.21</td>
                       </tr>
                     </tbody>
@@ -703,7 +700,7 @@
               <h3 class="cell-title">Exploited goes first</h3>
               <p>
                 The CISA KEV catalog lists vulnerabilities with evidence of
-                active exploitation. Vulnpilot puts those above every high CVSS
+                active exploitation. Relvet puts those above every high CVSS
                 score that nobody is known to exploit.
               </p>
               <!-- generated:proof-kev-entry -->
@@ -725,7 +722,7 @@
                     <dd>Yes</dd>
                   </div>
                   <div>
-                    <dt>Vulnpilot rank</dt>
+                    <dt>Relvet rank</dt>
                     <dd>1 of 23</dd>
                   </div>
                 </dl>
@@ -771,7 +768,7 @@
               </div>
               <figure class="code-block ci-yaml" aria-labelledby="ci-yaml-name">
                 <figcaption class="code-head">
-                  <code id="ci-yaml-name">.github/workflows/vulnpilot.yml</code>
+                  <code id="ci-yaml-name">.github/workflows/relvet.yml</code>
                   <button
                     class="copy copy-quiet"
                     type="button"
@@ -781,7 +778,7 @@
                     ><span class="visually-hidden"> the workflow</span>
                   </button>
                 </figcaption>
-                <pre><code id="ci-yaml-code">name: vulnpilot
+                <pre><code id="ci-yaml-code">name: relvet
 on:
   pull_request:
   schedule:
@@ -795,7 +792,7 @@ jobs:
         with:
           node-version: 26
       - run: >-
-          npx --yes vulnpilot@<span data-proof="cli-version">0.1.2</span>
+          npx --yes relvet@<span data-proof="cli-version">0.2.0</span>
           --non-interactive
           --eu-distribution yes
           --commercial yes
@@ -820,7 +817,7 @@ jobs:
                 <code>--json</code> prints a versioned report validated against
                 a
                 <a
-                  href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                  href="https://github.com/quaviabusiness-stack/relvet/blob/main/schema/report-v1.schema.json"
                   >published JSON Schema</a
                 >.
               </p>
@@ -846,7 +843,7 @@ jobs:
               What one scan found in a firmware SBOM
             </h2>
             <p class="section-lede">
-              The sample in Vulnpilot’s repository: router firmware with Log4j
+              The sample in Relvet’s repository: router firmware with Log4j
               2.14.1, lodash, requests and urllib3. One command, no
               configuration.
             </p>
@@ -871,7 +868,7 @@ jobs:
             <div class="figure-item">
               <dt>Scan time</dt>
               <dd>
-                <span data-proof="scan-time">2.4</span
+                <span data-proof="scan-time">1.5</span
                 ><span class="figure-unit">s</span>
               </dd>
             </div>
@@ -896,9 +893,9 @@ jobs:
                 <div class="run-row run-first run-blank">
                   <div class="run-cell">
                     <!-- generated:proof-run-1 -->
-                    <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json \
+                    <pre><code><span class="t-p" aria-hidden="true">$ </span>npx relvet --sbom test/fixtures/sbom/cyclonedx.json \
     --non-interactive --eu-distribution yes --commercial yes --product-type firmware
-<span class="t-b">Vulnpilot 0.1.2</span><span class="t-d"> · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 2.4s</span>
+<span class="t-b">Relvet 0.2.0</span><span class="t-d"> · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 1.5s</span>
 </code></pre>
                     <!-- /generated:proof-run-1 -->
                   </div>
@@ -984,22 +981,22 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
  4. <span class="t-b">org.apache.logging.log4j:log4j-core@2.14.1</span>  CVE-2021-44832  MEDIUM 6.6 · EPSS 97.9%
     Improper Input Validation and Injection in Apache Log4j2
     Fix: upgrade to 2.17.1
- 5. <span class="t-b">lodash@4.17.20</span>  CVE-2021-23337  HIGH 7.2 · EPSS 20.2%
+ 5. <span class="t-b">lodash@4.17.20</span>  CVE-2021-23337  HIGH 7.2 · EPSS 20.6%
     Command Injection in lodash
     Fix: upgrade to 4.17.21
  6. <span class="t-b">lodash@4.17.20</span>  CVE-2020-28500  MEDIUM 5.3 · EPSS 7.4%
     Regular Expression Denial of Service (ReDoS) in lodash
     Fix: upgrade to 4.17.21
- 7. <span class="t-b">urllib3@2.0.7</span>  CVE-2026-21441  HIGH 7.5 · EPSS 2.9%
+ 7. <span class="t-b">urllib3@2.0.7</span>  CVE-2026-21441  HIGH 7.5 · EPSS 3.9%
     Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)
     Fix: upgrade to 2.6.3
- 8. <span class="t-b">lodash@4.17.20</span>  CVE-2026-4800  HIGH 8.1 · EPSS 2.9%
-    lodash vulnerable to Code Injection via `_.template` imports key names
-    Fix: upgrade to 4.18.0
- 9. <span class="t-b">lodash@4.17.20</span>  CVE-2025-13465  MEDIUM 6.5 · EPSS 1.8%
+ 8. <span class="t-b">lodash@4.17.20</span>  CVE-2025-13465  MEDIUM 6.5 · EPSS 3.5%
     Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions
     Fix: upgrade to 4.17.23
-10. <span class="t-b">urllib3@2.0.7</span>  CVE-2024-37891  MEDIUM 4.4 · EPSS 1.1%
+ 9. <span class="t-b">lodash@4.17.20</span>  CVE-2026-4800  HIGH 8.1 · EPSS 3.1%
+    lodash vulnerable to Code Injection via `_.template` imports key names
+    Fix: upgrade to 4.18.0
+10. <span class="t-b">urllib3@2.0.7</span>  CVE-2024-37891  MEDIUM 4.4 · EPSS 1.5%
     urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
     Fix: upgrade to 2.2.2
 </code></pre>
@@ -1009,7 +1006,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                 <div class="run-row run-last">
                   <div class="run-cell">
                     <!-- generated:proof-run-7 -->
-                    <pre><code><span class="t-d">Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli</span>
+                    <pre><code><span class="t-d">Get continuous monitoring and ready-to-send 24h report drafts: https://relvet.vercel.app?utm_source=cli</span>
 <span class="t-p" aria-hidden="true">$ </span>echo $?
 1</code></pre>
                     <!-- /generated:proof-run-7 -->
@@ -1060,7 +1057,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
       },
       "epss": {
         "score": 0.99999,
-        "date": "2026-11-18"
+        "date": "2026-11-27"
       }
     }
   ]
@@ -1081,9 +1078,9 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
               Already run npm audit or Dependabot? Keep them.
             </h2>
             <p class="section-lede">
-              They tell you what is vulnerable. Vulnpilot tells you what is
-              known to be exploited, what to fix first, and whether the CRA
-              clock applies to you.
+              They tell you what is vulnerable. Relvet tells you what is known
+              to be exploited, what to fix first, and whether the CRA clock
+              applies to you.
             </p>
           </div>
           <div
@@ -1094,13 +1091,13 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
           >
             <table class="compare-table">
               <caption id="compare-caption" class="visually-hidden">
-                Vulnpilot compared with npm audit, Dependabot alerts and
+                Relvet compared with npm audit, Dependabot alerts and
                 OSV-Scanner, as documented on 25 November 2026
               </caption>
               <thead>
                 <tr>
                   <td></td>
-                  <th scope="col" class="is-us">Vulnpilot</th>
+                  <th scope="col" class="is-us">Relvet</th>
                   <th scope="col">npm audit</th>
                   <th scope="col">Dependabot alerts</th>
                   <th scope="col">OSV-Scanner</th>
@@ -1314,8 +1311,8 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                   aria-describedby="consent-error"
                 />
                 <label for="consent"
-                  >I agree to receive emails about Vulnpilot. Unsubscribe
-                  anytime. See the <a href="/privacy">privacy notice</a>.</label
+                  >I agree to receive emails about Relvet. Unsubscribe anytime.
+                  See the <a href="/privacy">privacy notice</a>.</label
                 >
               </div>
               <p
@@ -1340,7 +1337,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
               <h3>You’re on the list</h3>
               <p>
                 We’ll email you when there is something to try. Until then,
-                <code>npx vulnpilot</code> works today.
+                <code>npx relvet</code> works today.
               </p>
             </div>
           </div>
@@ -1364,7 +1361,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                 How is this different from npm audit or Dependabot?
               </summary>
               <p>
-                They tell you what is vulnerable. Vulnpilot tells you which of
+                They tell you what is vulnerable. Relvet tells you which of
                 those are known to be exploited, using the CISA KEV catalog,
                 puts them first, ranks the rest by EPSS and CVSS, and screens
                 whether the CRA applies. Run it next to them: it reads the same
@@ -1444,7 +1441,7 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                 codes with <code>--fail-on critical|high|kev</code>.
               </p>
             </details>
-            <!-- slot:faq-who. Add "Who is behind Vulnpilot?" with real names
+            <!-- slot:faq-who. Add "Who is behind Relvet?" with real names
                  and a photo once the founders agree to be named. -->
           </div>
         </div>
@@ -1467,11 +1464,11 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
             <div class="command">
               <code
                 ><span class="command-prompt" aria-hidden="true">$ </span>npx
-                vulnpilot</code
+                relvet</code
               >
-              <button class="copy" type="button" data-copy="npx vulnpilot">
+              <button class="copy" type="button" data-copy="npx relvet">
                 <span class="copy-label">Copy</span
-                ><span class="visually-hidden"> the command npx vulnpilot</span>
+                ><span class="visually-hidden"> the command npx relvet</span>
               </button>
             </div>
           </div>
@@ -1489,12 +1486,12 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
     <footer class="site-footer">
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="/" aria-label="Vulnpilot home">
+          <a class="brand" href="/" aria-label="Relvet home">
             <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
               <rect class="mark-bg" width="32" height="32" rx="7" />
               <path
-                class="mark-v"
-                d="M7 10.5 11.75 21.5 16.5 10.5"
+                class="mark-r"
+                d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
                 fill="none"
                 stroke-width="3"
               />
@@ -1506,13 +1503,13 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
                 height="11.5"
               />
             </svg>
-            <span class="brand-word">Vulnpilot</span>
+            <span class="brand-word">Relvet</span>
           </a>
           <p>
             Finds the dependencies attackers already exploit. Free and open
             source under the
             <a
-              href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+              href="https://github.com/quaviabusiness-stack/relvet/blob/main/LICENSE"
               >MIT license</a
             >.
           </p>
@@ -1522,14 +1519,14 @@ Actively exploited      <span class="t-r">2</span> <span class="t-d">(CISA KEV)<
             <li><a href="/scan">Scan</a></li>
             <li><a href="/docs">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
-            <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+            <li><a href="https://www.npmjs.com/package/relvet">npm</a></li>
             <li>
               <a
-                href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                href="https://github.com/quaviabusiness-stack/relvet/blob/main/schema/report-v1.schema.json"
                 >JSON Schema</a
               >
             </li>

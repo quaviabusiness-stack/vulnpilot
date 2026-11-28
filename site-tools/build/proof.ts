@@ -14,6 +14,8 @@ export interface ProofMeta {
   package: string;
   cliVersion: string;
   integrity: string;
+  /** Set when the capture came from a packed build instead of npm. */
+  source?: string;
   capturedAt: string;
   shownCommand: string;
   args: string[];
@@ -105,7 +107,7 @@ export function runLayout(plain: string[]): Layout {
       );
   };
   const at = (index: number) => plain[index] ?? '';
-  expect(at(0).startsWith('Vulnpilot '), 'version header');
+  expect(at(0).startsWith('Relvet '), 'version header');
   expect(at(1) === '', 'blank line after the header');
   expect(at(2).startsWith('EU Cyber Resilience Act:'), 'CRA screen');
   const craEnd = plain.indexOf('', 2);
@@ -134,7 +136,7 @@ const lineHtml = (line: string) => segmentsToHtml(ansiSegments(line));
 /** The command as the page shows it, wrapped after the input argument. */
 export function commandLines(meta: ProofMeta): [string, string] {
   const [first = '', second = '', ...rest] = meta.args;
-  return [`npx vulnpilot ${first} ${second} \\`, `    ${rest.join(' ')}`];
+  return [`npx relvet ${first} ${second} \\`, `    ${rest.join(' ')}`];
 }
 
 const pre = (html: string, className?: string) =>
@@ -394,7 +396,7 @@ export function kevEntry(proof: Proof): string {
 <div><dt>Package</dt><dd>${escapeHtml(shortName(issue.package.name))} ${escapeHtml(issue.package.version)}</dd></div>
 <div><dt>In the CISA catalog since</dt><dd>${fmtDate(issue.kev.dateAdded)}</dd></div>
 <div><dt>Known ransomware use</dt><dd>${ransomware === true ? 'Yes' : ransomware === false ? 'No' : 'Unknown'}</dd></div>
-<div><dt>Vulnpilot rank</dt><dd>${rank} of ${proof.report.summary.issues}</dd></div>
+<div><dt>Relvet rank</dt><dd>${rank} of ${proof.report.summary.issues}</dd></div>
 </dl>
 </div>`;
 }
@@ -495,6 +497,6 @@ export function captureDate(proof: Proof): string {
 /** The --help capture for /docs. */
 export function helpRegion(proof: Proof): string {
   return pre(
-    `${PROMPT}npx vulnpilot --help\n${escapeHtml(proof.help.replace(/\n$/, ''))}`,
+    `${PROMPT}npx relvet --help\n${escapeHtml(proof.help.replace(/\n$/, ''))}`,
   );
 }

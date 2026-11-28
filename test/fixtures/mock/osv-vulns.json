@@ -2,7 +2,7 @@
   "GHSA-mock-lod1-0001": {
     "id": "GHSA-mock-lod1-0001",
     "summary": "MOCK: Command injection in template()",
-    "details": "Synthetic advisory used by tests and VULNPILOT_MOCK=1.",
+    "details": "Synthetic advisory used by tests and RELVET_MOCK=1.",
     "aliases": ["CVE-2099-1001"],
     "severity": [
       {

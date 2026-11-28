@@ -37,7 +37,7 @@ describe('ansiSegments', () => {
   it('renders every SGR code formatText can emit', () => {
     const report = {
       schemaVersion: '1.0.0',
-      tool: { name: 'vulnpilot', version: '0.0.0' },
+      tool: { name: 'relvet', version: '0.0.0' },
       generatedAt: '2026-01-01T00:00:00.000Z',
       durationMs: 1,
       mock: false,

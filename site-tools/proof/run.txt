@@ -1,4 +1,4 @@
-Vulnpilot 0.1.2 · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 2.4s
+Relvet 0.2.0 · test/fixtures/sbom/cyclonedx.json (cyclonedx) · 1.5s
 
 EU Cyber Resilience Act: LIKELY APPLIES
   You make a firmware/hardware product available on the EU market as part of a
@@ -20,7 +20,7 @@ Critical/high issues    10
 Actively exploited      2 (CISA KEV)
 2 entries skipped (local/git/workspace links or components without a supported purl).
 
->>> Under the CRA, actively exploited vulnerabilities in your product must be reported within 24 hours.
+>>> CISA KEV match: check whether your product is affected. Under CRA Article 14, manufacturers must send an early warning without undue delay and within 24 hours of becoming aware of an actively exploited vulnerability in their product.
 
 Top 10 of 23 issue(s) (KEV first, then EPSS, then CVSS)
  1. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-44228  CRITICAL 10.0 · EPSS >99.9% · KNOWN EXPLOITED
@@ -35,23 +35,23 @@ Top 10 of 23 issue(s) (KEV first, then EPSS, then CVSS)
  4. org.apache.logging.log4j:log4j-core@2.14.1  CVE-2021-44832  MEDIUM 6.6 · EPSS 97.9%
     Improper Input Validation and Injection in Apache Log4j2
     Fix: upgrade to 2.17.1
- 5. lodash@4.17.20  CVE-2021-23337  HIGH 7.2 · EPSS 20.2%
+ 5. lodash@4.17.20  CVE-2021-23337  HIGH 7.2 · EPSS 20.6%
     Command Injection in lodash
     Fix: upgrade to 4.17.21
  6. lodash@4.17.20  CVE-2020-28500  MEDIUM 5.3 · EPSS 7.4%
     Regular Expression Denial of Service (ReDoS) in lodash
     Fix: upgrade to 4.17.21
- 7. urllib3@2.0.7  CVE-2026-21441  HIGH 7.5 · EPSS 2.9%
+ 7. urllib3@2.0.7  CVE-2026-21441  HIGH 7.5 · EPSS 3.9%
     Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)
     Fix: upgrade to 2.6.3
- 8. lodash@4.17.20  CVE-2026-4800  HIGH 8.1 · EPSS 2.9%
-    lodash vulnerable to Code Injection via `_.template` imports key names
-    Fix: upgrade to 4.18.0
- 9. lodash@4.17.20  CVE-2025-13465  MEDIUM 6.5 · EPSS 1.8%
+ 8. lodash@4.17.20  CVE-2025-13465  MEDIUM 6.5 · EPSS 3.5%
     Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions
     Fix: upgrade to 4.17.23
-10. urllib3@2.0.7  CVE-2024-37891  MEDIUM 4.4 · EPSS 1.1%
+ 9. lodash@4.17.20  CVE-2026-4800  HIGH 8.1 · EPSS 3.1%
+    lodash vulnerable to Code Injection via `_.template` imports key names
+    Fix: upgrade to 4.18.0
+10. urllib3@2.0.7  CVE-2024-37891  MEDIUM 4.4 · EPSS 1.5%
     urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
     Fix: upgrade to 2.2.2
 
-Get continuous monitoring and ready-to-send 24h report drafts: https://getvulnpilot.vercel.app?utm_source=cli
+Get continuous monitoring and ready-to-send 24h report drafts: https://relvet.vercel.app?utm_source=cli

@@ -52,7 +52,7 @@ async function cliReport(
   flag: string,
   answers: string[],
 ): Promise<Json> {
-  const cache = mkdtempSync(join(tmpdir(), 'vulnpilot-equality-'));
+  const cache = mkdtempSync(join(tmpdir(), 'relvet-equality-'));
   const cwd = process.cwd();
   let stdout = '';
   process.chdir(dirname(file));
@@ -60,7 +60,7 @@ async function cliReport(
     await runCli(
       [
         'node',
-        'vulnpilot',
+        'relvet',
         flag,
         basename(file),
         '--json',
@@ -68,7 +68,7 @@ async function cliReport(
         ...answers,
       ],
       {
-        env: { VULNPILOT_CACHE_DIR: cache, VULNPILOT_TELEMETRY: '0' },
+        env: { RELVET_CACHE_DIR: cache, RELVET_TELEMETRY: '0' },
         fetch: createMockFetch(),
         sleep: async () => {},
         stdout: (text) => {

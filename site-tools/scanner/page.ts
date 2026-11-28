@@ -164,7 +164,7 @@ let nextRequest = 1;
 
 function workerUrl(): string {
   if (!window.trustedTypes) return __WORKER_URL__;
-  policy ??= window.trustedTypes.createPolicy('vulnpilot-worker', {
+  policy ??= window.trustedTypes.createPolicy('relvet-worker', {
     createScriptURL: (input) => {
       if (input !== __WORKER_URL__)
         throw new TypeError('Unexpected worker URL.');
@@ -182,7 +182,7 @@ function parseInWorker(
 ): Promise<ParseResponse> {
   worker ??= new Worker(workerUrl(), {
     type: 'module',
-    name: 'vulnpilot-parse',
+    name: 'relvet-parse',
   });
   const current = worker;
   const id = nextRequest++;
@@ -258,8 +258,8 @@ function cliHint(label: string, detected?: DetectedInput): string {
     detected === 'cyclonedx' ||
     (!detected && /\.json$/i.test(label) && label !== 'package-lock.json')
   )
-    return `npx vulnpilot --sbom ${shellWord(label)}`;
-  return `npx vulnpilot --path ${shellWord(label)}`;
+    return `npx relvet --sbom ${shellWord(label)}`;
+  return `npx relvet --path ${shellWord(label)}`;
 }
 
 function shellWord(word: string): string {
@@ -322,7 +322,7 @@ async function readInput(
     showInputError(
       `${what} is ${bytes(size)}. The browser scanner reads files up to 32 MB. ${
         origin === 'pasted'
-          ? 'Save it to a file and scan it with the CLI: npx vulnpilot --path <file>'
+          ? 'Save it to a file and scan it with the CLI: npx relvet --path <file>'
           : `Scan it with the CLI: ${cliHint(label)}`
       }`,
     );
@@ -342,7 +342,7 @@ async function readInput(
       showInputError(
         `Reading ${origin === 'pasted' ? 'the pasted text' : label} took longer than 20 seconds and was stopped. ${
           origin === 'pasted'
-            ? 'Save it to a file and scan it with the CLI: npx vulnpilot --path <file>'
+            ? 'Save it to a file and scan it with the CLI: npx relvet --path <file>'
             : `Scan it with the CLI: ${cliHint(label)}`
         }`,
       );
@@ -794,7 +794,7 @@ function terminalCommand(current: Parsed, assessment: CraAssessment): string {
       ({ id, answer }) =>
         `--${id === 'euDistribution' ? 'eu-distribution' : id === 'productType' ? 'product-type' : 'commercial'} ${answer}`,
     );
-  return ['npx vulnpilot', input, '--non-interactive', ...flags].join(' ');
+  return ['npx relvet', input, '--non-interactive', ...flags].join(' ');
 }
 
 function banner(title: string, text: string): Child {
@@ -1004,7 +1004,7 @@ function download(): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `vulnpilot-report-${report.generatedAt.slice(0, 10)}.json`;
+  link.download = `relvet-report-${report.generatedAt.slice(0, 10)}.json`;
   link.hidden = true;
   document.body.append(link);
   link.click();
@@ -1118,6 +1118,8 @@ renderCra(false);
 
 // ---------------------------------------------------------------------------
 // Remove any lockfile left by the old home-page drop flow, without reading it.
+// That flow ran before the rename to Relvet, so the database keeps its old
+// name; renaming it here would leave those files behind.
 try {
   window.indexedDB?.deleteDatabase('vulnpilot-handoff');
 } catch {

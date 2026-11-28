@@ -1,12 +1,13 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeEach, expect, it } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { Cache, defaultCacheDir } from '../src/cache.js';
+import { resetLegacyWarnings } from '../src/legacy.js';
 
 let directory: string;
 beforeEach(async () => {
-  directory = await mkdtemp(join(tmpdir(), 'vulnpilot-cache-test-'));
+  directory = await mkdtemp(join(tmpdir(), 'relvet-cache-test-'));
 });
 afterEach(async () => {
   await rm(directory, { recursive: true, force: true });
@@ -46,14 +47,34 @@ it('is a no-op without a directory and never throws on unwritable paths', async 
 });
 
 it('uses the platform cache directory', () => {
-  expect(defaultCacheDir({ VULNPILOT_CACHE_DIR: '/x' }, 'linux')).toBe('/x');
+  expect(defaultCacheDir({ RELVET_CACHE_DIR: '/x' }, 'linux')).toBe('/x');
   expect(defaultCacheDir({ XDG_CACHE_HOME: '/xdg' }, 'linux')).toBe(
-    join('/xdg', 'vulnpilot'),
+    join('/xdg', 'relvet'),
   );
   expect(defaultCacheDir({ LOCALAPPDATA: 'C:\\Local' }, 'win32')).toBe(
-    join('C:\\Local', 'vulnpilot', 'Cache'),
+    join('C:\\Local', 'relvet', 'Cache'),
   );
   expect(defaultCacheDir({}, 'darwin')).toMatch(
-    /Library[\\/]Caches[\\/]vulnpilot$/,
+    /Library[\\/]Caches[\\/]relvet$/,
   );
+});
+
+it('falls back to the deprecated VULNPILOT_CACHE_DIR with a warning', () => {
+  resetLegacyWarnings();
+  const warn = vi.fn();
+  expect(defaultCacheDir({ VULNPILOT_CACHE_DIR: '/old' }, 'linux', warn)).toBe(
+    '/old',
+  );
+  expect(warn).toHaveBeenCalledWith(
+    'Relvet: VULNPILOT_CACHE_DIR is deprecated; use RELVET_CACHE_DIR instead.',
+  );
+  warn.mockClear();
+  expect(
+    defaultCacheDir(
+      { RELVET_CACHE_DIR: '/new', VULNPILOT_CACHE_DIR: '/old' },
+      'linux',
+      warn,
+    ),
+  ).toBe('/new');
+  expect(warn).not.toHaveBeenCalled();
 });

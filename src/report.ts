@@ -16,7 +16,7 @@ export type FailOn = 'critical' | 'high' | 'kev';
 
 export interface Report {
   schemaVersion: typeof SCHEMA_VERSION;
-  tool: { name: 'vulnpilot'; version: string };
+  tool: { name: 'relvet'; version: string };
   generatedAt: string;
   durationMs: number;
   mock: boolean;
@@ -53,7 +53,7 @@ export function createReport(options: {
   );
   return {
     schemaVersion: SCHEMA_VERSION,
-    tool: { name: 'vulnpilot', version: CLI_VERSION },
+    tool: { name: 'relvet', version: CLI_VERSION },
     generatedAt: (options.now ?? new Date()).toISOString(),
     durationMs: Math.round(options.durationMs),
     mock: options.mock,
@@ -185,7 +185,7 @@ export function formatText(report: Report, options: TextOptions): string {
   const { cra, summary } = report;
   const out: string[] = [];
   out.push(
-    bold(`Vulnpilot ${report.tool.version}`) +
+    bold(`Relvet ${report.tool.version}`) +
       (report.mock ? red(' (MOCK DATA - not a real scan)') : '') +
       dim(
         ` · ${report.input.file} (${report.input.format}) · ${(report.durationMs / 1000).toFixed(1)}s`,

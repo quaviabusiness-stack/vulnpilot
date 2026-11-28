@@ -1,4 +1,4 @@
-/* Vulnpilot site. Self-hosted fonts only; no external requests.
+/* Relvet site. Self-hosted fonts only; no external requests.
    Design tokens live in this first block: colour, type, space, motion. */
 
 @font-face {
@@ -334,7 +334,7 @@ strong {
   fill: var(--text);
 }
 
-.brand-mark .mark-v {
+.brand-mark .mark-r {
   stroke: var(--bg);
 }
 

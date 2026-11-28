@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CLI reference · Vulnpilot</title>
+    <title>CLI reference · Relvet</title>
     <meta
       name="description"
-      content="Every flag, exit code, input, data source and JSON report field of the Vulnpilot CLI, on one page."
+      content="Every flag, exit code, input, data source and JSON report field of the Relvet CLI, on one page."
     />
-    <link rel="canonical" href="https://getvulnpilot.vercel.app/docs" />
+    <link rel="canonical" href="https://relvet.vercel.app/docs" />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
@@ -24,17 +24,14 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Vulnpilot" />
-    <meta property="og:url" content="https://getvulnpilot.vercel.app/docs" />
-    <meta property="og:title" content="CLI reference · Vulnpilot" />
+    <meta property="og:site_name" content="Relvet" />
+    <meta property="og:url" content="https://relvet.vercel.app/docs" />
+    <meta property="og:title" content="CLI reference · Relvet" />
     <meta
       property="og:description"
-      content="Every flag, exit code, input, data source and JSON report field of the Vulnpilot CLI, on one page."
+      content="Every flag, exit code, input, data source and JSON report field of the Relvet CLI, on one page."
     />
-    <meta
-      property="og:image"
-      content="https://getvulnpilot.vercel.app/og.png"
-    />
+    <meta property="og:image" content="https://relvet.vercel.app/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -52,7 +49,7 @@
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="/assets/styles-2cbdab4707.css" />
+    <link rel="stylesheet" href="/assets/styles-e5dc61ce5d.css" />
     <link rel="stylesheet" href="/assets/pages-bc9f91c6c9.css" />
   </head>
   <body>
@@ -61,12 +58,12 @@
     <!-- generated:header -->
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="brand" href="/" aria-label="Vulnpilot home">
+        <a class="brand" href="/" aria-label="Relvet home">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
             <rect class="mark-bg" width="32" height="32" rx="7" />
             <path
-              class="mark-v"
-              d="M7 10.5 11.75 21.5 16.5 10.5"
+              class="mark-r"
+              d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
               fill="none"
               stroke-width="3"
             />
@@ -78,7 +75,7 @@
               height="11.5"
             />
           </svg>
-          <span class="brand-word">Vulnpilot</span>
+          <span class="brand-word">Relvet</span>
         </a>
         <nav class="nav nav-desktop" aria-label="Main">
           <ul>
@@ -87,7 +84,7 @@
             <li><a href="/#pricing">Pricing</a></li>
             <li><a href="/docs" aria-current="page">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
@@ -108,7 +105,7 @@
                 <li><a href="/#pricing">Pricing</a></li>
                 <li><a href="/docs" aria-current="page">Docs</a></li>
                 <li>
-                  <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+                  <a href="https://github.com/quaviabusiness-stack/relvet"
                     >GitHub</a
                   >
                 </li>
@@ -131,9 +128,9 @@
             <div class="section-body">
               <h1>CLI reference</h1>
               <p class="intro">
-                Everything <code>npx vulnpilot</code> does, on one page. The
-                help text is captured from vulnpilot
-                <span data-proof="cli-version">0.1.2</span>; the JSON field list
+                Everything <code>npx relvet</code> does, on one page. The help
+                text is captured from relvet
+                <span data-proof="cli-version">0.2.0</span>; the JSON field list
                 is generated from the published schema.
               </p>
               <nav class="toc" aria-label="On this page">
@@ -164,21 +161,21 @@
             <div class="section-body">
               <h2 id="run-title">Run</h2>
               <p>
-                Vulnpilot is a free command-line tool under the MIT license. It
+                Relvet is a free command-line tool under the MIT license. It
                 needs Node.js&nbsp;26 or later.
               </p>
               <figure class="code-block">
-                <pre><code>npx vulnpilot                               # scan the lockfile in the current directory
-npx vulnpilot --path ./apps/web             # another directory, or a lockfile path
-npx vulnpilot --sbom firmware.cdx.json      # CycloneDX SBOM (firmware, non-npm projects)
-npx vulnpilot --json &gt; vulnpilot.json       # machine-readable report</code></pre>
+                <pre><code>npx relvet                               # scan the lockfile in the current directory
+npx relvet --path ./apps/web             # another directory, or a lockfile path
+npx relvet --sbom firmware.cdx.json      # CycloneDX SBOM (firmware, non-npm projects)
+npx relvet --json &gt; relvet.json       # machine-readable report</code></pre>
               </figure>
               <p>
                 In CI, give the three CRA answers as flags and pick a failure
                 threshold:
               </p>
               <figure class="code-block">
-                <pre><code>npx vulnpilot --non-interactive --eu-distribution yes --commercial yes --product-type app --fail-on kev</code></pre>
+                <pre><code>npx relvet --non-interactive --eu-distribution yes --commercial yes --product-type app --fail-on kev</code></pre>
               </figure>
               <p>
                 Prompts are skipped when <code>--json</code> or
@@ -200,8 +197,8 @@ npx vulnpilot --json &gt; vulnpilot.json       # machine-readable report</code><
               <figure class="docs-terminal" aria-labelledby="help-caption">
                 <div class="run-cell">
                   <!-- generated:docs-help -->
-                  <pre><code><span class="t-p" aria-hidden="true">$ </span>npx vulnpilot --help
-Usage: vulnpilot [options]
+                  <pre><code><span class="t-p" aria-hidden="true">$ </span>npx relvet --help
+Usage: relvet [options]
 
 Check dependencies for known and actively exploited vulnerabilities, and screen
 EU Cyber Resilience Act applicability (not legal advice).
@@ -231,10 +228,10 @@ Not legal advice.</code></pre>
                   <!-- /generated:docs-help -->
                 </div>
                 <figcaption id="help-caption" class="term-caption">
-                  Captured from vulnpilot
-                  <span data-proof="cli-version">0.1.2</span> on
-                  <time data-proof="capture-date" datetime="2026-11-18"
-                    >18&nbsp;November&nbsp;2026</time
+                  Captured from relvet
+                  <span data-proof="cli-version">0.2.0</span> on
+                  <time data-proof="capture-date" datetime="2026-11-28"
+                    >28&nbsp;November&nbsp;2026</time
                   >
                   by <code>site-tools/scripts/capture-proof.mjs</code>.
                 </figcaption>
@@ -411,7 +408,7 @@ Not legal advice.</code></pre>
             <div class="section-body">
               <h2 id="inputs-title">Inputs</h2>
               <p>
-                Vulnpilot reads one file. The lockfile is auto-detected in
+                Relvet reads one file. The lockfile is auto-detected in
                 <code>--path</code>. If none is found the CLI exits 2 and lists
                 the supported names; if several exist it asks you to pick one.
               </p>
@@ -721,11 +718,11 @@ Not legal advice.</code></pre>
               <h2 id="cache-title">Cache and offline</h2>
               <p>
                 Responses are cached for 24 hours in the OS cache directory:
-                <code>%LOCALAPPDATA%\vulnpilot\Cache</code> on Windows,
-                <code>~/Library/Caches/vulnpilot</code> on macOS,
-                <code>$XDG_CACHE_HOME/vulnpilot</code> (default
-                <code>~/.cache/vulnpilot</code>) elsewhere; override it with
-                <code>VULNPILOT_CACHE_DIR</code>. Each cache file holds one OSV
+                <code>%LOCALAPPDATA%\relvet\Cache</code> on Windows,
+                <code>~/Library/Caches/relvet</code> on macOS,
+                <code>$XDG_CACHE_HOME/relvet</code> (default
+                <code>~/.cache/relvet</code>) elsewhere; override it with
+                <code>RELVET_CACHE_DIR</code>. Each cache file holds one OSV
                 package result, OSV advisory, EPSS score or the trimmed KEV
                 catalog.
               </p>
@@ -764,7 +761,7 @@ Not legal advice.</code></pre>
                 <tbody>
                   <tr>
                     <th scope="row"><code>cli_version</code></th>
-                    <td>The Vulnpilot version.</td>
+                    <td>The Relvet version.</td>
                   </tr>
                   <tr>
                     <th scope="row"><code>os</code></th>
@@ -795,8 +792,8 @@ Not legal advice.</code></pre>
                 No identifiers, package names, versions, paths, answers or
                 vulnerability details are sent. Telemetry is off in CI (when
                 <code>CI</code> is set), and <code>--no-telemetry</code> or
-                <code>VULNPILOT_TELEMETRY=0</code> turns it off. It never fails
-                or slows a scan beyond a 1.5-second timeout.
+                <code>RELVET_TELEMETRY=0</code> turns it off. It never fails or
+                slows a scan beyond a 1.5-second timeout.
               </p>
             </div>
           </div>
@@ -812,7 +809,7 @@ Not legal advice.</code></pre>
               <p>
                 <code>--json</code> prints a report validated against
                 <a
-                  href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                  href="https://github.com/quaviabusiness-stack/relvet/blob/main/schema/report-v1.schema.json"
                   ><code>schema/report-v1.schema.json</code></a
                 >, which is shipped in the npm package.
                 <code>schemaVersion</code> is <code>1.0.0</code>; minor versions
@@ -863,13 +860,13 @@ Not legal advice.</code></pre>
                     </tr>
                     <tr>
                       <th scope="row"><code>tool.name</code></th>
-                      <td>string<span class="field-values">vulnpilot</span></td>
-                      <td>Always vulnpilot.</td>
+                      <td>string<span class="field-values">relvet</span></td>
+                      <td>Always relvet.</td>
                     </tr>
                     <tr>
                       <th scope="row"><code>tool.version</code></th>
                       <td>string</td>
-                      <td>Vulnpilot version that produced the report.</td>
+                      <td>Relvet version that produced the report.</td>
                     </tr>
                     <tr>
                       <th scope="row"><code>generatedAt</code></th>
@@ -889,7 +886,7 @@ Not legal advice.</code></pre>
                       <td>boolean</td>
                       <td>
                         True only for runs on the bundled mock data
-                        (VULNPILOT_MOCK=1), which is never a real scan.
+                        (RELVET_MOCK=1), which is never a real scan.
                       </td>
                     </tr>
                     <tr>
@@ -1332,7 +1329,7 @@ Not legal advice.</code></pre>
                 </li>
                 <li>
                   The KEV catalog comes from <code>/api/kev</code> on this site,
-                  a copy of the CISA feed trimmed to the fields Vulnpilot uses,
+                  a copy of the CISA feed trimmed to the fields Relvet uses,
                   because browsers cannot read the CISA feed directly.
                 </li>
                 <li>
@@ -1358,12 +1355,12 @@ Not legal advice.</code></pre>
     <footer class="site-footer">
       <div class="wrap grid footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="/" aria-label="Vulnpilot home">
+          <a class="brand" href="/" aria-label="Relvet home">
             <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
               <rect class="mark-bg" width="32" height="32" rx="7" />
               <path
-                class="mark-v"
-                d="M7 10.5 11.75 21.5 16.5 10.5"
+                class="mark-r"
+                d="M8.5 21.5V11.5H13.25L15.5 13.75V15.25L13.25 17.5H8.5M12.25 17.5 16.5 21.5"
                 fill="none"
                 stroke-width="3"
               />
@@ -1375,13 +1372,13 @@ Not legal advice.</code></pre>
                 height="11.5"
               />
             </svg>
-            <span class="brand-word">Vulnpilot</span>
+            <span class="brand-word">Relvet</span>
           </a>
           <p>
             Finds the dependencies attackers already exploit. Free and open
             source under the
             <a
-              href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/LICENSE"
+              href="https://github.com/quaviabusiness-stack/relvet/blob/main/LICENSE"
               >MIT license</a
             >.
           </p>
@@ -1391,14 +1388,14 @@ Not legal advice.</code></pre>
             <li><a href="/scan">Scan</a></li>
             <li><a href="/docs">Docs</a></li>
             <li>
-              <a href="https://github.com/quaviabusiness-stack/vulnpilot"
+              <a href="https://github.com/quaviabusiness-stack/relvet"
                 >GitHub</a
               >
             </li>
-            <li><a href="https://www.npmjs.com/package/vulnpilot">npm</a></li>
+            <li><a href="https://www.npmjs.com/package/relvet">npm</a></li>
             <li>
               <a
-                href="https://github.com/quaviabusiness-stack/vulnpilot/blob/main/schema/report-v1.schema.json"
+                href="https://github.com/quaviabusiness-stack/relvet/blob/main/schema/report-v1.schema.json"
                 >JSON Schema</a
               >
             </li>

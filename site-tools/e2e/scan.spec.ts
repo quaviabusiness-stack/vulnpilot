@@ -119,7 +119,7 @@ test('result: the CLI text report, JSON download, table and facts @cross', async
 }) => {
   await loadSample(page);
   await scan(page);
-  await expect(reportText(page)).toContainText(`Vulnpilot ${version}`);
+  await expect(reportText(page)).toContainText(`Relvet ${version}`);
   await expect(reportText(page)).toContainText('Top 4 of 4 issue(s)');
   await expect(
     reportText(page).locator('.t-r', { hasText: 'KNOWN EXPLOITED' }),
@@ -132,7 +132,7 @@ test('result: the CLI text report, JSON download, table and facts @cross', async
     'CLI exit code for this result: 1 (issues found).',
   );
   await expect(page.locator('#terminal-command')).toHaveText(
-    'npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json --non-interactive',
+    'npx relvet --sbom test/fixtures/sbom/cyclonedx.json --non-interactive',
   );
   await expect(page.locator('#toggle-all')).toBeHidden();
 
@@ -141,7 +141,7 @@ test('result: the CLI text report, JSON download, table and facts @cross', async
     page.getByRole('button', { name: 'Download JSON' }).click(),
   ]);
   expect(download.suggestedFilename()).toMatch(
-    /^vulnpilot-report-\d{4}-\d{2}-\d{2}\.json$/,
+    /^relvet-report-\d{4}-\d{2}-\d{2}\.json$/,
   );
   const report = JSON.parse(readFileSync((await download.path())!, 'utf8'));
   const validate = new Ajv({ allErrors: true, validateFormats: false }).compile(
@@ -257,7 +257,7 @@ test.describe('input errors', () => {
     await open(page, '/scan');
     await choose(page, 'package-lock.json', Buffer.alloc(33 * 1024 * 1024, 32));
     await expect(error(page)).toHaveText(
-      'package-lock.json is 33.0 MB. The browser scanner reads files up to 32 MB. Scan it with the CLI: npx vulnpilot --path package-lock.json',
+      'package-lock.json is 33.0 MB. The browser scanner reads files up to 32 MB. Scan it with the CLI: npx relvet --path package-lock.json',
     );
     expect(
       network.requests.some((request) => request.url.includes('parse-worker')),
@@ -295,7 +295,7 @@ test.describe('input errors', () => {
       readFileSync(fixture('projects/npm/package-lock.json')),
     );
     await expect(error(page)).toHaveText(
-      'Reading package-lock.json took longer than 20 seconds and was stopped. Scan it with the CLI: npx vulnpilot --path package-lock.json',
+      'Reading package-lock.json took longer than 20 seconds and was stopped. Scan it with the CLI: npx relvet --path package-lock.json',
       { timeout: 30_000 },
     );
   });
@@ -450,7 +450,7 @@ test('the CRA screen uses the CLI rules and feeds the report @cross', async ({
     'must send an early warning without undue delay and within 24 hours of becoming aware of an actively exploited vulnerability in their product.',
   );
   await expect(page.locator('#terminal-command')).toHaveText(
-    'npx vulnpilot --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware',
+    'npx relvet --sbom test/fixtures/sbom/cyclonedx.json --non-interactive --eu-distribution yes --commercial yes --product-type firmware',
   );
 });
 

@@ -1,5 +1,5 @@
 // Offline stand-ins for OSV, CISA KEV and FIRST EPSS. Used by the test suite and
-// by `VULNPILOT_MOCK=1` smoke tests. All IDs are synthetic (CVE-2099-*, GHSA-mock-*).
+// by `RELVET_MOCK=1` smoke tests. All IDs are synthetic (CVE-2099-*, GHSA-mock-*).
 import epss from '../test/fixtures/mock/epss.json' with { type: 'json' };
 import kev from '../test/fixtures/mock/kev.json' with { type: 'json' };
 import index from '../test/fixtures/mock/osv-index.json' with { type: 'json' };

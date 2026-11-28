@@ -6,7 +6,7 @@ import { type CliEnvironment, runCli } from '../src/main.js';
 
 let cacheDir: string;
 beforeEach(async () => {
-  cacheDir = await mkdtemp(join(tmpdir(), 'vulnpilot-cli-test-'));
+  cacheDir = await mkdtemp(join(tmpdir(), 'relvet-cli-test-'));
 });
 afterEach(async () => {
   await rm(cacheDir, { recursive: true, force: true });
@@ -15,8 +15,8 @@ afterEach(async () => {
 async function run(args: string[], io: CliEnvironment = {}) {
   const stdout: string[] = [];
   const stderr: string[] = [];
-  const code = await runCli(['node', 'vulnpilot', ...args], {
-    env: { VULNPILOT_MOCK: '1', VULNPILOT_CACHE_DIR: cacheDir },
+  const code = await runCli(['node', 'relvet', ...args], {
+    env: { RELVET_MOCK: '1', RELVET_CACHE_DIR: cacheDir },
     interactive: false,
     stdout: (text) => stdout.push(text),
     stderr: (text) => stderr.push(text),
@@ -123,7 +123,7 @@ it('exits 2 for invalid flags and 0 for --help/--version', async () => {
 
 it('exits 2 when OSV is unreachable and nothing is found', async () => {
   const result = await run(['--path', 'test/fixtures/projects/npm', '--json'], {
-    env: { VULNPILOT_CACHE_DIR: cacheDir },
+    env: { RELVET_CACHE_DIR: cacheDir },
     fetch: vi
       .fn<typeof fetch>()
       .mockRejectedValue(new TypeError('fetch failed')),
@@ -140,7 +140,7 @@ it('works --offline from a warm cache without network access', async () => {
   // Warm the cache through an injected (non-mock) fetch backed by the fixtures.
   const { createMockFetch } = await import('../src/mock.js');
   const online = vi.fn(createMockFetch());
-  const env = { VULNPILOT_CACHE_DIR: cacheDir };
+  const env = { RELVET_CACHE_DIR: cacheDir };
   const first = await run(['--path', 'test/fixtures/projects/npm', '--json'], {
     env,
     fetch: online,
@@ -163,7 +163,7 @@ it('works --offline from a warm cache without network access', async () => {
   const cold = await run(
     ['--path', 'test/fixtures/projects/npm', '--json', '--offline'],
     {
-      env: { VULNPILOT_CACHE_DIR: join(cacheDir, 'empty') },
+      env: { RELVET_CACHE_DIR: join(cacheDir, 'empty') },
       fetch: offlineFetch,
     },
   );
@@ -171,4 +171,24 @@ it('works --offline from a warm cache without network access', async () => {
   expect(
     JSON.parse(cold.stdout).sources.map((s: { status: string }) => s.status),
   ).toEqual(['unavailable', 'unavailable', 'ok']);
+});
+
+it('still reads the deprecated VULNPILOT_* variables, warning on stderr only', async () => {
+  const { createMockFetch } = await import('../src/mock.js');
+  const { resetLegacyWarnings } = await import('../src/legacy.js');
+  resetLegacyWarnings();
+  const legacyCache = join(cacheDir, 'legacy');
+  const result = await run(['--path', 'test/fixtures/projects/npm', '--json'], {
+    env: { VULNPILOT_CACHE_DIR: legacyCache, VULNPILOT_TELEMETRY: '0' },
+    fetch: vi.fn(createMockFetch()),
+  });
+  expect(JSON.parse(result.stdout).tool.name).toBe('relvet');
+  expect(result.stderr).toContain(
+    'VULNPILOT_CACHE_DIR is deprecated; use RELVET_CACHE_DIR instead.',
+  );
+  expect(result.stderr).toContain(
+    'VULNPILOT_TELEMETRY is deprecated; use RELVET_TELEMETRY instead.',
+  );
+  const { readdir } = await import('node:fs/promises');
+  expect((await readdir(legacyCache)).length).toBeGreaterThan(0);
 });

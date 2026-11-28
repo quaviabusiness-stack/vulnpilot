@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { SITE } from '../build/paths.js';
+import { SITE, SITE_URL } from '../build/paths.js';
 import { expect, open, SUPABASE, test } from './support.js';
 
 const PAGES = [
-  { path: '/', canonical: 'https://getvulnpilot.vercel.app/' },
-  { path: '/scan', canonical: 'https://getvulnpilot.vercel.app/scan' },
-  { path: '/docs', canonical: 'https://getvulnpilot.vercel.app/docs' },
-  { path: '/privacy', canonical: 'https://getvulnpilot.vercel.app/privacy' },
+  { path: '/', canonical: `${SITE_URL}/` },
+  { path: '/scan', canonical: `${SITE_URL}/scan` },
+  { path: '/docs', canonical: `${SITE_URL}/docs` },
+  { path: '/privacy', canonical: `${SITE_URL}/privacy` },
 ];
 
 for (const { path, canonical } of PAGES)
@@ -50,11 +50,11 @@ test('the home page states facts only in its JSON-LD', async ({ page }) => {
   const types = data['@graph'].map((node) => node['@type']);
   expect(types).toEqual(['SoftwareApplication', 'Organization', 'FAQPage']);
   expect(data['@graph'][0]).toMatchObject({
-    name: 'Vulnpilot',
+    name: 'Relvet',
     description: expect.stringContaining('Free, open-source CLI') as unknown,
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-    url: 'https://getvulnpilot.vercel.app/',
+    url: `${SITE_URL}/`,
   });
   // The FAQ text itself is compared with the page by site-tools/checks.
 });
@@ -92,7 +92,7 @@ test('the headers are the per-route ones from vercel.json', async ({
     "connect-src 'self' https://api.osv.dev https://api.first.org;",
   );
   expect(scan).toContain(
-    "require-trusted-types-for 'script'; trusted-types vulnpilot-worker",
+    "require-trusted-types-for 'script'; trusted-types relvet-worker",
   );
   for (const path of ['/', '/scan', '/docs', '/privacy']) {
     const headers = (await request.get(path)).headers();
@@ -132,7 +132,7 @@ test.describe('waitlist form (unchanged behaviour)', () => {
     const [post] = posts(network).filter(
       (request) => request.method === 'POST',
     );
-    expect(post?.url).toBe(`${SUPABASE}/rest/v1/vulnpilot_waitlist`);
+    expect(post?.url).toBe(`${SUPABASE}/rest/v1/relvet_waitlist`);
     expect(JSON.parse(post!.body ?? '')).toEqual({
       email: 'someone@example.com',
       consent: true,

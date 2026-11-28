@@ -1,4 +1,4 @@
-Usage: vulnpilot [options]
+Usage: relvet [options]
 
 Check dependencies for known and actively exploited vulnerabilities, and screen
 EU Cyber Resilience Act applicability (not legal advice).

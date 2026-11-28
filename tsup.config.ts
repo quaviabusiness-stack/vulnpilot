@@ -1,6 +1,23 @@
 import { defineConfig } from 'tsup';
 import packageJson from './package.json' with { type: 'json' };
 
+/**
+ * Build-time setting from RELVET_<name>, falling back to the pre-0.2.0
+ * VULNPILOT_<name> so older CI configurations keep embedding telemetry.
+ */
+function setting(name: string): string {
+  const current = process.env[`RELVET_${name}`];
+  if (current) return current;
+  const legacy = process.env[`VULNPILOT_${name}`];
+  if (legacy) {
+    console.warn(
+      `VULNPILOT_${name} is deprecated; set RELVET_${name} instead.`,
+    );
+    return legacy;
+  }
+  return '';
+}
+
 export default defineConfig({
   entry: ['src/cli.ts'],
   format: ['esm'],
@@ -13,10 +30,8 @@ export default defineConfig({
   noExternal: ['commander', '@clack/prompts'],
   define: {
     __CLI_VERSION__: JSON.stringify(packageJson.version),
-    __SUPABASE_URL__: JSON.stringify(process.env.VULNPILOT_SUPABASE_URL ?? ''),
-    __SUPABASE_ANON_KEY__: JSON.stringify(
-      process.env.VULNPILOT_SUPABASE_ANON_KEY ?? '',
-    ),
-    __WAITLIST_URL__: JSON.stringify(process.env.VULNPILOT_WAITLIST_URL ?? ''),
+    __SUPABASE_URL__: JSON.stringify(setting('SUPABASE_URL')),
+    __SUPABASE_ANON_KEY__: JSON.stringify(setting('SUPABASE_ANON_KEY')),
+    __WAITLIST_URL__: JSON.stringify(setting('WAITLIST_URL')),
   },
 });

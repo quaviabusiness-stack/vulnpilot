@@ -13,7 +13,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { HtmlValidate } from 'html-validate';
-import { PAGES, SITE, TOOLS } from '../build/paths.js';
+import { PAGES, SITE, SITE_URL, TOOLS } from '../build/paths.js';
 
 const failures: string[] = [];
 const fail = (message: string) => failures.push(message);
@@ -69,7 +69,7 @@ function checkProof(): void {
   // Row 1 starts with the command (two lines); row 7 ends with `$ echo $?` and the code.
   const first = rows[0]!.split('\n');
   const command = `${first[0]}\n${first[1]}`;
-  const expectedCommand = `$ npx vulnpilot ${meta.args.slice(0, 2).join(' ')} \\\n    ${meta.args.slice(2).join(' ')}`;
+  const expectedCommand = `$ npx relvet ${meta.args.slice(0, 2).join(' ')} \\\n    ${meta.args.slice(2).join(' ')}`;
   if (command !== expectedCommand)
     fail('proof: the command on the page is not the captured command');
   rows[0] = first.slice(2).join('\n');
@@ -99,7 +99,7 @@ function checkProof(): void {
 
   const docs = page('docs.html');
   const helpText = codeText(region(docs, 'docs-help'));
-  if (helpText !== `$ npx vulnpilot --help\n${help.replace(/\n$/, '')}`)
+  if (helpText !== `$ npx relvet --help\n${help.replace(/\n$/, '')}`)
     fail(
       'proof: the help text on /docs differs from site-tools/proof/help.txt',
     );
@@ -341,10 +341,7 @@ function checkSecurityTxt(now = new Date()): void {
     );
   else if (expires - now.getTime() > 366 * day)
     fail('security: security.txt Expires is more than a year away (RFC 9116)');
-  if (
-    field('Canonical') !==
-    'https://getvulnpilot.vercel.app/.well-known/security.txt'
-  )
+  if (field('Canonical') !== `${SITE_URL}/.well-known/security.txt`)
     fail('security: security.txt Canonical is wrong');
   if (field('Preferred-Languages') !== 'en')
     fail('security: Preferred-Languages is not en');
@@ -382,7 +379,7 @@ function checkCrawling(): void {
   for (const line of [
     'User-agent: *',
     'Allow: /',
-    'Sitemap: https://getvulnpilot.vercel.app/sitemap.xml',
+    `Sitemap: ${SITE_URL}/sitemap.xml`,
   ])
     if (!robots.split(String.fromCharCode(10)).includes(line))
       fail(`crawling: robots.txt lacks "${line}"`);
