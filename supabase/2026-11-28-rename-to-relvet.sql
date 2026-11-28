@@ -25,6 +25,20 @@ alter table public.vulnpilot_waitlist rename to relvet_waitlist;
 alter index public.vulnpilot_waitlist_email_lower_idx
   rename to relvet_waitlist_email_lower_idx;
 
+-- Constraints named after the table when it was created, so that the result
+-- matches a database created from waitlist.sql. Renaming the primary key
+-- constraint also renames its index.
+alter table public.relvet_waitlist
+  rename constraint vulnpilot_waitlist_pkey to relvet_waitlist_pkey;
+alter table public.relvet_waitlist
+  rename constraint vulnpilot_waitlist_email_check to relvet_waitlist_email_check;
+alter table public.relvet_waitlist
+  rename constraint vulnpilot_waitlist_consent_check to relvet_waitlist_consent_check;
+alter table public.relvet_waitlist
+  rename constraint vulnpilot_waitlist_source_check to relvet_waitlist_source_check;
+alter table public.relvet_waitlist
+  rename constraint vulnpilot_waitlist_company_size_check to relvet_waitlist_company_size_check;
+
 alter policy "vulnpilot_waitlist_anon_insert"
   on public.relvet_waitlist
   rename to "relvet_waitlist_anon_insert";
